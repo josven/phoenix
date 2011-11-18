@@ -112,7 +112,7 @@ model that it tracks history for."
 
                     if changed:
                         # All requirements for history has been checked,
-                        # save the a history item
+                        # save the history item
                         history_fields['created_by'] = self.last_changed_by
                         history_fields['origin'] = self
                         try:
@@ -127,7 +127,7 @@ on "simple" fields, advanced fields like ManyToManyField cannot be tracked.
         # Call the real save() method.
         # Setting hierarchy calls save twice as it needs the pk to set the
         # hierarchy. If the save originated from a objects.create force_insert 
-        # will be one. If we see this, foce_update instead
+        # will be on. If we see this, foce_update instead
         if self.pk:
             kwargs['force_insert'] = False
             kwargs['force_update'] = True
