@@ -1,7 +1,7 @@
 from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponse
 
-from registration.models import BetaReg
+from models import BetaReg
 
 
 @require_POST

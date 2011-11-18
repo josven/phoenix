@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import get_model
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
-from core.utils import find_request
+from utils import find_request
 
 class Profile(models.Model):
     """
