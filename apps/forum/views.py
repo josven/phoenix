@@ -1,6 +1,8 @@
-from core.models import Thread, ThreadHistory
+from models import Thread, ThreadHistory
 from django.contrib.auth.models import User, Group
 from django.http import Http404
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 def test_view(request):
     User.objects.all().delete()
@@ -12,3 +14,8 @@ def test_view(request):
     t1.save()
 
     raise Http404
+
+@login_required(login_url='/auth/login/')
+def list_forum(request):
+    results = " lol"
+    return render(request,'forum.html', {"results": results})

@@ -10,4 +10,6 @@ urlpatterns = patterns('',
     (r'^register/beta/$', 'apps.registration.views.register_beta'),
     (r'^test$', direct_to_template, {'template': 'desktop_base.html'}),
     (r'^auth/', include('apps.registration.urls')),
+    (r'^forum/', include('apps.forum.urls')),
+    (r'^chat/', include('apps.chat.urls')),
 )

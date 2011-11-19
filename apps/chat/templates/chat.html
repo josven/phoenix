@@ -1,0 +1,29 @@
+﻿{% extends "desktop_base.html" %}
+{% block content %}
+<h1>Chat</h1>
+
+<hr/>
+
+<form action="{% url chat %}" method="post">
+    {% csrf_token %}
+    <ul>
+        
+        {% for error in form.text.errors %}
+        <li><strong>{{ error|striptags }}</strong></li>
+        {% endfor %}
+        <li>{{ form.text }}</li>
+        <li><input type="submit" value="Skicka" /></li>
+        
+     </ul>
+</form>
+
+<hr/>
+
+<ul>
+{% for entry in posts %}
+    <li><strong>{{ entry.created_by }}</strong> - <em>{{ entry.date_created }}</em>
+        <p>{{ entry.text }}</p>
+    </li>
+{% endfor %}
+</ul>
+{% endblock content %}

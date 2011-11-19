@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from models import BetaReg
 
@@ -51,11 +52,13 @@ def auth_login(request):
             results = "Fel användarnamn eller lösenord."
             
     return render(request,'login.html', {"results": results})
-
+    
+@login_required(login_url='/auth/login/')
 def auth_logout(request):
     """
     Log out a user
     
     """
+    results = "Du har just loggat ut"
     logout(request)
-    return render(request,'login.html')
+    return render(request,'login.html', {"results": results})
