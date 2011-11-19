@@ -2,8 +2,7 @@ import datetime
 from django.db import models
 from django.db.models import get_model
 
-from core import ThreadedEntry, Entry
-
+from apps.core.models import ThreadedEntry, ThreadedEntryHistory, Entry, EntryHistory
 
 class Thread(Entry):
     """
