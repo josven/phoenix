@@ -1,0 +1,18 @@
+{% extends "desktop_base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Inloggad</h1>
+<p>Du är inloggad som <em>{{ user }}.</em></p>
+<p>Antingen kan du <a href="{% url logout %}">logga ut</a> eller logga in som en annan användare</p>
+{% else %}
+<h1>Logga in</h1>
+{% endif %}
+<p><strong>{{ results }}</strong></p>
+<form action="{% url login %}" method="post">
+	{% csrf_token %}
+	<input type="text" name="username" placeholder="Användarnamn" />
+	<input type="password" name="password" placeholder="Lösenord" />
+	<input type="submit" value="Logga in" />
+</form>
+
+{% endblock content %}
