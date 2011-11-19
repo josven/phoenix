@@ -1,11 +1,12 @@
 ﻿from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponse
-from django.shortcuts import render
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from models import BetaReg
 
+from apps.core.utils import render
 
 @require_POST
 def register_beta(request):
@@ -36,7 +37,6 @@ def auth_login(request):
     Log in a user
     
     """
-    results = ""
     
     if request.method == 'POST':
         username = request.POST['username']
@@ -45,13 +45,13 @@ def auth_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                results = "Du loggade just in."
+                messages.add_message(request, messages.INFO, "Du loggade just in.")
             else:
-                results = "Ej aktiv"
+                messages.add_message(request, messages.INFO, "Ej aktiv användare")
         else:
-            results = "Fel användarnamn eller lösenord."
+            messages.add_message(request, messages.INFO, "Fel användarnamn eller lösenord.")
             
-    return render(request,'login.html', {"results": results})
+    return render(request,'login.html')
     
 @login_required(login_url='/auth/login/')
 def auth_logout(request):
@@ -59,6 +59,6 @@ def auth_logout(request):
     Log out a user
     
     """
-    results = "Du har just loggat ut"
+    messages.add_message(request, messages.INFO, "Du har just loggat ut")
     logout(request)
-    return render(request,'login.html', {"results": results})
+    return render(request,'login.html')

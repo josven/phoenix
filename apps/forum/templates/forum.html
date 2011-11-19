@@ -1,6 +1,9 @@
-﻿{% extends "desktop_base.html" %}
-{% block content %}
+﻿{% extends "base.html" %}
+{% block header %}
 <h1>Forum</h1>
+{% endblock header %}
+
+{% block content %}
 <h2>Skapa tråd</h2>
 <form action="{% url list_forum %}" method="post">
     <input type="text" name="title" placeholder="Trådtitel" />

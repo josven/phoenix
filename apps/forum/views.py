@@ -1,8 +1,9 @@
 from models import Thread, ThreadHistory
 from django.contrib.auth.models import User, Group
 from django.http import Http404
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+
+from apps.core.utils import render
 
 def test_view(request):
     User.objects.all().delete()

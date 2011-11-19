@@ -1,29 +1,44 @@
-﻿{% extends "desktop_base.html" %}
-{% block content %}
+﻿{% extends "base.html" %}
+{% block header %}
 <h1>Chat</h1>
+{% endblock header %}
 
-<hr/>
-
+{% block content %}
+{% if form %}
 <form action="{% url chat %}" method="post">
     {% csrf_token %}
-    <ul>
-        
-        {% for error in form.text.errors %}
-        <li><strong>{{ error|striptags }}</strong></li>
-        {% endfor %}
-        <li>{{ form.text }}</li>
-        <li><input type="submit" value="Skicka" /></li>
-        
-     </ul>
+
+    {{ form.text }}
+    <br />
+    <input type="submit" value="Skicka" />
+
 </form>
+{% endif %}
 
-<hr/>
 
-<ul>
 {% for entry in posts %}
-    <li><strong>{{ entry.created_by }}</strong> - <em>{{ entry.date_created }}</em>
+{% if forloop.first %}
+<hr />
+<ul data-role="listview" data-inset="true">
+{% endif %}
+    <li>
+        <h4>{{ entry.created_by }} - <em>{{ entry.date_created }}</em></h4>
         <p>{{ entry.text }}</p>
     </li>
-{% endfor %}
+
+{% if forloop.last %}
+{% if not isFirstPage %}
+    <li data-icon="arrow-l" data-iconpos="left"><a href="{% url chatposts entry.id|add:forloop.counter, entry.id|add:forloop.counter|add:'10', 'html' %}">Framåt</a></li>
+{% endif %}
+{% if not isLastPage %}
+{% if entry.id|add:'-11' > 0 %}
+    <li><a href="{% url chatposts entry.id|add:'-11', entry.id|add:'-1', 'html' %}">Bakåt</a></li>
+{% else %}
+    <li><a href="{% url chatposts 1, entry.id|add:'-1', 'html' %}">Bakåt</a></li>
+{% endif %}
+{% endif %}
 </ul>
+{% endif %}
+
+{% endfor %}
 {% endblock content %}

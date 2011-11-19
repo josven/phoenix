@@ -1,0 +1,42 @@
+<!DOCTYPE html> 
+<html>
+	<head> 
+	<title>{{ title }}</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+</head> 
+<body> 
+
+{% block body %}
+<div data-role="page">
+
+	<div data-role="header">
+        {% block header %}
+        {% endblock header %}
+	</div><!-- /header -->
+
+    <div data-role="navbar">
+    {% block navigation %}
+    {% endblock navigation %}
+    </div>
+    
+    {% block messages %}
+    {% endblock messages %}
+        
+	<div data-role="content">	
+        {% block content %}
+        {% endblock content %}
+	</div><!-- /content -->
+    
+  	<div data-role="footer">
+        {% block footer %}
+        {% endblock footer %}
+	</div><!-- /header -->  
+
+</div><!-- /page -->
+{% endblock body %}
+
+</body>
+</html>

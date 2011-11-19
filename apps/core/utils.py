@@ -1,5 +1,6 @@
 ﻿import sys
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
+from django.shortcuts import render as djangorender
 
 def find_request():
     """
@@ -14,3 +15,35 @@ def find_request():
             break
         f = f.f_back
     return request
+
+def set_base_template(request,base):
+    print base
+    if base == 'touch':
+        request.session['base_template'] = 'touch_base.html'
+    else:
+        request.session['base_template'] = 'desktop_base.html'
+
+    try:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except:
+        return HttpResponseRedirect(request.META['PATH_INFO'])
+    
+def get_base_template(request):
+    try:
+        return request.session['base_template']
+    except:
+        request.session['base_template'] = 'desktop_base.html'
+        return request.session['base_template']
+        
+def render(request,*args):
+    template = args[0]
+    
+    try:
+        vars = args[1]
+    except:
+        vars = {}
+
+    vars['base_template'] = get_base_template(request)
+    return djangorender(request,template,vars)
+    
+

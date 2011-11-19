@@ -1,23 +1,132 @@
-from models import *
+﻿from models import *
 from forms import *
+from django.contrib import messages
 from django.contrib.auth.models import User, Group
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
+from django.conf import settings
+
+from apps.core.utils import render
+"""
+
+    Constants
+    
+"""
+LIST_ITEM_LIMIT = 10
+
 
 @login_required(login_url='/auth/login/')
 def chat(request):
 
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            results = "valid"
-        else:
-            results = "invalid"
-    else:
-        results = "get"
-        form = PostForm()
+    vars = {
+        "isFirstPage":True
+    }
     
-    posts = Post.objects.order_by('-date_created')[:10]
+    if request.method == 'POST':
+    
+        form = PostForm(request.POST)
+    
+        if form.is_valid():
+            if len( form.clean()['text'] ) > 4:
+                form.save()
+                
+                # Send back a new form
+                form = PostForm()
+                
+                messages.add_message(request, messages.INFO, 'Meddelande skickat')
+            else:
+                messages.add_message(request, messages.ERROR, 'Meddelande måste vara fem tecken eller mer')
+    else:
+        form = PostForm()
 
-    return render(request,'chat.html', {"results": results,"form":form,"posts":posts})
+    posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
+    
+    vars['form'] = form
+    vars['posts'] = posts
+    return render(request,'chat.html', vars)
+    
+@login_required(login_url='/auth/login/')
+def chatpost(request,id,type):
+    """
+    
+    API for GET posts in HTML
+    Later this will also return 
+    json and xml depending on <type>
+    
+    """
+    try:
+        post = Post.objects.get(id=id)
+    except:
+        # "no match"
+        raise Http404  
+    
+    if request.method == 'GET':
+        if type == 'html':
+            form = PostForm()
+            posts = [post]
+            return render(request,'chat.html', {"posts":posts,"form":form})
+        else:
+            # "wrong format"
+            raise Http404
+    else:
+        # "wrong method"
+        raise Http404
+
+@login_required(login_url='/auth/login/')
+def chatposts(request,id1,id2,type):
+    """
+    
+    API for GET a rage of posts in HTML
+    Later this will also return 
+    json and xml depending on <type>
+    
+    """
+    
+    vars = {
+        'isFirstPage': False,
+        'isLastPage': False,
+        }
+    
+    # Check order
+    if int(id1) > int(id2):
+        # "reverse"
+        start = int(id2)
+        stop = int(id1)
+    else:
+        # " not reverse"
+        start = int(id1)
+        stop = int(id2)
+    
+    # Check if theres a negative value or its the first page
+    if start <= 1:
+        # "First page"
+        vars['isLastPage'] = True
+        start = 1
+    
+    try:
+        # Add +1 padding to deteminate if its any more posts
+        posts = Post.objects.filter(id__range=(start,stop+1)).order_by('-date_created')
+        
+        # Control if its the last page
+        if posts[0].id <= stop:
+            vars['isFirstPage'] = True
+        else:
+           # Trim query to match orginal request
+           posts = posts[1:LIST_ITEM_LIMIT+1]
+    except:
+        # "no match"
+        raise Http404
+    
+    if request.method == 'GET':
+        if type == 'html':
+            form = PostForm()
+            vars['posts'] = posts
+            vars['form'] = form
+            return render(request,'chat.html', vars)
+        else:
+            #"wrong format"
+            raise Http404
+    else:
+        # "wrong method"
+        raise Http404        
+    
