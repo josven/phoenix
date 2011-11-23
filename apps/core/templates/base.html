@@ -17,7 +17,7 @@
 
 {% block messages %}
 {% if messages %}
-<ul class="messages">
+<ul class="messages jGrowlmessages">
     {% for message in messages %}
     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
@@ -30,5 +30,5 @@
 {% endblock content %}
 
 {% block footer %}
-<p>Phoenix</p>
+
 {% endblock footer %}

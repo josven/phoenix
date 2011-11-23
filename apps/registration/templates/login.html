@@ -15,14 +15,16 @@
 {% endif %}
 <p><strong>{{ results }}</strong></p>
 <form id="id_loginform" action="{% url login %}" method="post">
+    
+<ul class="formfields">
     {% csrf_token %}
-<ul>
     <li><input type="text" name="username" placeholder="Användarnamn" /></li>
     <li><input type="password" name="password" placeholder="Lösenord" /></li>
-    <li><input type="submit" value="Logga in" /></li>
+</ul>
+<ul>
+    <li><input type="submit" value="Logga in" />&nbsp;<a data-modal-form="true" title="Registrera ny användare" href="{% url register %}">Ny användare</a></li>
 </ul>
 </form>
 
-<a href="{% url register %}">Ny användare</a>
 
 {% endblock content %}

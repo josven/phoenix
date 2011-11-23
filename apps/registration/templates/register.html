@@ -10,34 +10,21 @@
 
 {% block content %}
 {% if not user.is_authenticated %}
-<form id="id_registerform" action="{% if form.password1 %}{% url register %}{% else %}{% url login %}{% endif %}" method="post">
-{% csrf_token %}
-<ul>
-    <li><label for="id_username">Användarnamn:</label></li>
-    <li>{{ form.username }}</li>
-    
-    {% if form.email %}
-    <li><label for="id_email">Epost:</label></li>
-    <li>{{ form.email }}</li>
-    {% endif %}
-    
-    {% if form.password %}
-    <li><label for="id_password">Lösenord:</label></li>
-    <li>{{ form.password }}</li> 
-    <li><input type="submit" value="Logga in" /></li>
-    {% endif %}
-    
-    {% if form.password1 %}
-    <li><label for="id_password1">Lösenord:</label></li>
+<form id="id_registerform" action="{% url register %}" method="post">
+<ul class="formfields">
+    {% csrf_token %}
+
+    <li>{{ form.username }}</li>   
+
+    <li>{{ form.email }}</li>   
+
     <li>{{ form.password1 }}</li>
 
-    <li><label for="id_password2">Lösenord igen:</label></li>
     <li>{{ form.password2 }}</li>
-
-    <li><input type="submit" value="Registera" /></li>
-    {% endif %}
+</ul>
+<ul>
+    <li><input type="submit" value="Registera" />&nbsp;<a data-modal-form="true" title="Logga in" href="{% url login %}">Logga in</a></li>
 </ul>
 
-<a href="{% url login %}">Logga in</a>
 {% endif %}
 {% endblock content %}
