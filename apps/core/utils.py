@@ -1,4 +1,4 @@
-﻿import sys
+﻿import sys, inspect
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
 
@@ -36,13 +36,17 @@ def get_base_template(request):
         return request.session['base_template']
         
 def render(request,*args):
+    frm = inspect.stack()[1]
+    mod = inspect.getmodule(frm[0])
+
     template = args[0]
     
     try:
         vars = args[1]
     except:
         vars = {}
-
+    
+    vars['app_name'] = mod.__name__.split('.')[1]
     vars['base_template'] = get_base_template(request)
     return djangorender(request,template,vars)
     

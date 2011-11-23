@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% if user.is_authenticated %}
+<h1>Redan registerad användare</h1>
+{% else %}
+<h1>Registrera användare</h1>
+{% endif %}
+{% endblock header %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+<form id="id_registerform" action="{% if form.password1 %}{% url register %}{% else %}{% url login %}{% endif %}" method="post">
+{% csrf_token %}
+<ul>
+    <li><label for="id_username">Användarnamn:</label></li>
+    <li>{{ form.username }}</li>
+    
+    {% if form.email %}
+    <li><label for="id_email">Epost:</label></li>
+    <li>{{ form.email }}</li>
+    {% endif %}
+    
+    {% if form.password %}
+    <li><label for="id_password">Lösenord:</label></li>
+    <li>{{ form.password }}</li> 
+    <li><input type="submit" value="Logga in" /></li>
+    {% endif %}
+    
+    {% if form.password1 %}
+    <li><label for="id_password1">Lösenord:</label></li>
+    <li>{{ form.password1 }}</li>
+
+    <li><label for="id_password2">Lösenord igen:</label></li>
+    <li>{{ form.password2 }}</li>
+
+    <li><input type="submit" value="Registera" /></li>
+    {% endif %}
+</ul>
+
+<a href="{% url login %}">Logga in</a>
+{% endif %}
+{% endblock content %}

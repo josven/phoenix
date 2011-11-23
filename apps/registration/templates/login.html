@@ -14,10 +14,15 @@
 <p>Antingen kan du <a href="{% url logout %}">logga ut</a> eller logga in som en annan användare</p>
 {% endif %}
 <p><strong>{{ results }}</strong></p>
-<form action="{% url login %}" method="post">
+<form id="id_loginform" action="{% url login %}" method="post">
     {% csrf_token %}
-    <input type="text" name="username" placeholder="Användarnamn" />
-    <input type="password" name="password" placeholder="Lösenord" />
-    <input type="submit" value="Logga in" />
+<ul>
+    <li><input type="text" name="username" placeholder="Användarnamn" /></li>
+    <li><input type="password" name="password" placeholder="Lösenord" /></li>
+    <li><input type="submit" value="Logga in" /></li>
+</ul>
 </form>
+
+<a href="{% url register %}">Ny användare</a>
+
 {% endblock content %}

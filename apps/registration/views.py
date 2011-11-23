@@ -3,8 +3,10 @@ from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from forms import RegisterForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from models import BetaReg
+
 
 from apps.core.utils import render
 
@@ -37,7 +39,9 @@ def auth_login(request):
     Log in a user
     
     """
-    
+    vars = {
+        'body_id':'page_login'
+    }
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -62,3 +66,28 @@ def auth_logout(request):
     messages.add_message(request, messages.INFO, "Du har just loggat ut")
     logout(request)
     return render(request,'login.html')
+    
+
+def auth_register(request):
+    """
+    register a user
+    
+    """
+    vars = {
+        'body_id':'page_register'
+    }
+    
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            form = AuthenticationForm()
+            messages.add_message(request, messages.INFO, "Användare skapad, prova att logga in")
+        else:
+            messages.add_message(request, messages.INFO, "Fel fel fel fel")
+    else:
+        form = RegisterForm()
+    
+    vars['form'] = form
+    return render(request,'register.html', vars)

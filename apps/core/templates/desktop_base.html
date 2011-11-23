@@ -10,10 +10,11 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link rel="stylesheet" href="{{ STATIC_URL }}/css/style.css">
+    {% if app_name %}<link rel="stylesheet" href="{{ STATIC_URL }}/css/{{ app_name }}.css">{% endif %}
 	<script src="{{ STATIC_URL }}/js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 
-<body>
+<body class="{{ app_name }}" id="{{ body_id }}">
 {% block body %}
 	<div id="container" class="container_12">
 		
