@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     // Show messages with jGrowl
     var messages = $('.jGrowlmessages li');
     messages.hide();

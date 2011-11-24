@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from utils import find_request
 
+
 class Profile(models.Model):
     """
     A user profile
@@ -12,6 +13,17 @@ class Profile(models.Model):
     """
 
     pass
+
+
+class ActiveManager(models.Manager):
+    """
+    Active manager for entry, inherited by children. 
+    Only returns objects that are not deleted.
+    Used as class.active.command (ex: Thread.active.all())
+    
+    """
+    def get_query_set(self):
+        return super(ActiveManager, self).get_query_set().exclude(date_deleted__isnull=True)
 
 
 class Entry(models.Model):
@@ -22,6 +34,9 @@ class Entry(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_deleted = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    objects = models.Manager()
+    active = ActiveManager()
 
     class Meta():
         abstract = True
