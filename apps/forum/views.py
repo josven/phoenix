@@ -29,3 +29,16 @@ def create_thread(request):
     if form.is_valid():
         Thread.objects.create(created_by=request.user, title=form.cleaned_data['title'])
     return render(request, 'forum.html', {"threads": threads, 'form': form})
+
+@login_required(login_url='/auth/login/')
+def read_thread(request, id):
+    """
+    Read a forum thread.
+    
+    """
+    try:
+        thread = Thread.active.get(id=id)
+    except:
+        raise Http404
+    
+    return render(request, 'thread.html', {"thread": thread})

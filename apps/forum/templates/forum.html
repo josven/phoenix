@@ -11,7 +11,7 @@
     <h2>Trådar</h2>
     {% for thread in threads %}
         <div class="thread_wrapper">
-            {{ thread.title }} - {{ thread.created_by }}
+            <a href="{% url read_thread thread.id %}">{{ thread.title }} - {{ thread.created_by }}</a>
         </div>
     {% endfor %}
 {% endblock content %}
