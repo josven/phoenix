@@ -47,6 +47,10 @@ def auth_login(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
+            if not user.is_staff:
+                messages.add_message(request, messages.INFO, "Siten inte öppen.")
+                return render(request,'comming_soon.html')
+
             if user.is_active:
                 login(request, user)
                 messages.add_message(request, messages.INFO, "Du loggade just in.")
@@ -83,7 +87,8 @@ def auth_register(request):
         if form.is_valid():
             form.save()
             form = AuthenticationForm()
-            messages.add_message(request, messages.INFO, "Användare skapad, prova att logga in")
+            messages.add_message(request, messages.INFO, "Användare skapad.")
+            return render(request,'login.html', vars)
         else:
             messages.add_message(request, messages.INFO, "Fel fel fel fel")
     else:
