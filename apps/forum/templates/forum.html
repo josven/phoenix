@@ -1,14 +1,17 @@
 ﻿{% extends "base.html" %}
-{% block header %}
-<h1>Forum</h1>
-{% endblock header %}
 
 {% block content %}
-<h2>Skapa tråd</h2>
-<form action="{% url list_forum %}" method="post">
-    {% csrf_token %}
+    <h2>Skapa tråd</h2>
+    <form action="{% url create_thread %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Skapa" />
+    </form>
     
-    <input type="text" name="title" placeholder="Trådtitel" />
-    <input type="submit" value="Skapa" />
-</form>
+    <h2>Trådar</h2>
+    {% for thread in threads %}
+        <div class="thread_wrapper">
+            {{ thread.title }} - {{ thread.created_by }}
+        </div>
+    {% endfor %}
 {% endblock content %}

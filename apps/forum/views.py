@@ -1,22 +1,31 @@
-from models import Thread, ThreadHistory
 from django.contrib.auth.models import User, Group
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
 from apps.core.utils import render
-
-def test_view(request):
-    User.objects.all().delete()
-    u = User.objects.create(username="aaaa")
-    u2 = User.objects.create(username="aaaa2")
-    t1 = Thread.objects.create(title="Thread 1")
-    t1.title = "Thread 1 - Modified"
-    t1.last_changed_by = u2
-    t1.save()
-
-    raise Http404
+from models import Thread, ThreadHistory
+from forms import ThreadForm
 
 @login_required(login_url='/auth/login/')
-def list_forum(request):
-    results = " lol"
-    return render(request,'forum.html', {"results": results})
+def read_forum(request):
+    """
+    Read the list of forum threads.
+    
+    """
+    threads = Thread.active.all()
+    form = ThreadForm()
+    return render(request, 'forum.html', {"threads": threads, 'form': form})
+
+
+@login_required(login_url='/auth/login/')
+def create_thread(request):
+    """
+    Create a forum thread.
+    
+    """
+    threads = Thread.active.all()
+    form = ThreadForm(request.POST)
+    if form.is_valid():
+        Thread.objects.create(created_by=request.user, title=form.cleaned_data['title'])
+    return render(request, 'forum.html', {"threads": threads, 'form': form})
