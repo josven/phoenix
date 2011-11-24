@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+    // Apply jQuery UI buttons
+    $( "input:submit, a.ui-button,nav a, button").button();
+    
     
     // Show messages with jGrowl
     var messages = $('.jGrowlmessages li');

@@ -1,13 +1,6 @@
 {% extends "base.html" %}
-
 {% block header %}
-{% if user.is_authenticated %}
-<h1>Redan registerad användare</h1>
-{% else %}
-<h1>Registrera användare</h1>
-{% endif %}
 {% endblock header %}
-
 {% block content %}
 {% if not user.is_authenticated %}
 <form id="id_registerform" action="{% url register %}" method="post">
@@ -23,7 +16,7 @@
     <li>{{ form.password2 }}</li>
 </ul>
 <ul>
-    <li><input type="submit" value="Registera" />&nbsp;<a data-modal-form="true" title="Logga in" href="{% url login %}">Logga in</a></li>
+    <li><input type="submit" value="Registera" />&nbsp;<a data-modal-form="true" class="ui-button" title="Logga in" href="{% url login %}">Logga in</a></li>
 </ul>
 
 {% endif %}

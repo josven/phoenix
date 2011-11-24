@@ -1,6 +1,4 @@
 $(document).ready(function() {
-    // Apply jQuery UI buttons
-    $( "input:submit, a, button").button();
     
     // Modals for register and login. Can be reused for any modalforms
     $( '*[data-modal-form=true]' ).click( function(event) {

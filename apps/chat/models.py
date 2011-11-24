@@ -8,4 +8,4 @@ class Post(Entry):
     A Post in the chat.
 
     """
-    text = models.CharField(max_length=100)
+    text = models.CharField(max_length=1024)

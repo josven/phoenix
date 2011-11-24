@@ -1,18 +1,10 @@
 {% extends "base.html" %}
-
 {% block header %}
-{% if user.is_authenticated %}
-<h1>Inloggad</h1>
-{% else %}
-<h1>Logga in</h1>
-{% endif %}
 {% endblock header %}
-
 {% block content %}
 {% if user.is_authenticated %}
 <p>Du är inloggad som <em>{{ user }}.</em></p>
-<p>Antingen kan du <a href="{% url logout %}">logga ut</a> eller logga in som en annan användare</p>
-{% endif %}
+{% else %}
 <p><strong>{{ results }}</strong></p>
 <form id="id_loginform" action="{% url login %}" method="post">
     
@@ -22,9 +14,9 @@
     <li><input type="password" name="password" placeholder="Lösenord" /></li>
 </ul>
 <ul>
-    <li><input type="submit" value="Logga in" />&nbsp;<a data-modal-form="true" title="Registrera ny användare" href="{% url register %}">Ny användare</a></li>
+    <li><input type="submit" value="Logga in" />&nbsp;<a data-modal-form="true" title="Registrera ny användare" class="ui-button" href="{% url register %}">Ny användare</a></li>
 </ul>
 </form>
-
+{% endif %}
 
 {% endblock content %}
