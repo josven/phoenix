@@ -66,6 +66,12 @@ a:focus { outline: thin dotted; }
 /* Improve readability when focused and hovered in all browsers: h5bp.com/h */
 a:hover, a:active { outline: 0; }
 
+a.link-user {
+    color: #ddd;
+    text-decoration:none;
+}
+a.link-user:visited {color: #ddd;}
+a.link-user:hover {color: #fff;}
 
 /* =============================================================================
    Typography
@@ -251,10 +257,7 @@ header h1 {
 }
 
 /* Nav */
-
 nav.navigationbar {
-
-
     background-color: #777777;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#777777), to(#999999)); 
     background-image: -webkit-linear-gradient(top, #777777, #999999); 
@@ -266,7 +269,7 @@ nav.navigationbar {
 
     border:1px solid #666;
     margin: 0px;
-    padding: 3px;
+    padding: 3px 7px 3px 3px;
     border-radius: 4px;
     
     display:inline-block;
@@ -278,6 +281,18 @@ nav.navigationbar ul {
 
 nav.navigationbar li {
  display: inline;
+}
+
+nav#top-navigationbar {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index: 9999;
+    display:block;
+    width:100%;
+}
+nav#top-navigationbar .logo {
+    float:left;
 }
 
 /* content */

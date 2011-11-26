@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
@@ -27,19 +27,25 @@
     {% endblock script %}
 </head>
 
-<body class="{{ app_name }}" id="{{ body_id }}">
+<body class="{{ app_name }}">
 {% block body %}
+    
+    {% if user.is_authenticated %}
+    <nav id="top-navigationbar" class="navigationbar buttonset">
+    <span class="logo" >[LOGO]</span>
+    {% block navigation %}
+    {% endblock navigation %}
+    </nav>
+    {% endif %}
+    
 	<div id="container" class="container_12">
-		
+        
         <header class="grid_12">
 		{% block header %}
 		{% endblock header %}
         </header>
         
-        <nav class="navigationbar">
-        {% block navigation %}
-        {% endblock navigation %}
-        </nav>
+
         
         {% block messages %}
         {% endblock messages %}

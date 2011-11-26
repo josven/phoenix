@@ -1,6 +1,5 @@
-﻿{% extends "base.html" %}
-{% block header %}
-{% endblock header %}
+{% extends "base.html" %}
+
 {% block content %}
 {% if form %}
 <form action="{% url chat %}" method="post">
@@ -21,8 +20,14 @@
 <ul id="chatlist" data-role="listview" data-inset="true">
 {% endif %}
     <li>
-        <h4>{{ entry.created_by }} - <em>{{ entry.date_created }}</em></h4>
-        <p>{{ entry.text|linebreaks|urlizetrunc:40  }}</p>
+        <h4><a {% if entry.created_by.is_authenticated %} class="link-user" {% endif %} href="/user/{{ entry.created_by.id }}">{{ entry.created_by }}</a> - <em>{{ entry.date_created }}</em></h4>
+        {{ entry.text|linebreaks|urlizetrunc:40  }}
+        
+        <div class="buttonset">
+            <a href="#" class="ui-button ui-corner-left">Svara</a>
+            <a href="#" class="ui-button">Mail</a>
+            <a href="#" class="ui-button">Gästbok</a>
+        </div>
     </li>
 
 {% if forloop.last %}
