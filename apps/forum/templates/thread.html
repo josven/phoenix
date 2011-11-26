@@ -2,5 +2,20 @@
 
 {% block content %}
     <h2>{{ thread.title }} - {{ thread.created_by }}</h2>
-    {{ thread }}
+    
+    {% for post in posts %}
+        {% if post.first_in_subthread %}<div class="subthread" style="margin-left: 16px; border: solid 1px red;">{% endif %}
+        <div class="forum_post">
+            {{ post.body }}
+            {% if post.last_in_subthread %}
+                <div class="full_width_reply">Svara</div>
+                {% include "reply_form.html" %}
+            {% else %}
+                <div class="small_reply">Svara</div>
+                {% include "reply_form.html" %}
+            {% endif %}
+        </div>
+        {% if post.last_in_subthread %}</div>{% endif %}
+    {% endfor %}
+    
 {% endblock content %}
