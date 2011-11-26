@@ -2,15 +2,23 @@
 from forms import *
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404
 from django.conf import settings
 
 from apps.core.utils import render
+
+"""
+    TO DO
+    - Move constants to a seperate settings file.
+    - read_post()
+    - delete_post()
+    - Use (CURD) in chat(request, **kwargs) depending on POST GET UPDATE and DELETE
+
 """
 
+"""
     Constants
-    
 """
 LIST_ITEM_LIMIT = 10
 
@@ -56,6 +64,8 @@ def chatpost(request,id,type):
     """
     try:
         post = Post.objects.get(id=id)
+        print "test"
+        print perms.post
     except:
         # "no match"
         raise Http404  
@@ -76,9 +86,7 @@ def chatpost(request,id,type):
 def chatposts(request,id1,id2,type):
     """
     
-    API for GET a rage of posts in HTML
-    Later this will also return 
-    json and xml depending on <type>
+    API for GET a range of posts in HTML
     
     """
     
@@ -128,5 +136,4 @@ def chatposts(request,id1,id2,type):
             raise Http404
     else:
         # "wrong method"
-        raise Http404        
-    
+        raise Http404

@@ -2,6 +2,7 @@ $(document).ready(function() {
 
     // Apply jQuery UI buttons
     $( "input:submit, a.ui-button,nav a, button").button();
+    $( ".buttonset" ).buttonset();
 
     // Show messages with jGrowl
     var messages = $('.jGrowlmessages li, .errorlist li');
