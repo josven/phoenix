@@ -16,7 +16,7 @@ def register_beta(request):
     Register a beta email address!
 
     """
-
+    
     if not request.is_ajax():
         raise Http404
 
@@ -77,6 +77,10 @@ def auth_register(request):
     register a user
     
     """
+    
+    return render(request,'comming_soon.html')
+    
+    
     vars = {
         'body_id':'page_register'
     }
