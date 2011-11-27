@@ -187,6 +187,46 @@ class EntryHistory(models.Model):
         abstract = True
 
 
+class ThreadedManager(models.Manager):
+    """
+    Adds "decorated" to objects manager, decorates a thread of items with 
+    template variables first_in_subthread and first_in_subthread, to make them 
+    easier to render.
+    
+    """
+
+    def decorated(self, *args, **kwargs):
+        print kwargs
+        # Get the items in the thread ordered by hierarchy
+        items = super(ThreadedManager, self).get_query_set().filter(**kwargs)
+
+        li = None # Last item
+        for item in items:
+            ihl = item.hierarchy_level
+            lhl = 0
+            if li:
+                lhl = li.hierarchy_level
+            # If hierarchy_level increased, this is first in a sub-thread
+            if ihl > lhl:
+                item.first_in_subthread = True
+
+            # If hierarchy_level decreased, previous item was last in sub-thread
+            elif li and ihl < lhl:
+                li.last_in_subthread = True
+
+            # If hierarchy are the same, but sub-thread changed. Last item
+            # was last, new item is first
+            elif li and ihl == lhl and li.sub_thread != item.sub_thread:
+                item.first_in_subthread = True
+                li.last_in_subthread = True
+
+            li = item
+            lhl = item.hierarchy_level
+            lst = item.sub_thread
+
+        return items
+
+
 class ThreadedEntry(Entry):
     """
     Abstract model for Entries containing threading logic. Used for
@@ -203,8 +243,10 @@ class ThreadedEntry(Entry):
     """
     hierarchy = models.CharField(max_length="1024")
     hierarchy_level = models.PositiveIntegerField(blank=True, null=True)
-    sub_thread = models.CharField(max_length="1024")
+    sub_thread = models.CharField(max_length="1024", blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True)
+
+    objects = ThreadedManager()
 
     def save(self, *args, **kwargs):
         """

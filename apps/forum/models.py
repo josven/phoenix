@@ -11,12 +11,16 @@ class Thread(Entry):
     """
     title = models.CharField(max_length=100)
 
+    def get_absolute_url(self):
+        return "/forum/thread/read/%s/" % self.id
+
 
 class ThreadHistory(EntryHistory):
     """
     History for the Thread model.
     
     """
+    origin = models.ForeignKey(Thread)
     title = models.CharField(max_length=100)
 
 
@@ -34,5 +38,6 @@ class ForumPostHistory(ThreadedEntryHistory):
     History for the ForumPost model.
     
     """
+    origin = models.ForeignKey(ForumPost)
     body = models.TextField()
 
