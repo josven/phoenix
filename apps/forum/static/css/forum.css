@@ -1,0 +1,12 @@
+.hidden {
+    display: none;
+}
+
+.subthread {
+    margin-left: 16px;
+    border: solid 1px red;
+}
+
+.form_post {
+    border: solid 1px green;
+}

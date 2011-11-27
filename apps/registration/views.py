@@ -49,7 +49,7 @@ def auth_login(request):
         if user is not None:
             if not user.is_staff:
                 messages.add_message(request, messages.INFO, "Siten inte öppen.")
-                return render(request,'comming_soon.html')
+                return render(request, 'comming_soon.html')
 
             if user.is_active:
                 login(request, user)
@@ -58,9 +58,9 @@ def auth_login(request):
                 messages.add_message(request, messages.INFO, "Ej aktiv användare")
         else:
             messages.add_message(request, messages.INFO, "Fel användarnamn eller lösenord.")
-            
-    return render(request,'login.html')
-    
+
+    return render(request, 'login.html')
+
 @login_required(login_url='/auth/login/')
 def auth_logout(request):
     """
@@ -69,8 +69,8 @@ def auth_logout(request):
     """
     messages.add_message(request, messages.INFO, "Du har just loggat ut")
     logout(request)
-    return render(request,'login.html')
-    
+    return render(request, 'login.html')
+
 
 def auth_register(request):
     """
@@ -80,19 +80,19 @@ def auth_register(request):
     vars = {
         'body_id':'page_register'
     }
-    
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        
+
         if form.is_valid():
             form.save()
             form = AuthenticationForm()
             messages.add_message(request, messages.INFO, "Användare skapad.")
-            return render(request,'login.html', vars)
+            return render(request, 'login.html', vars)
         else:
             messages.add_message(request, messages.INFO, "Fel fel fel fel")
     else:
         form = RegisterForm()
-    
+
     vars['form'] = form
-    return render(request,'register.html', vars)
+    return render(request, 'register.html', vars)

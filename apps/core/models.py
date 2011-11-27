@@ -203,7 +203,7 @@ class ThreadedManager(models.Manager):
         li = None # Last item
         for item in items:
             ihl = item.hierarchy_level
-            lhl = None
+            lhl = 0
             if li:
                 lhl = li.hierarchy_level
             # If hierarchy_level increased, this is first in a sub-thread
@@ -211,7 +211,7 @@ class ThreadedManager(models.Manager):
                 item.first_in_subthread = True
 
             # If hierarchy_level decreased, previous item was last in sub-thread
-            elif ihl < lhl:
+            elif li and ihl < lhl:
                 li.last_in_subthread = True
 
             # If hierarchy are the same, but sub-thread changed. Last item

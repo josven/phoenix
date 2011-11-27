@@ -14,6 +14,7 @@ class Thread(Entry):
     def get_absolute_url(self):
         return "/forum/thread/read/%s/" % self.id
 
+
 class ThreadHistory(EntryHistory):
     """
     History for the Thread model.

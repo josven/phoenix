@@ -14,6 +14,7 @@ def read_forum(request):
     Read the list of forum threads.
     
     """
+
     threads = Thread.active.all()
     form = ThreadForm()
     return render(request, 'forum.html', {"threads": threads, 'form': form})
@@ -71,24 +72,35 @@ def create_forumpost(request):
     form = ForumPostForm(request.POST)
     if form.is_valid():
         try:
-            thread = Thread.active.get(id=thread_id)
+            thread = Thread.active.get(id=form.cleaned_data['thread_id'])
         except:
             raise Http404
 
         # If the parent does not equal the given thread, abort!
-        if parent_id in form.cleaned_data:
+        if 'parent_id' in form.cleaned_data and form.cleaned_data['parent_id']:
             try:
-                parent = ForumPost.objects.get()
+                parent = ForumPost.objects.get(id=form.cleaned_data['parent_id'])
             except:
                 raise Http404
             if parent.collection != thread:
-                raise Hell
+                raise Http404
 
         # Create the post
         ForumPost.objects.create(
+            parent_id=form.cleaned_data['parent_id'],
             created_by=request.user,
-            parent_id=parent_id,
-            collection=thread
+            collection=thread,
+            body=form.cleaned_data['body']
         )
 
-        return aasd
+        return HttpResponseRedirect(thread.get_absolute_url())
+
+    try:
+        thread = Thread.active.get(id=request.POST['thread_id'])
+    except:
+        raise Http404
+    posts = ForumPost.objects.decorated(collection=thread)
+    form = ForumPostForm()
+
+    data = {"thread": thread, 'posts': posts, 'form': form}
+    return render(request, 'thread.html', data)
