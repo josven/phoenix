@@ -32,6 +32,7 @@
 
 {% if forloop.last %}
 </ul>
+{% comment %}
 <nav class="navigationbar">
     <ul>
     {% if not isFirstPage %}
@@ -46,6 +47,7 @@
     {% endif %}
     </ul>
 </nav>
+{% endcomment %}
 {% endif %}
 
 {% endfor %}

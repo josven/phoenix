@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     (r'^auth/', include('apps.registration.urls')),
     (r'^forum/', include('apps.forum.urls')),
     (r'^chat/', include('apps.chat.urls')),
+    (r'^claim/', include('apps.claim.urls')),
 )

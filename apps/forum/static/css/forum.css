@@ -1,12 +1,49 @@
-.hidden {
-    display: none;
-}
-
 .subthread {
-    margin-left: 16px;
-    border: solid 1px red;
+    list-style-type: none;
+    padding-left:0;
+    margin-left:10px;
+    margin-top: -5px;
 }
 
-.form_post {
-    border: solid 1px green;
+.boxshadow .subthread {
+    box-shadow: -2px 2px 2px rgba(0,0,0,0.5);
+}
+
+.forum_post {
+    border-top: 1px dotted #666;
+    padding: 0.5em 10px 10px;
+    margin:0;
+    margin: -1px;
+}
+
+.subthread li:first-child {
+    border-style: solid;
+}
+
+.forum_post .ui-buttonset {
+    font-size: 70%;
+}
+
+.full_width_reply {
+    background-color:white;
+    border-top: 1px dotted #666;
+    padding-top:10px;
+}
+
+.full_width_reply label {
+    margin:10px;
+    font-weight: bold;
+    color: #333;
+}
+.full_width_reply textarea {
+    width:90%;
+    border:0px solid red;
+    padding:0;
+    outline:none;
+    color: #222;
+}
+.full_width_reply p {
+    text-align: right;
+    padding: 10px;
+    margin:0;
 }

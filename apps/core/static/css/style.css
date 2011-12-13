@@ -231,20 +231,36 @@ body{min-width:960px}.container_12,.container_16{margin-left:auto;margin-right:a
    ========================================================================== */
 /* body */
 body  {
+    background: #45484d; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #222 0%, #45484d 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#222), color-stop(100%,#45484d)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* IE10+ */
+    background: radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222', endColorstr='#45484d',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/*
+body  {
     background-color: #dddddd;
     
-    background-image:url('../img/theword.png'), -webkit-gradient(linear, left top, left bottom, from(#666666), to(#dddddd)); 
-    background-image:url('../img/theword.png'),  -webkit-linear-gradient(top, #666666, #dddddd); 
-    background-image:url('../img/theword.png'),     -moz-linear-gradient(top, #666666, #dddddd); 
-    background-image:url('../img/theword.png'),      -ms-linear-gradient(top, #666666, #dddddd); 
-    background-image:url('../img/theword.png'),       -o-linear-gradient(top, #666666, #dddddd); 
-    background-image:url('../img/theword.png'),          linear-gradient(top, #666666, #dddddd);
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'), -webkit-gradient(linear, left top, left bottom, from(#FF0000), to(#aa0000)); 
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'),  -webkit-linear-gradient(top, #FF0000, #aa0000); 
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'),     -moz-linear-gradient(top, #FF0000, #aa0000); 
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'),      -ms-linear-gradient(top, #FF0000, #aa0000); 
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'),       -o-linear-gradient(top, #FF0000, #aa0000); 
+    background-image:url('http://img269.imageshack.us/img269/9461/tvlingdesign.png'),          linear-gradient(top, #FF0000, #aa0000);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#666666', EndColorStr='#dddddd'); 
     background-repeat:no-repeat;
     background-position:top center;
+    
 }
-
-
+*/
 /* header */
 
 header {
