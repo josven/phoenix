@@ -10,6 +10,9 @@ $(document).ready(function() {
     messages.each( function(){
         $.jGrowl(this.innerHTML);
     });
+    
+    // User jQuery datepicker
+    $(".datepicker").datepicker({dateFormat: 'yy-mm-dd', defaultDate:'-25y',  changeYear: true, changeMonth: true });
 });
 
 
