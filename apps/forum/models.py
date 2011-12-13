@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.db.models import get_model
+from taggit.managers import TaggableManager
 
 from apps.core.models import ThreadedEntry, ThreadedEntryHistory, Entry, EntryHistory
 
@@ -10,6 +11,7 @@ class Thread(Entry):
 
     """
     title = models.CharField(max_length=100)
+    tags = TaggableManager()
 
     def get_absolute_url(self):
         return "/forum/thread/read/%s/" % self.id

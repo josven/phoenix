@@ -1,4 +1,5 @@
 ﻿import sys, inspect
+from django.db import models
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
 
@@ -16,7 +17,7 @@ def find_request():
         f = f.f_back
     return request
 
-def set_base_template(request,base):
+def set_base_template(request, base):
     print base
     if base == 'touch':
         request.session['base_template'] = 'touch_base.html'
@@ -27,27 +28,33 @@ def set_base_template(request,base):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     except:
         return HttpResponseRedirect(request.META['PATH_INFO'])
-    
+
 def get_base_template(request):
     try:
         return request.session['base_template']
     except:
         request.session['base_template'] = 'desktop_base.html'
         return request.session['base_template']
-        
-def render(request,*args):
+
+def render(request, *args):
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
 
     template = args[0]
-    
+
     try:
         vars = args[1]
     except:
         vars = {}
-    
+
     vars['app_name'] = mod.__name__.split('.')[1]
     vars['base_template'] = get_base_template(request)
-    return djangorender(request,template,vars)
-    
+    return djangorender(request, template, vars)
 
+
+def create_datepicker(form):
+    formfield = form.formfield()
+    if isinstance(form, models.DateField):
+        formfield.widget.format = '%Y/%m/%dasdas'
+        formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
+    return formfield
