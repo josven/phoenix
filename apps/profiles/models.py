@@ -17,7 +17,7 @@ class Profile(models.Model):
 
     """
     def get_image_path(instance, filename):
-        return os.path.join('media/avatars', str(instance.id), filename)
+        return os.path.join('avatars', str(instance.id), filename)
 
     user = models.OneToOneField(User)
     name = models.CharField(max_length=150, blank=True, null=True, verbose_name="Namn")
