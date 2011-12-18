@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import shlex
 
 from django.contrib.auth.models import User, Group
+from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -17,9 +19,15 @@ def read_forum(request):
     
     """
 
+    categories = defaultCategories.objects.all()
     threads = Thread.active.all()
-    form = ThreadForm()
-    return render(request, 'forum.html', {"threads": threads, 'form': form})
+    
+    vars = {
+            "threads": threads,
+            "categories":categories
+            }
+
+    return render(request, 'forum.html', vars )
 
 
 @login_required(login_url='/auth/login/')
@@ -116,3 +124,15 @@ def create_forumpost(request):
 
     data = {"thread": thread, 'posts': posts, 'form': form}
     return render(request, 'thread.html', data)
+
+@login_required(login_url='/auth/login/')
+def get_threads_by_tags(request,tags):
+    categories = defaultCategories.objects.all()
+    tags = tags.split(",")
+    threads = Thread.active.filter(tags__name__in=tags)
+    
+    if len( threads ) < 1:
+        messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
+
+    return render(request, 'forum.html', {"threads": threads,"categories":categories})
+    

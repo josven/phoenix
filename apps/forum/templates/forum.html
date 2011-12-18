@@ -2,11 +2,17 @@
 {% load entry_tags %}
 
 {% block secondary_navigation %}
-<h2>Forumsmeny</h2>
+<nav>
 <ul>
+    <li><h3>Forumsmeny</h3></li>
     <li><a href="{% url read_forum %}">Trådar</a></li>
     <li><a href="{% url create_thread %}">Skapa tråd</a></li>
+    <li><h3>Huvudkategorier</h3></li>
+    {% for tag in categories %}
+    <li><a href="{% url get_threads_by_tags tag %}">{{ tag }}</a></li>
+    {% endfor %}
 </ul>
+</nav>
 {% endblock secondary_navigation %}
 
 {% block content %}
