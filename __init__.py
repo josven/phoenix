@@ -14,3 +14,7 @@ settings.TEMPLATE_CONTEXT_PROCESSORS += (
 )
 
 settings.MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+settings.TEMPLATE_LOADERS += (
+    'django.template.loaders.app_directories.load_template_source',
+)

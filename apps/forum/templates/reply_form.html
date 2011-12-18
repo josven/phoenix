@@ -3,14 +3,14 @@
     {{ form.non_field_errors }}
     <div class="fieldWrapper">
         {{ form.subject.errors }}
-        <label for="id_body">Body:</label>
+        <label for="id_body">Skriv svar:</label>
         {{ form.body }}
     </div>
-    <div class="hidden" style="display: none;">
+    <div class="ui-helper-hidden" style="display: none;">
         <input type="text" name="thread_id" id="id_thread_id" value="{{ thread.id }}">
     </div>
-    <div class="hidden" style="display: none;">
+    <div class="ui-helper-hidden" style="display: none;">
         <input type="text" name="parent_id" id="id_parent_id" value="{{ post.id }}">
     </div>
-    <p><input type="submit" value="Send message" /></p>
+    <p class="ui-helper-hidden"><input type="submit" value="Svara" /></p>
 </form>

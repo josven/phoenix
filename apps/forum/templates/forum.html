@@ -1,17 +1,67 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
+{% load entry_tags %}
+
+{% block secondary_navigation %}
+<nav>
+<ul>
+    <li><h3>Forumsmeny</h3></li>
+    <li><a href="{% url read_forum %}">Trådar</a></li>
+    <li><a href="{% url create_thread %}">Skapa tråd</a></li>
+    <li><h3>Huvudkategorier</h3></li>
+    {% for tag in categories %}
+    <li><a href="{% url get_threads_by_tags tag %}">{{ tag }}</a></li>
+    {% endfor %}
+</ul>
+</nav>
+{% endblock secondary_navigation %}
 
 {% block content %}
-    <h2>Skapa tråd</h2>
-    <form action="{% url create_thread %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Skapa" />
-    </form>
+{% for thread in threads %}
+{% if forloop.first %}
+<table id="table_threads">
+	<thead>
+		<tr>
+			<th>Trådtitel</th>
+			<th>Skapad av</th>
+            <th>Kategorier</th>
+            <th>Datum</th>
+			<th>Läsningar</th>
+			<th>Svar</th>
+			<th>Senate svar</th>
+		</tr>
+	</thead>
+	<tbody>
+{% endif%}
+		<tr class="ui-widget-content">
+			<td><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></td>
+			<td>{{ thread.created_by }}</td>
+			<td>{% for tag in thread.tags.all %}{{tag}} {% endfor %}</td>
+			<td>{{ thread.date_created }}</td>
+			<td>{ ANTAL }</td>
+			<td>{ ANTAL }</td>
+			<td>{ DATUM }</td>
+		</tr>
+{% if forloop.last %}
+	</tbody>
+</table>
+{% endif %}
+{% endfor %}
+
+{% comment %}
+<ul id="threadlist" class="flat-list entrylist" data-role="listview" data-inset="true">
+{% for thread in threads %}
+<li class="ui-widget ui-widget-content">
+    {% entry_head thread %}
     
-    <h2>Trådar</h2>
-    {% for thread in threads %}
-        <div class="thread_wrapper">
-            <a href="{% url read_thread thread.id %}">{{ thread.title }} - {{ thread.created_by }}</a>
-        </div>
-    {% endfor %}
+    <div class="ui-text-panel">
+        <h3><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></h3>
+        <p>Skapad av {{ thread.created_by }}, {{ thread.date_created }} <br/>
+           Läst X gånger, X svar.<br/>
+           Kategorier:
+        </p>
+    </div>
+</li>
+{% endfor %}
+</ul>
+{% endcomment %}
 {% endblock content %}

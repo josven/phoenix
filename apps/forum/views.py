@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+import shlex
+
 from django.contrib.auth.models import User, Group
+from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from apps.core.utils import render
-from models import Thread, ForumPost
+from models import Thread, ForumPost, defaultCategories
 from forms import ThreadForm, ForumPostForm
 
 
@@ -15,9 +19,15 @@ def read_forum(request):
     
     """
 
+    categories = defaultCategories.objects.all()
     threads = Thread.active.all()
-    form = ThreadForm()
-    return render(request, 'forum.html', {"threads": threads, 'form': form})
+    
+    vars = {
+            "threads": threads,
+            "categories":categories
+            }
+
+    return render(request, 'forum.html', vars )
 
 
 @login_required(login_url='/auth/login/')
@@ -27,22 +37,32 @@ def create_thread(request):
     
     """
     threads = Thread.active.all()
-    form = ThreadForm(request.POST)
-    if form.is_valid():
-        # Create the thread
-        thread = Thread.objects.create(
-            created_by=request.user,
-            title=form.cleaned_data['title']
-        )
+    form = ThreadForm()
+    categories = defaultCategories.objects.all()
+    
+    if request.method == 'POST':    
+        form = ThreadForm(request.POST)
+        if form.is_valid():
+            # Create the thread
+            
+            thread = Thread.objects.create(
+                created_by = request.user,
+                title = form.cleaned_data['title']
+            )            
+            
+            tags = form.cleaned_data['tags']
+            for tag in tags:
+                thread.tags.add(tag.lower())
 
-        # Create the initial post
-        ForumPost.objects.create(
-            created_by=request.user,
-            collection=thread,
-            body=form.cleaned_data['body']
-        )
-        return HttpResponseRedirect(thread.get_absolute_url())
-    return render(request, 'forum.html', {"threads": threads, 'form': form})
+            # Create the initial post
+            ForumPost.objects.create(
+                created_by=request.user,
+                collection=thread,
+                body=form.cleaned_data['body']
+            )
+            return HttpResponseRedirect(thread.get_absolute_url())
+    
+    return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories})
 
 
 @login_required(login_url='/auth/login/')
@@ -104,3 +124,15 @@ def create_forumpost(request):
 
     data = {"thread": thread, 'posts': posts, 'form': form}
     return render(request, 'thread.html', data)
+
+@login_required(login_url='/auth/login/')
+def get_threads_by_tags(request,tags):
+    categories = defaultCategories.objects.all()
+    tags = tags.split(",")
+    threads = Thread.active.filter(tags__name__in=tags)
+    
+    if len( threads ) < 1:
+        messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
+
+    return render(request, 'forum.html', {"threads": threads,"categories":categories})
+    

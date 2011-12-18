@@ -1,16 +1,13 @@
-﻿{% extends base_template %}
-
-{% block header %}
-<h1></h1>
-{% endblock header %}
+{% extends base_template %}
 
 {% block navigation %}
-<ul class="container_12">
+<ul>
     <li><a href="{% url read_forum %}">Forum</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
+    {% comment %}
     <li><a data-ajax="false" href="{% url set_base_template 'touch' %}">Touch</a></li>
     <li><a data-ajax="false" href="{% url set_base_template 'desktop' %}">Desktop</a></li>
-    <li><a data-ajax="false" href="{% url logout %}">Logga ut</a></li>
+    {% endcomment %}
 </ul>
 {% endblock navigation %}
 
