@@ -1,10 +1,12 @@
+import shlex
+
 from django.contrib.auth.models import User, Group
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from apps.core.utils import render
-from models import Thread, ForumPost
+from models import Thread, ForumPost, defaultCategories
 from forms import ThreadForm, ForumPostForm
 
 
@@ -27,22 +29,32 @@ def create_thread(request):
     
     """
     threads = Thread.active.all()
-    form = ThreadForm(request.POST)
-    if form.is_valid():
-        # Create the thread
-        thread = Thread.objects.create(
-            created_by=request.user,
-            title=form.cleaned_data['title']
-        )
+    form = ThreadForm()
+    categories = defaultCategories.objects.all()
+    
+    if request.method == 'POST':    
+        form = ThreadForm(request.POST)
+        if form.is_valid():
+            # Create the thread
+            
+            thread = Thread.objects.create(
+                created_by = request.user,
+                title = form.cleaned_data['title']
+            )            
+            
+            tags = form.cleaned_data['tags']
+            for tag in tags:
+                thread.tags.add(tag.lower())
 
-        # Create the initial post
-        ForumPost.objects.create(
-            created_by=request.user,
-            collection=thread,
-            body=form.cleaned_data['body']
-        )
-        return HttpResponseRedirect(thread.get_absolute_url())
-    return render(request, 'forum.html', {"threads": threads, 'form': form})
+            # Create the initial post
+            ForumPost.objects.create(
+                created_by=request.user,
+                collection=thread,
+                body=form.cleaned_data['body']
+            )
+            return HttpResponseRedirect(thread.get_absolute_url())
+    
+    return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories})
 
 
 @login_required(login_url='/auth/login/')

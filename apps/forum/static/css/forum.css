@@ -1,3 +1,68 @@
+/* Create thread */
+#categories .ui-selecting { background: #eee; }
+#categories .ui-selected{ background: #888; color: #fff; }
+#categories { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#categories .ui-selectee { cursor:pointer; padding: .2em 0.4em; height: 18px; }
+    
+/* List threads, data tables styles */
+div.dataTables_length {
+	float: left;
+}
+
+div.dataTables_filter {
+	float: right;
+}
+
+div.dataTables_info {
+	float: left;
+}
+
+div.dataTables_paginate {
+	float: right;
+}
+
+div.dataTables_length,
+div.dataTables_filter,
+div.dataTables_paginate,
+div.dataTables_info {
+	padding: 6px;
+}
+table#table_threads a {
+    color:#DDD;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+table#table_threads {
+	clear: both;
+    width: 100%;
+}
+
+table#table_threads td,
+table#table_threads th {
+	padding: 5px;
+}
+
+div.dataTables_wrapper {
+    margin-top:16px;
+}
+
+div.dataTables_wrapper:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+html[xmlns] .dataTables_wrapper { display: block; }
+* html .dataTables_wrapper { height: 1%; }
+
+/* thread view */
+.thead_wrapper {
+    margin-top: 17px;
+}
+
 .subthread {
     list-style-type: none;
     padding-left:0;
@@ -10,14 +75,8 @@
 }
 
 .forum_post {
-    border-top: 1px dotted #666;
-    padding: 0.5em 10px 10px;
     margin:0;
     margin: -1px;
-}
-
-.subthread li:first-child {
-    border-style: solid;
 }
 
 .forum_post .ui-buttonset {
@@ -25,22 +84,29 @@
 }
 
 .full_width_reply {
-    background-color:white;
+    background-color: transparent;
     border-top: 1px dotted #666;
     padding-top:10px;
 }
 
+.inactive_reply {
+    height: 25px;
+}
+.inactive_reply textarea {
+    height: 25px;
+}
 .full_width_reply label {
     margin:10px;
     font-weight: bold;
-    color: #333;
+    color: #666;
 }
 .full_width_reply textarea {
     width:90%;
-    border:0px solid red;
+    border:0px solid black;
     padding:0;
     outline:none;
     color: #222;
+    background-color: transparent;
 }
 .full_width_reply p {
     text-align: right;

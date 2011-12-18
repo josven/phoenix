@@ -1,8 +1,17 @@
 {% extends "base.html" %}
+{% load entry_tags %}
+
+{% block secondary_navigation %}
+<h2>Chatmeny</h2>
+<ul>
+    <li>...</li>
+    <li>...</li>
+</ul>
+{% endblock secondary_navigation %}
 
 {% block content %}
 {% if form %}
-<form action="{% url chat %}" method="post">
+<form id="chat_form" action="{% url chat %}" method="post">
     {% csrf_token %}
 
     {{ form.text }}
@@ -17,16 +26,12 @@
 {% if forloop.first %}
 <hr />
 
-<ul id="chatlist" data-role="listview" data-inset="true">
+<ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
 {% endif %}
-    <li>
-        <h4><a {% if entry.created_by.is_authenticated %} class="link-user" {% endif %} href="/user/{{ entry.created_by.id }}">{{ entry.created_by }}</a> - <em>{{ entry.date_created }}</em></h4>
-        {{ entry.text|linebreaks|urlizetrunc:40  }}
-        
-        <div class="buttonset">
-            <a href="#" class="ui-button ui-corner-left">Svara</a>
-            <a href="#" class="ui-button">Mail</a>
-            <a href="#" class="ui-button">Gästbok</a>
+    <li class="ui-widget ui-widget-content">
+        {% entry_head entry %}      
+        <div class="ui-text-panel">
+            {{ entry.text|linebreaks|urlizetrunc:40  }}
         </div>
     </li>
 

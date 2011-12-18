@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-
+from taggit.forms import *
 
 class ThreadForm(forms.Form):
     title_min = 10
@@ -16,9 +16,17 @@ class ThreadForm(forms.Form):
         }
     )
 
-
+    tags = TagField(
+        required=True,
+        error_messages={
+            'required': 'Du har inte angett någon kategori!',
+        },
+        widget=forms.HiddenInput,
+    )
+    
     body = forms.CharField(
         required=True,
+        widget=forms.Textarea,
         error_messages={
             'required': 'Du måste fylla i detta fält.',
         }

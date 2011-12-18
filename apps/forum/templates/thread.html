@@ -1,18 +1,19 @@
-{% extends "base.html" %}
+{% extends "forum.html" %}
 {% load entry_tags %}
 
 {% block content %}    
+    <div class="thead_wrapper">
     {% for post in posts %}
-        
         {% if post.first_in_subthread or forloop.first %}
         <ul class="subthread ui-widget-content">
         {% endif %}
         
-            <li class="forum_post ui-widget-content">
+            <li class="forum_post ui-widget ui-widget-content">
                 {% entry_head post %}
-                {{ post.body|linebreaks|urlizetrunc:40 }}
                 
-                {% entry_foot post %}
+                <div class="ui-text-panel">
+                {{ post.body|linebreaks|urlizetrunc:40 }}
+                </div>
                 
                 {% if not post.last_in_subthread %}
                 {% endif %}
@@ -20,18 +21,18 @@
             </li><!-- End post -->
         
         {% if post.last_in_subthread or forloop.last %}
-            <li class="full_width_reply {% if not forloop.last %}ui-helper-hidden{% endif %}">
+            <li class="full_width_reply inactive_reply">
             {% include "reply_form.html" %}
             </li>
         </ul><!-- End subthread -->
         {% else %}
-             <li class="full_width_reply ui-helper-hidden">
+             <li class="full_width_reply inactive_reply ui-helper-hidden">
             {% include "reply_form.html" %}
             </li>
         {% endif %}
 
     {% endfor %}
-
+    </div>
          
     {% comment %}
     

@@ -1,0 +1,19 @@
+{% extends "forum.html" %}
+
+{% block content %}
+    <h1>Skapa ny tråd</h2>
+    <form action="{% url create_thread %}" method="post">
+        {% csrf_token %}
+        <p>
+            <label for="id_title">Kategori:</label>
+            <span id="categories">
+                {% for tag in categories %}
+                <span title="Håll in ctrl för att välja flera" class="ui-widget-content">{{ tag }}</span>
+                {% endfor %}
+            </span>
+        </p>
+        
+        {{ form.as_p }}    
+        <input type="submit" value="Skapa" />
+    </form>
+{% endblock content %}
