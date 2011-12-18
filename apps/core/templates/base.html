@@ -2,6 +2,7 @@
 
 {% block navigation %}
 <ul>
+    <li><a href="{{ user.get_profile.get_absolute_url }}">{{ user.get_profile.name }}</a></li>
     <li><a href="{% url read_forum %}">Forum</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
     {% comment %}

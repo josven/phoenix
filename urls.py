@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     (r'^core/', include('apps.core.urls')),
     (r'^auth/', include('apps.registration.urls')),
     (r'^forum/', include('apps.forum.urls')),
-    #(r'^profile/', include('apps.profiles.urls')),
+    (r'^user/', include('apps.profiles.urls')),
     (r'^chat/', include('apps.chat.urls')),
     (r'^claim/', include('apps.claim.urls')),
 )

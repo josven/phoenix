@@ -43,16 +43,16 @@ class ForumPostHistory(ThreadedEntryHistory):
     origin = models.ForeignKey(ForumPost)
     body = models.TextField()
 
+
 class defaultCategories(models.Model):
     """
     Default categories for the forum
     using tags
     """
     tags = TaggableManager()
-    
+
     def __unicode__(self):
-    
+
         text = self.tags.all()[0]
-        
-        return u'%s' % ( text )
-    
+
+        return u'%s' % (text)

@@ -34,7 +34,7 @@
 {% endif%}
 		<tr class="ui-widget-content">
 			<td><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></td>
-			<td>{{ thread.created_by }}</td>
+			<td><a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a></td>
 			<td>{% for tag in thread.tags.all %}{{tag}} {% endfor %}</td>
 			<td>{{ thread.date_created }}</td>
 			<td>{ ANTAL }</td>
@@ -55,7 +55,7 @@
     
     <div class="ui-text-panel">
         <h3><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></h3>
-        <p>Skapad av {{ thread.created_by }}, {{ thread.date_created }} <br/>
+        <p>Skapad av <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a>, {{ thread.date_created }} <br/>
            Läst X gånger, X svar.<br/>
            Kategorier:
         </p>
