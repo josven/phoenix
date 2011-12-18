@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ user.username }}</h2>
+    
+    {{ profile.name }}<br />
+    {{ profile.location }}<br />
+    {{ profile.birthdate }}<br />
+    {{ profile.gender }}<br />
+    {{ profile.description }}<br />
+    
+{% endblock content %}
