@@ -55,6 +55,5 @@ def render(request, *args):
 def create_datepicker(form):
     formfield = form.formfield()
     if isinstance(form, models.DateField):
-        formfield.widget.format = '%Y/%m/%dasdas'
         formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
     return formfield
