@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Skapa ny tråd</h2>
-    <form action="{% url create_thread %}" method="post">
+    <form id="form-create-thread" action="{% url create_thread %}" method="post">
         {% csrf_token %}
         <p>
             <label for="id_title">Kategori:</label>

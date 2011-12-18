@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load entry_tags %}
+
+{% block secondary_navigation %}
+<nav>
+<ul>
+    <li><h3>Gästboksmeny</h3></li>
+    <li>...</li>
+</ul>
+</nav>
+{% endblock secondary_navigation %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.text }}
+    <br />
+    <input type="submit" value="Skicka" />
+</form>
+
+<hr />
+<ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
+{% for entry in posts %}
+
+{% if forloop.counter < increment|add:padding %}
+    <li class="ui-widget ui-widget-content">
+        {% entry_head entry %}      
+        <div class="ui-text-panel">
+            {{ entry.text|linebreaks|urlizetrunc:40  }}
+        </div>
+    </li>
+{% endif %}
+
+{% if forloop.last %}
+</ul>
+
+<div class="buttonset">
+    {% if not start|add:negincrement < 0 %}
+    <a href="{% url guestbook user_id start|add:negincrement %}">Föregående</a>
+    {% endif %}
+    
+    {% if forloop.counter = increment|add:padding %}
+    <a href="{% url guestbook user_id start|add:increment %}">Nästa</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endfor %}
+{% endblock content %}

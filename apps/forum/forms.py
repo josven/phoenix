@@ -8,8 +8,10 @@ class ThreadForm(forms.Form):
 
     title = forms.CharField(
         required=True,
+        label="",
         min_length=title_min,
         max_length=title_max,
+        widget=forms.TextInput(attrs={'placeholder': 'Titeln måste vara minst %s tecken lång.' % title_min}),
         error_messages={
             'required': 'Du har inte angett en titel!',
             'min_length': 'Titeln måste vara minst %s tecken lång.' % title_min,
@@ -26,7 +28,8 @@ class ThreadForm(forms.Form):
     
     body = forms.CharField(
         required=True,
-        widget=forms.Textarea,
+        label="",
+        widget=forms.Textarea(attrs={'cols': 80, 'rows': 10, 'placeholder': "Skriv ditt meddelande"}),
         error_messages={
             'required': 'Du måste fylla i detta fält.',
         }

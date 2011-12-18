@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     #(r'^profile/', include('apps.profiles.urls')),
     (r'^chat/', include('apps.chat.urls')),
     (r'^claim/', include('apps.claim.urls')),
+    (r'^', include('apps.guestbook.urls')),
 )

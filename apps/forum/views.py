@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import shlex
-
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
@@ -71,6 +69,8 @@ def read_thread(request, id):
     Read a forum thread.
     
     """
+    categories = defaultCategories.objects.all()
+    
     try:
         thread = Thread.active.get(id=id)
     except:
@@ -79,7 +79,7 @@ def read_thread(request, id):
     posts = ForumPost.objects.decorated(collection=thread)
     form = ForumPostForm()
 
-    data = {"thread": thread, 'posts': posts, 'form': form}
+    data = {"thread": thread, 'posts': posts, 'form': form, 'categories':categories}
     return render(request, 'thread.html', data)
 
 

@@ -4,6 +4,55 @@
 #categories { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 #categories .ui-selectee { cursor:pointer; padding: .2em 0.4em; height: 18px; }
     
+#form-create-thread {
+
+}
+
+#form-create-thread  input {
+    margin: 10px 0;
+    padding: 1%;
+    font-size:130%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 98%;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;    
+}
+
+#form-create-thread  input[type=submit] {
+    width:100%
+}
+
+#form-create-thread  textarea {
+    margin: 10px 0;
+    padding: 1%;
+    font-size:130%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 98%;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+
+}
+
 /* List threads, data tables styles */
 div.dataTables_length {
 	float: left;
