@@ -36,7 +36,7 @@
          
     {% comment %}
     
-    <h2>{{ thread.title }} - {{ thread.created_by }}</h2>
+    <h2>{{ thread.title }} - <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a></h2>
     
     {% for post in posts %}
         {% if post.first_in_subthread %}<div class="subthread" style="margin-left: 16px; border: solid 1px red;">{% endif %}
