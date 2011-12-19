@@ -13,6 +13,7 @@ $(document).ready(function() {
 
     $( "#account_button" )
 			.button()
+            
 			.next()
 				.button( {
 					text: false,
@@ -21,10 +22,11 @@ $(document).ready(function() {
 					}
 				})
 				.click(function() {
-					alert( "Visa inställningar" );
+					//alert( "Visa inställningar" );
 				})
 				.parent()
 					.buttonset();
+            
        
     });
     
@@ -36,11 +38,22 @@ $(document).ready(function() {
     });
     
     // User jQuery datepicker
-    $(".datepicker").datepicker({dateFormat: 'yy-mm-dd', defaultDate:'-25y',  changeYear: true, changeMonth: true });
+    $(".datePicker").datepicker({dateFormat: 'yy-mm-dd', defaultDate:'-25y',  changeYear: true, changeMonth: true });
 
 
-
-
+   // Hover username menu
+   $('.link-user').mouseenter( function () {
+        link = $(this);
+        widget = link.parent('.ui-widget-header');
+        menu = widget.next('ul.username-hover-menu');
+        console.log(menu);
+        
+        menu.fadeIn("fast");
+   });
+   $('ul.username-hover-menu').mouseleave( function () {
+        
+        $(this).fadeOut("fast");
+   })
 
 
 

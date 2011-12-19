@@ -2,12 +2,14 @@ from django.contrib.auth.models import User, Group
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, Http404
+from django.views.decorators.cache import never_cache
 
 from apps.core.utils import render
 from models import Profile
-from forms import ProfileForm
+from forms import ProfileForm, ProfileDescriptionForm
 
+@never_cache
 @login_required(login_url='/auth/login/')
 def read_profile(request, user_id=None):
     """
@@ -23,7 +25,7 @@ def read_profile(request, user_id=None):
         user = User.objects.get(pk=user_id)
     profile, created = Profile.objects.select_related().get_or_create(user=user)
 
-    return render(request, 'profile.html', {"profile": profile, 'user': profile.user})
+    return render(request, 'profile.html', {"profile": profile,'user':user})
 
 
 @login_required(login_url='/auth/login/')
@@ -39,10 +41,31 @@ def update_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            print request.FILES
 
             return HttpResponseRedirect('/user/')
     else:
         form = ProfileForm(instance=profile)
 
     return render(request, 'update_profile.html', {"profile": profile, 'user': profile.user, 'form':form})
+
+@never_cache    
+@login_required(login_url='/auth/login/')
+def profile_description_form(request,user_id=None):
+    user = request.user
+    profile, created = Profile.objects.select_related().get_or_create(user=user)
+    
+    if request.method == 'POST':
+        form = ProfileDescriptionForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
+    action = reverse('ajax_user_description_form', args=[user.id])
+    form = ProfileDescriptionForm(instance=profile)
+    
+    return render(request, 'ajaxform.html', {'form':form,'action':action})
+
+    
+        
+   

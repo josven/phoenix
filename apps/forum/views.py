@@ -112,7 +112,7 @@ def create_forumpost(request):
             collection=thread,
             body=form.cleaned_data['body']
         )
-
+        print "test"
         return HttpResponseRedirect(thread.get_absolute_url())
 
     try:

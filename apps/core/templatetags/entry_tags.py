@@ -1,4 +1,5 @@
 ﻿from django import template
+from django.core.urlresolvers import reverse
 
 register = template.Library()
 
@@ -17,6 +18,11 @@ def entry_head(entry):
     output += "<a href=\"#\" data-reply-to=\"" + str( entry.created_by ) + "\" class=\"js-reply\">Svara</a>"
     
     output += "</h4>"
+
+    output += "<ul class=\"username-hover-menu ui-helper-hidden ui-widget ui-widget-content\"> \
+                <li><a href=\"" + reverse('read_profile', args=[entry.created_by.id]) + "\">Profil</a></li> \
+                <li><a href=\"" + reverse('guestbook', args=[entry.created_by.id]) + "\">Gästbok</a></li> \
+              </ul>"
 
     return output
 

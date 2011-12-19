@@ -10,3 +10,12 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         exclude = ('user')
+        description = forms.CharField(help_text="Formateringshjälp: http://sv.wikipedia.org/wiki/Textile")
+        
+class ProfileDescriptionForm(ModelForm):
+    formfield_callback = create_datepicker
+    class Meta:
+        model = Profile
+        fields = ('description',)
+
+        description = forms.CharField(label="", help_text="", widget=forms.Textarea())

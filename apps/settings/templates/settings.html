@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block settings-link %}{% endblock settings-link %}
+
+{% block secondary_navigation %}
+<nav>
+<ul>
+    <li><h3>Inställningar</h3></li>
+    <li><a href="{% url read_settings 'account' %}">Konto</a></li>
+    <li><a href="{% url read_settings 'profiles' %}">Profil</a></li>
+    <li><a href="{% url read_settings 'guestbook' %}">Gästbok</a></li>
+    <li><a href="{% url read_settings 'forum' %}">Forum</a></li>
+</ul>
+</nav>
+{% endblock secondary_navigation %}
+
+{% block content %}  
+    <div class="ui-widget ui-widget-content">
+        <h4 class="ui-widget-header entry-head">Inga inställningar hittades</h4>
+        <p class="ui-text-panel">Finns inga inställningar för {{ appname }}</p>
+    </div>
+    
+{% endblock content %}

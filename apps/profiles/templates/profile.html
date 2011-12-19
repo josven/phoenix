@@ -1,15 +1,40 @@
 ﻿{% extends "base.html" %}
+{% load markup %}
 {% load thumbnail %}
 
-{% block content %}
-    <h2>{{ user.username }}</h2>
+{% block secondary_navigation %}
+<nav>
+<ul>
+    <li>
+        {% thumbnail user.get_profile.photo "150x150" crop="center" as im %}
+        <img class="ui-widget-content" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% empty %}
+        <p>Ingen bild</p>
+        {% endthumbnail %}   
+    </li>
     
-    {{ profile.name }}<br />
-    {{ profile.location }}<br />
-    {{ profile.birthdate }}<br />
-    {{ profile.gender }}<br />
-    {{ profile.description }}<br />
-    {% thumbnail profile.photo "100x100" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-    {% endthumbnail %}
-{% endblock content %}
+    <li>
+        <h3>{{ user }}</h3>
+    </li>
+    
+    <li class="profile-details">Namn: {{ user.get_profile.name }}</li>
+    <li class="profile-details">Bor: {{ user.get_profile.location }}</li>
+    <li class="profile-details">Kön: {{ user.get_profile.gender }}</li>
+    <li class="profile-details">Född: {{ user.get_profile.birthdate }}</li>
+    <li>&nbsp;</li>
+    <li><a href="{% url guestbook user.id %}">Gästbok</a></li>
+</ul>
+</nav>
+{% endblock secondary_navigation %}
+
+{% block content %} 
+    <div id="profile-description">
+        {{ profile.description|urlize|textile }}
+    </div>
+    {% if request.user == user %}
+    <div>
+        <a href="{% url ajax_user_description_form request.user.id %}" class="js-quick-edit" rel="profile-description">Ändra</a>
+    </div>
+    {% endif %}
+    <br />
+    {% endblock content %}

@@ -32,7 +32,7 @@
 
 <body class="{{ app_name }}">
 {% block body %}
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <div id="top-wrapper" class="ui-widget-content clearfix">
         
         <h1 id="main_logo">PHX</h1>
@@ -44,8 +44,8 @@
          
         <div id="account">
             {% block account %}
-            <a data-ajax="false" id="account_button" href="{% url logout %}">Logga ut <span id="username">{{ user }}</span></a>
-            <a data-ajax="false" href="#settings">Inställningar</a>
+            <a data-ajax="false" id="account_button" href="{% url logout %}">Logga ut <span id="username">{{ request.user }}</span></a>
+            {% block settings-link %}<a data-ajax="false" href="{% url read_settings app_name %}">Inställningar</a>{% endblock settings-link %}
             {% endblock account %}
         </div>
     </div>
@@ -53,7 +53,7 @@
     
 	<div id="container">
         
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
         <nav id="secondary_navigation">
         {% block secondary_navigation %}
         {% endblock secondary_navigation %}

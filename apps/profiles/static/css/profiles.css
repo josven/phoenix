@@ -1,0 +1,11 @@
+#profile-description {
+    padding: 1em;
+    background: #EEE;
+}
+
+#profile-description #id_description {
+    border:none;
+    width:100%;
+    margin:0;
+    padding:0;
+}

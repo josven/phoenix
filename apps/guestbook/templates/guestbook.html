@@ -1,17 +1,8 @@
-{% extends "base.html" %}
+{% extends "profile.html" %}
 {% load entry_tags %}
 
-{% block secondary_navigation %}
-<nav>
-<ul>
-    <li><h3>Gästboksmeny</h3></li>
-    <li>...</li>
-</ul>
-</nav>
-{% endblock secondary_navigation %}
-
 {% block content %}
-
+{% if not request.user == profile.user %}
 <form action="" method="post">
     {% csrf_token %}
 
@@ -21,6 +12,8 @@
 </form>
 
 <hr />
+{% endif %}
+
 <ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
 {% for entry in posts %}
 
@@ -38,11 +31,11 @@
 
 <div class="buttonset">
     {% if not start|add:negincrement < 0 %}
-    <a href="{% url guestbook user_id start|add:negincrement %}">Föregående</a>
+    <a href="{% url guestbook user.id start|add:negincrement %}">Föregående</a>
     {% endif %}
     
     {% if forloop.counter = increment|add:padding %}
-    <a href="{% url guestbook user_id start|add:increment %}">Nästa</a>
+    <a href="{% url guestbook user.id start|add:increment %}">Nästa</a>
     {% endif %}
 </div>
 {% endif %}

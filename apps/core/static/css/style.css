@@ -212,6 +212,56 @@ textarea { overflow: auto; vertical-align: top; resize: vertical; }
 input:valid, textarea:valid {  }
 input:invalid, textarea:invalid { background-color: #f0dddd; }
 
+/* form-settings */
+
+.form-settings p {
+    font-size:130%;
+    color: #DDD;
+}
+
+.form-settings label {
+    font-weight: bold;
+    width: 10em;
+    display: inline-block;
+}
+
+.form-settings  textarea   {
+    margin: 10px 0;
+    padding: 1%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 50%;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  
+}
+.form-settings  input[type=text]   {
+    margin: 10px 0;
+    padding: 1%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  
+}
 
 /* =============================================================================
    Tables
@@ -344,10 +394,43 @@ nav#secondary_navigation ul li hr {
     float:right;
 }
 
+/* Hover username menu */
+.username-hover-menu {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    
+    list-style:none;
+    padding:0;
+    margin:0;
+    
+    box-shadow: -2px 2px 2px rgba(0,0,0,0.5);
+}
+.username-hover-menu li {
+    margin: .5em;
+}
+
+.username-hover-menu li  a {
+    color:#ddd;
+    font-weight:bold;
+    text-decoration: none;
+}
+
+/* user profile sidebar */
+.profile-details {
+    color:#888;
+    font-weight:bold;
+}
+
 /* ui-styles */
 .ui-text-panel {
     padding:.5em 1em;
 }
+
+.ui-widget-content {
+    position:relative;
+}
+
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.
    ========================================================================== */
