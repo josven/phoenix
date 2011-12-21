@@ -4,8 +4,8 @@
 
 {% block secondary_navigation %}
 <nav>
-<ul>
-    <li>
+<ul class="flat-list entrylist">
+    <li class="ui-widget">
         {% thumbnail user.get_profile.photo "150x150" crop="center" as im %}
         <img class="ui-widget-content" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
         {% empty %}
@@ -27,14 +27,22 @@
 </nav>
 {% endblock secondary_navigation %}
 
-{% block content %} 
-    <div id="profile-description">
-        {{ profile.description|urlize|textile }}
-    </div>
-    {% if request.user == user %}
-    <div>
-        <a href="{% url ajax_user_description_form request.user.id %}" class="js-quick-edit" rel="profile-description">Ändra</a>
-    </div>
-    {% endif %}
-    <br />
+{% block content %}
+<ul class="flat-list entrylist">
+    <li class="ui-widget ui-widget-content">
+        
+        <h4 class="ui-widget-header entry-head">
+            Presentation
+            {% if request.user == user %}
+            <div class="button-wrapper">
+                <a href="{% url ajax_user_description_form request.user.id %}" class="js-quick-edit" rel="profile-description">Ändra</a>
+            </div>
+            {% endif %}
+        </h4>
+        
+        <div id="profile-description">
+            {{ profile.description|urlize|textile }}
+        </div>
+    </li>
+</ul>
     {% endblock content %}

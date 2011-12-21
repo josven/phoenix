@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     (r'^user/', include('apps.profiles.urls')),
     (r'^chat/', include('apps.chat.urls')),
     (r'^claim/', include('apps.claim.urls')),
+    (r'^articles/', include('apps.articles.urls')),
+    (r'^accounts/', include('apps.accounts.urls')),
 )
 
 if settings.DEBUG:

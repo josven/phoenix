@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load entry_tags %}
+{% load thumbnail %}
 
 {% block secondary_navigation %}
 <h2>Chatmeny</h2>
@@ -31,6 +32,9 @@
     <li class="ui-widget ui-widget-content">
         {% entry_head entry %}      
         <div class="ui-text-panel">
+            {% thumbnail entry.created_by.get_profile.photo "100x100" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
             {{ entry.text|linebreaks|urlizetrunc:40  }}
         </div>
     </li>

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load entry_tags %}
+{% load thumbnail %}
+
+{% block secondary_navigation %}
+<h3>Artikelmeny</h3>
+<ul>
+    <li><a href="{% url read_article %}">Artiklar</a></li>
+    <li><a href="{% url create_article %}">Ny</a></li>
+    <li>&nbsp;</li>
+    <li><h3>Huvudkategorier</h3></li>
+    {% for tag in categories %}
+    <li><a href="{% url search_article tag %}">{{ tag|title }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock secondary_navigation %}
+
+{% block content %}
+{% for article in articles %}
+{% if forloop.first %}
+<table id="table_articles">
+	<thead>
+		<tr>
+			<th>Titel</th>
+			<th>Skapad av</th>
+            <th>Kategorier</th>
+            <th>Skapad</th>
+		</tr>
+	</thead>
+	<tbody>
+{% endif%}
+		<tr class="ui-widget-content">
+			<td><a href="{% url read_article article.id %}">{{ article.title }}</a></td>
+			<td><a href="{{ article.created_by.get_profile.get_absolute_url }}">{{ article.created_by }}</a></td>
+			<td>{% for tag in article.tags.all %}{{tag}} {% endfor %}</td>
+			<td>{{ article.date_created }}</td>
+		</tr>
+{% if forloop.last %}
+	</tbody>
+</table>
+{% endif %}
+{% endfor %}
+{% endblock content %}

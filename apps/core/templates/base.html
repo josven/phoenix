@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends 'desktop_base.html' %}
 
 {% block navigation %}
 <ul>
@@ -6,6 +6,7 @@
     <li><a href="{% url read_forum %}">Forum</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
     <li><a href="{% url guestbook request.user.id %}">Gästbok</a></li>
+    <li><a href="{% url read_article %}">Artiklar</a></li>
     {% comment %}
     <li><a data-ajax="false" href="{% url set_base_template 'touch' %}">Touch</a></li>
     <li><a data-ajax="false" href="{% url set_base_template 'desktop' %}">Desktop</a></li>

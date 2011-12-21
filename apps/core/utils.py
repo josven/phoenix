@@ -46,9 +46,11 @@ def render(request, *args):
         vars = args[1]
     except:
         vars = {}
-
+    
     vars['app_name'] = mod.__name__.split('.')[1]
     vars['base_template'] = get_base_template(request)
+    request.session['app_name'] = vars['app_name']
+    
     return djangorender(request, template, vars)
 
 

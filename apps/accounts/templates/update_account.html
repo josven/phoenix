@@ -1,0 +1,10 @@
+{% extends "settings.html" %}
+
+{% block content %}
+<h2>Kontoinställningar</h2>
+<form action="" method="post" id="user-form-settings" class="form-settings">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Byt lösenord">
+</form>
+{% endblock content %}

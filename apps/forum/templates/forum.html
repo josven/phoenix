@@ -9,7 +9,7 @@
     <li><a href="{% url create_thread %}">Skapa tråd</a></li>
     <li><h3>Huvudkategorier</h3></li>
     {% for tag in categories %}
-    <li><a href="{% url get_threads_by_tags tag %}">{{ tag }}</a></li>
+    <li><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></li>
     {% endfor %}
 </ul>
 </nav>

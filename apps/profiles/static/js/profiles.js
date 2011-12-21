@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
                             });
 
                             // change to save button
-                            button.replaceWith( ' <a href="'+ url +'" class="js-quick-save" rel="profile-description">Spara</a>  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">Formateringshjälp</a> ');
+                            button.replaceWith( '  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">Formateringshjälp</a><a href="'+ url +'" class="js-quick-save" rel="profile-description">Spara</a>');
                             $( '.js-quick-save' ).button({
                                 icons: {
                                     primary: "ui-icon-pencil"

@@ -1,5 +1,6 @@
 ﻿from django import template
 from django.core.urlresolvers import reverse
+from apps.core.utils import find_request
 
 register = template.Library()
 
@@ -9,13 +10,19 @@ def entry_head(entry):
     Template tag for writing out head of entrys/post
     
     """
+    request = find_request()
+    appname = request.session['app_name']
     
     output ="<h4 class=\"ui-widget-header entry-head\"> \
                 <a class=\"link-user\" href=\"/user/" + str( entry.created_by.id ) + "\"> \
                     " + str( entry.created_by ) + " \
                 </a> - <em>" + str( entry.date_created ) + "</em>"
             
-    output += "<a href=\"#\" data-reply-to=\"" + str( entry.created_by ) + "\" class=\"js-reply\">Svara</a>"
+    output += "<div class=\"button-wrapper\">"
+
+    if request.user != entry.created_by or appname == "forum":
+        output += "<a href=\"#\" data-reply-to=\"" + str( entry.created_by ) + "\" class=\"js-reply\">Svara</a>"
+    output += "</div>"
     
     output += "</h4>"
 

@@ -18,3 +18,7 @@ settings.MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStora
 settings.TEMPLATE_LOADERS += (
     'django.template.loaders.app_directories.load_template_source',
 )
+
+# clear cache, this if testing, not to use in production
+from django.core.cache import cache
+cache.clear()

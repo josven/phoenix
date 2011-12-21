@@ -50,11 +50,11 @@ jQuery(document).ready(function() {
     $('#table_threads').dataTable({
         "bJQueryUI": true,
         "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ trådar per sida",
+            "sLengthMenu": "Visar _MENU_ artiklar per sida",
             "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ artiklar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 artiklar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal artiklar)",
             "sSearch": "Filter"
         }
     });

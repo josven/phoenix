@@ -3,6 +3,7 @@ from forms import *
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.cache import never_cache
 from django.http import Http404
 from django.conf import settings
 
@@ -22,7 +23,7 @@ from apps.core.utils import render
 """
 LIST_ITEM_LIMIT = 10
 
-
+@never_cache
 @login_required(login_url='/auth/login/')
 def chat(request):
 
@@ -53,6 +54,7 @@ def chat(request):
     vars['posts'] = posts
     return render(request,'chat.html', vars)
     
+@never_cache
 @login_required(login_url='/auth/login/')
 def chatpost(request,id,type):
     """
@@ -82,6 +84,7 @@ def chatpost(request,id,type):
         # "wrong method"
         raise Http404
 
+@never_cache
 @login_required(login_url='/auth/login/')
 def chatposts(request,id1,id2,type):
     """

@@ -382,6 +382,7 @@ nav#secondary_navigation ul li hr {
 
 .entrylist li {
     margin: 1em 0;
+    position: relative;
 }
 
 .entry-head {
@@ -391,7 +392,6 @@ nav#secondary_navigation ul li hr {
 
 .entry-head .ui-button {
     font-size:60%;
-    float:right;
 }
 
 /* Hover username menu */
@@ -426,10 +426,28 @@ nav#secondary_navigation ul li hr {
 .ui-text-panel {
     padding:.5em 1em;
 }
+.ui-text-panel img {
+    vertical-align: top;
+    margin-top: -.5em;
+    margin-bottom: -.5em;
+    margin-left: -1em;
+    margin-right: 1em;
+}
+.ui-text-panel p {
+    display: inline-block;
+    width: 80%;
+}
 
-.ui-widget-content {
+.ui-widget-header .button-wrapper {
+    float:right;
+}
+
+}.ui-widget-content {
     position:relative;
 }
+
+
+
 
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.

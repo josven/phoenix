@@ -47,10 +47,12 @@ def auth_login(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
+            '''
             if not user.is_staff:
                 messages.add_message(request, messages.INFO, "Siten inte öppen.")
                 return render(request, 'comming_soon.html')
-
+            '''
+            
             if user.is_active:
                 login(request, user)
                 messages.add_message(request, messages.INFO, "Du loggade just in.")

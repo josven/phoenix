@@ -18,3 +18,10 @@ form  textarea   {
      -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
   
 }
+
+.inactive_reply {
+    height: 25px;
+}
+.inactive_reply textarea {
+    height: 25px;
+}

@@ -4,12 +4,12 @@ from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-
+from django.views.decorators.cache import never_cache
 from apps.core.utils import render
 from models import Thread, ForumPost, defaultCategories
 from forms import ThreadForm, ForumPostForm
 
-
+@never_cache
 @login_required(login_url='/auth/login/')
 def read_forum(request):
     """
@@ -27,7 +27,7 @@ def read_forum(request):
 
     return render(request, 'forum.html', vars )
 
-
+@never_cache
 @login_required(login_url='/auth/login/')
 def create_thread(request):
     """
@@ -62,7 +62,7 @@ def create_thread(request):
     
     return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories})
 
-
+@never_cache
 @login_required(login_url='/auth/login/')
 def read_thread(request, id):
     """
@@ -82,7 +82,7 @@ def read_thread(request, id):
     data = {"thread": thread, 'posts': posts, 'form': form, 'categories':categories}
     return render(request, 'thread.html', data)
 
-
+@never_cache
 @login_required(login_url='/auth/login/')
 def create_forumpost(request):
     """
@@ -125,6 +125,7 @@ def create_forumpost(request):
     data = {"thread": thread, 'posts': posts, 'form': form}
     return render(request, 'thread.html', data)
 
+@never_cache
 @login_required(login_url='/auth/login/')
 def get_threads_by_tags(request,tags):
     categories = defaultCategories.objects.all()
