@@ -2,16 +2,26 @@
 
 {% block content %}
     <h1>Skapa ny Artikel</h2>
-    <form id="form-create-thread" action="" method="post">
+    <form id="form-create-article" action="" method="post">
         {% csrf_token %}
-        <p>
-            <label for="id_title">Kategori:</label>
-            <span id="categories">
-                {% for tag in categories %}
-                <span title="Håll in ctrl för att välja flera" class="ui-widget-content">{{ tag }}</span>
-                {% endfor %}
+        <p>            
+            {% for tag in categories %}
+            <span class="ui-tag">
+                <input data-tag="{{ tag }}" type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
             </span>
+            {% endfor %}     
+        </p>        
+        
+        {% if request.user.is_staff %}
+        <hr />
+        <p>     
+            {% for tag in moderator_categories %}
+            <span class="ui-tag">
+                <input data-tag="{{ tag }}" type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
+            </span>
+            {% endfor %}  
         </p>
+        {% endif %}
         
         {{ form.as_p }}    
         <input type="submit" value="Skapa" />

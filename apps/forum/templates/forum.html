@@ -6,7 +6,11 @@
 <ul>
     <li><h3>Forumsmeny</h3></li>
     <li><a href="{% url read_forum %}">Trådar</a></li>
+    {% if tags %}
+    <li><a href="{% url create_thread_by_tags tags %}">Skapa tråd</a></li>
+    {% else %}
     <li><a href="{% url create_thread %}">Skapa tråd</a></li>
+    {% endif %}
     <li><h3>Huvudkategorier</h3></li>
     {% for tag in categories %}
     <li><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></li>
@@ -27,7 +31,7 @@
             <th>Datum</th>
 			<th>Läsningar</th>
 			<th>Svar</th>
-			<th>Senate svar</th>
+			<th>Senaste svar</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,11 +39,11 @@
 		<tr class="ui-widget-content">
 			<td><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></td>
 			<td><a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a></td>
-			<td>{% for tag in thread.tags.all %}{{tag}} {% endfor %}</td>
+			<td>{% for tag in thread.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></span>{% endfor %}</td>
 			<td>{{ thread.date_created }}</td>
-			<td>{ ANTAL }</td>
-			<td>{ ANTAL }</td>
-			<td>{ DATUM }</td>
+			<td>X</td>
+			<td>X</td>
+			<td>X</td>
 		</tr>
 {% if forloop.last %}
 	</tbody>

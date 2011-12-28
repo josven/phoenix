@@ -1,7 +1,4 @@
 {% extends "base.html" %}
-{% load entry_tags %}
-{% load thumbnail %}
-
 {% block secondary_navigation %}
 <h2>Chatmeny</h2>
 <ul>
@@ -21,43 +18,10 @@
 
 </form>
 {% endif %}
-
-
-{% for entry in posts %}
-{% if forloop.first %}
 <hr />
-
 <ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
-{% endif %}
-    <li class="ui-widget ui-widget-content">
-        {% entry_head entry %}      
-        <div class="ui-text-panel">
-            {% thumbnail entry.created_by.get_profile.photo "100x100" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-            {% endthumbnail %}
-            {{ entry.text|linebreaks|urlizetrunc:40  }}
-        </div>
-    </li>
-
-{% if forloop.last %}
-</ul>
-{% comment %}
-<nav class="navigationbar">
-    <ul>
-    {% if not isFirstPage %}
-        <li data-icon="arrow-l" data-iconpos="left"><a class="ui-button" href="{% url chatposts entry.id|add:forloop.counter, entry.id|add:forloop.counter|add:'10', 'html' %}">Framåt</a></li>
-    {% endif %}
-    {% if not isLastPage %}
-    {% if entry.id|add:'-11' > 0 %}
-        <li><a class="ui-button" href="{% url chatposts entry.id|add:'-11', entry.id|add:'-1', 'html' %}">Bakåt</a></li>
-    {% else %}
-        <li><a class="ui-button" href="{% url chatposts 1, entry.id|add:'-1', 'html' %}">Bakåt</a></li>
-    {% endif %}
-    {% endif %}
-    </ul>
-</nav>
-{% endcomment %}
-{% endif %}
-
+{% for entry in posts %}
+{% include "_entry.html" %}
 {% endfor %}
+</ul>
 {% endblock content %}

@@ -35,7 +35,7 @@
     {% if request.user.is_authenticated %}
     <div id="top-wrapper" class="ui-widget-content clearfix">
         
-        <h1 id="main_logo">PHX</h1>
+        <h1 id="main_logo"><a href="{% url read_frontpage %}">PHX</a></h1>
         
         <nav id="primary_navigation">
             {% block navigation %}

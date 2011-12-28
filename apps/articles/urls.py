@@ -12,4 +12,7 @@ urlpatterns = patterns('',
     #Ajax APIs
     url(r'^(?P<id>\d*)/body/form/$', 'apps.articles.views.ajax_article_body_form', name='ajax_article_body_form'),
 
+    #User url articles
+    url(r'^user/(?P<user_id>\d*)/tag/(?P<tags>\w*)/$', 'apps.articles.views.search_article', name='read_user_articles'),
+    
 )

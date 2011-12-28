@@ -15,6 +15,9 @@ class Thread(Entry):
 
     def get_absolute_url(self):
         return "/forum/thread/read/%s/" % self.id
+    
+    def __unicode__(self):
+        return u'%s' % self.title
 
 
 class ThreadHistory(EntryHistory):

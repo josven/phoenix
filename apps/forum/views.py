@@ -29,13 +29,19 @@ def read_forum(request):
 
 @never_cache
 @login_required(login_url='/auth/login/')
-def create_thread(request):
+def create_thread(request, tags=None):
     """
     Create a forum thread.
     
     """
     threads = Thread.active.all()
+    
     form = ThreadForm()
+    initial_tags = tags
+    
+    if tags != None:
+        form = ThreadForm(initial={'tags': initial_tags})
+
     categories = defaultCategories.objects.all()
     
     if request.method == 'POST':    
@@ -60,7 +66,7 @@ def create_thread(request):
             )
             return HttpResponseRedirect(thread.get_absolute_url())
     
-    return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories})
+    return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories, 'initial_tags':initial_tags})
 
 @never_cache
 @login_required(login_url='/auth/login/')
@@ -84,7 +90,7 @@ def read_thread(request, id):
 
 @never_cache
 @login_required(login_url='/auth/login/')
-def create_forumpost(request):
+def create_forumpost(request, tags=None):
     """
     Create a forumpost. FormPost class will handle all threading logic.
     
@@ -129,11 +135,11 @@ def create_forumpost(request):
 @login_required(login_url='/auth/login/')
 def get_threads_by_tags(request,tags):
     categories = defaultCategories.objects.all()
-    tags = tags.split(",")
-    threads = Thread.active.filter(tags__name__in=tags)
+    tags_array = tags.split(",")
+    threads = Thread.active.filter(tags__name__in=tags_array)
     
     if len( threads ) < 1:
         messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
 
-    return render(request, 'forum.html', {"threads": threads,"categories":categories})
+    return render(request, 'forum.html', {"threads": threads,"categories":categories,"tags":tags})
     

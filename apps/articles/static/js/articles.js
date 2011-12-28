@@ -41,7 +41,7 @@ jQuery(document).ready(function() {
                         });
   
     // Select categories
-    $( "#categories" ).selectable({
+    $( ".categories" ).selectable({
 			stop: function() {
 				var tags = "";				
                 $( ".ui-selected", this ).each(function() {
@@ -68,6 +68,9 @@ jQuery(document).ready(function() {
             "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
             "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
             "sSearch": "Filter"
-        }
+            
+        },
+        "iDisplayLength": 50,
+        "aaSorting": [[3,'desc']]
     });
 });

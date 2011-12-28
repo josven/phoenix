@@ -14,7 +14,7 @@ def entry_head(entry):
     appname = request.session['app_name']
     
     output ="<h4 class=\"ui-widget-header entry-head\"> \
-                <a class=\"link-user\" href=\"/user/" + str( entry.created_by.id ) + "\"> \
+                <a class=\"link-user\" href=\"" + reverse('read_profile', args=[ entry.created_by.id ]) + "\"> \
                     " + str( entry.created_by ) + " \
                 </a> - <em>" + str( entry.date_created ) + "</em>"
             

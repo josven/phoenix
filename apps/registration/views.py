@@ -55,6 +55,7 @@ def auth_login(request):
             
             if user.is_active:
                 login(request, user)
+                request.session.set_expiry(0)
                 messages.add_message(request, messages.INFO, "Du loggade just in.")
             else:
                 messages.add_message(request, messages.INFO, "Ej aktiv användare")

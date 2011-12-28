@@ -270,6 +270,64 @@ input:invalid, textarea:invalid { background-color: #f0dddd; }
 table { border-collapse: collapse; border-spacing: 0; }
 td { vertical-align: top; }
 
+/* =============================================================================
+   Entrys
+   ========================================================================== */
+
+.entry {
+    position: relative;
+}   
+
+.entry .entry-header {
+    margin: 0;
+    padding: .5em;
+}
+
+.entry .entry-profile {
+    width:100px;
+    height:100px;
+    margin-left: 0;
+    margin-bottom:-.5em;
+}
+
+.entry .entry-content {
+    padding: .5em .5em;
+}
+   
+.entry .entry-content img { 
+    vertical-align: top;
+    display: inline;
+}
+   
+.entry .entry-content p { 
+    display: block;
+    word-wrap: break-word;
+    margin-top: 0;
+    padding-left: 110px;
+}
+
+.entry .entry-content img { 
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* =============================================================================
+   Tags
+   ========================================================================== */
+
+.ui-tag { 
+    font-size:80%;
+}
+
+.ui-tag a { 
+    font-size: 90%;
+    margin: 0.2em;
+}
+
+
+
 /* ==|== primary styles =====================================================
    Author: Jonas Svensson
    ========================================================================== */
@@ -309,6 +367,15 @@ body  {
 #top-wrapper {
     border-left:none;
     border-right:none;
+}
+
+#top-wrapper #main_logo a {
+    text-decoration:none;
+    color:#DDD;
+}
+
+#top-wrapper #main_logo a:hover {
+    color:#ED7B1D;
 }
 
 /* primary navigation */
@@ -390,6 +457,11 @@ nav#secondary_navigation ul li hr {
     padding:.5em;
 }
 
+.entry-head form {
+    display:inline;
+    font-size:100%;
+}
+
 .entry-head .ui-button {
     font-size:60%;
 }
@@ -436,6 +508,7 @@ nav#secondary_navigation ul li hr {
 .ui-text-panel p {
     display: inline-block;
     width: 80%;
+    word-wrap: break-word;
 }
 
 .ui-widget-header .button-wrapper {

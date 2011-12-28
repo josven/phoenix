@@ -1,0 +1,27 @@
+{% load thumbnail %}
+{% load entry_tags %}
+{% load markup %}
+
+<li class="entry ui-widget ui-widget-content">
+    {% entry_head entry %}    
+    
+    {% if entry.created_by.get_profile.photo %}
+    <div class="entry-profile clearfix">
+        {% thumbnail entry.created_by.get_profile.photo "100x100" crop="center" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}   
+    </div>
+    {% endif %}
+    
+    <div class="entry-content clearfix">
+        {{ entry.text|urlize|textile  }}
+        {{ entry.body|urlize|textile  }}
+        
+        {% if form.text %}
+        <form class="ui-helper-hidden" method="post" action="{% url guestbook entry.created_by.id %}">
+        {% csrf_token %}
+        {{ form.text }}
+        </form>
+        {% endif %}
+    </div>
+</li>

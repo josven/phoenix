@@ -1,8 +1,10 @@
 jQuery(document).ready(function() {
 
-    $('.js-reply').click( function () {
+    $('.js-reply').click( function (event) {
+        event.preventDefault();
+        
         var entry = $(this).parentsUntil('ul').last(),
-            content = entry.find('.ui-text-panel').clone();
+            content = entry.find('.entry-content').clone();
         
         dialog = content.dialog({
             title: "Svara " + $(this).data('replyTo'),
@@ -17,8 +19,8 @@ jQuery(document).ready(function() {
         });
         
         dialog.find('.ui-helper-hidden').show();
-        dialog.find('.entry-profile-picture').hide();
-
+        
+        return false;
     });
 
 });

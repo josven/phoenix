@@ -32,8 +32,8 @@
 		<tr class="ui-widget-content">
 			<td><a href="{% url read_article article.id %}">{{ article.title }}</a></td>
 			<td><a href="{{ article.created_by.get_profile.get_absolute_url }}">{{ article.created_by }}</a></td>
-			<td>{% for tag in article.tags.all %}{{tag}} {% endfor %}</td>
-			<td>{{ article.date_created }}</td>
+			<td>{% for tag in article.tags.all %}<span class="ui-tag"><a href="{% url search_article tag %}">{{ tag|title }}</a></span>{% endfor %}</td>
+            <td>{{ article.date_created }}</td>
 		</tr>
 {% if forloop.last %}
 	</tbody>

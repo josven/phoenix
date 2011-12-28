@@ -5,12 +5,11 @@
     <form id="form-create-thread" action="{% url create_thread %}" method="post">
         {% csrf_token %}
         <p>
-            <label for="id_title">Kategori:</label>
-            <span id="categories">
-                {% for tag in categories %}
-                <span title="Håll in ctrl för att välja flera" class="ui-widget-content">{{ tag }}</span>
-                {% endfor %}
+            {% for tag in categories %}
+            <span class="ui-tag">
+                <input data-tag="{{ tag }}" {% if tag|lower  == initial_tags|lower  %}checked="checked" {% endif %}type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
             </span>
+            {% endfor %}
         </p>
         
         {{ form.as_p }}    

@@ -17,25 +17,7 @@
 
 <ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
 {% for entry in posts %}
-
-{% if forloop.counter < increment|add:padding %}
-    <li class="ui-widget ui-widget-content">
-        {% entry_head entry %}      
-        <div class="ui-text-panel">
-            {% thumbnail entry.created_by.get_profile.photo "100x100" crop="center" as im %}
-            <img class="entry-profile-picture" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-            {% endthumbnail %}
-            
-            {{ entry.text|linebreaks|urlizetrunc:40  }}
-        
-            <form class="ui-helper-hidden" action="{% url guestbook entry.created_by.id %}" method="post">
-                {% csrf_token %}
-                {{ form.text }}
-            </form>
-        </div>
-    </li>
-{% endif %}
-
+{% include "_entry.html" %}
 {% if forloop.last %}
 </ul>
 

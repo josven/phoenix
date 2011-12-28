@@ -1,23 +1,5 @@
 jQuery(document).ready(function() {
     
-    // Select categories
-    $( "#categories" ).selectable({
-			stop: function() {
-				var tags = "";				
-                $( ".ui-selected", this ).each(function() {
-					var tag = this.innerHTML;
-					tags = tags + " " + tag;
-                    
-				});
-                $( "#id_tags" ).val(tags.trim());
-			}
-        }).on('mousedown', '*', function(e){
-            // fix http://bugs.jqueryui.com/ticket/7858
-            if (e.ctrlKey) {
-                e.metaKey = e.ctrlKey;
-            }
-        });
-    
     // Reply button
     jQuery(".js-reply").click(function() {
         var button = $(this),
@@ -48,6 +30,7 @@ jQuery(document).ready(function() {
     
     // Apply datatables
     $('#table_threads').dataTable({
+        "aaSorting": [[3,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ artiklar per sida",
@@ -56,6 +39,7 @@ jQuery(document).ready(function() {
             "sInfoEmpty": "Visar 0 till 0 av 0 artiklar",
             "sInfoFiltered": "(filtrerat från _MAX_ antal artiklar)",
             "sSearch": "Filter"
-        }
+        },
+        "iDisplayLength": 50
     });
 });

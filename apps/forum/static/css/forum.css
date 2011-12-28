@@ -112,6 +112,10 @@ html[xmlns] .dataTables_wrapper { display: block; }
     margin-top: 17px;
 }
 
+.forum_post span.ui-tag {
+    font-size:100%;
+}
+
 .subthread {
     list-style-type: none;
     padding-left:0;

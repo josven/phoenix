@@ -20,8 +20,22 @@ class Article(Entry):
 
 class defaultArticleCategories(models.Model):
     """
-    Default categories for the forum
+    Default categories for articles
     using tags
+    """
+    tags = TaggableManager()
+
+    def __unicode__(self):
+
+        text = self.tags.all()[0]
+
+        return u'%s' % (text)
+        
+
+class ModeratorArticleCategories(models.Model):
+    """
+    Default categories for the articles
+    for moderators, using tags
     """
     tags = TaggableManager()
 

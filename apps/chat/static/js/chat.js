@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {    
     // Reply link event
-    $('a.js-reply').click( function (event) {
-        event.preventDefault();
+    $('a.js-reply').click( function (e) {
+        e.preventDefault();
         
         var to = $(this).data('replyTo'),
             textarea = $('form#chat_form textarea'),
@@ -18,6 +18,7 @@ jQuery(document).ready(function() {
    
    // Hilight a messages with usename.
    var username = $('#username').html();
-   $('ul#chatlist li div.ui-text-panel:contains("'+username+'")').parent('li').addClass('ui-state-active');
+   $('.entry-content:contains("'+username+'")').parent('li').addClass('ui-state-active');
+
    
 });

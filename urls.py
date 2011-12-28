@@ -7,7 +7,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'apps.registration.views.auth_login', name='start'),
+    (r'^', include('apps.frontpage.urls')),
+    #url(r'^$', 'apps.registration.views.auth_login', name='start'),
     (r'^', include('apps.settings.urls')),
     (r'^', include('apps.guestbook.urls')),
     #(r'^register/beta/$', 'apps.registration.views.register_beta'),
