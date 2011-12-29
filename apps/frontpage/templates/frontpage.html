@@ -6,18 +6,11 @@
 {% block content %}
 <ul class="flat-list entrylist">
     {% for article in articles %}
-    <li class="ui-widget ui-widget-content">
+    <li class="ui-widget ui-widget-content acticle_post">
         
-        <h4 class="ui-widget-header entry-head">
-            {{ article.title }} av {{ article.created_by }} den {{ article.date_created }}
-            {% if request.user == article.created_by.user %}
-            <div class="button-wrapper">
-                <a href="{% url ajax_user_description_form request.user.id %}" class="js-quick-edit" rel="profile-description">Ändra</a>
-            </div>
-            {% endif %}
-        </h4>
+        {% article_header article %}
         
-        <div id="profile-description">
+        <div class="article-body">
             {{ article.body|urlize|textile }}
         </div>
     </li>

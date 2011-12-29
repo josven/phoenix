@@ -1,18 +1,3 @@
-.acticle_post span.ui-tag {
-    font-size:100%;
-}
-
-#article-body {
-    padding: 1em;
-}
-
-#article-body #id_body {
-    border:none;
-    width:100%;
-    margin:0;
-    padding:0;
-}
-
 .categories .ui-selecting { background: #eee; }
 .categories .ui-selected{ background: #888; color: #fff; }
 .categories { list-style-type: none; margin: 0; padding: 0; width: 60%; }

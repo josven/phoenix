@@ -1,8 +1,9 @@
-{% extends "base.html" %}
+{% extends "login.html" %}
 {% block header %}
 {% endblock header %}
 {% block content %}
 {% if not user.is_authenticated %}
+<h1>PHX</h1>
 <form id="id_registerform" action="{% url register %}" method="post">
 <ul class="formfields">
     {% csrf_token %}

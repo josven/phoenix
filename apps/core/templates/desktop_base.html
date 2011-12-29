@@ -63,15 +63,19 @@
         {% block messages %}
         {% endblock messages %}
 		
+        {% block main %}
 		<div id="main" role="main">
 		{% block content %}
 		{% endblock content %}
 		</div>
-
+        {% endblock main %}
+        
+        {% block widgets %}
         <div id="widgets">
-		{% block widgets %}
-		{% endblock widgets %}
+		{% block widgets-inner %}
+		{% endblock widgets-inner %}
 		</div>
+        {% endblock widgets %}
         
 		<footer>
 		{% block footer %}

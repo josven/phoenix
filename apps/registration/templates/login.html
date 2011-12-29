@@ -2,17 +2,18 @@
 {% block header %}
 {% endblock header %}
 {% block content %}
+
 {% if user.is_authenticated %}
 <p>Du är inloggad som <em>{{ user }}.</em></p>
 {% else %}
-<p><strong>{{ results }}</strong></p>
+<h1>PHX</h1>
 <form id="id_loginform" action="{% url login %}" method="post">
-    
 <ul class="formfields">
     {% csrf_token %}
     <li><input type="text" name="username" placeholder="Användarnamn" /></li>
     <li><input type="password" name="password" placeholder="Lösenord" /></li>
 </ul>
+
 <ul>
     <li><input type="submit" value="Logga in" />&nbsp;<a id="register_button" data-modal-form="true" title="Registrera ny användare" class="ui-button" href="{% url register %}">Ny användare</a></li>
 </ul>
@@ -20,3 +21,10 @@
 {% endif %}
 
 {% endblock content %}
+
+{% block widgets %}
+{% endblock widgets %}
+        
+        
+
+

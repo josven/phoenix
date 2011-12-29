@@ -1,5 +1,6 @@
 ﻿from django.views.decorators.http import require_POST
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -58,6 +59,8 @@ def auth_login(request):
                 login(request, user)
                 request.session.set_expiry(0)
                 messages.add_message(request, messages.INFO, "Du loggade just in.")
+                return HttpResponseRedirect(reverse('start'))
+                
             else:
                 messages.add_message(request, messages.INFO, "Ej aktiv användare")
         else:
@@ -94,6 +97,7 @@ def auth_register(request):
 
         if form.is_valid():
             username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
             
             try:
                 User.objects.get(username__iexact=username)
@@ -105,7 +109,10 @@ def auth_register(request):
                 form.save()
                 form = AuthenticationForm()
                 messages.add_message(request, messages.INFO, "Användare skapad.")
-                return render(request, 'login.html', vars)
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                
+                return HttpResponseRedirect(reverse('start'))
                 
         else:
             messages.add_message(request, messages.INFO, "Fel fel fel fel")
