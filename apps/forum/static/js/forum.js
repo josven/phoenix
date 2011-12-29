@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
     
     // Apply datatables
     $('#table_threads').dataTable({
-        "aaSorting": [[6,'desc']],
+        "aaSorting": [[5,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ artiklar per sida",

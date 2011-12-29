@@ -16,7 +16,7 @@ class DefaultForumTagsForm(forms.Form):
     )
 
 class ThreadForm(forms.Form):
-    title_min = 10
+    title_min = 5
     title_max = 100
 
     title = forms.CharField(
