@@ -53,13 +53,15 @@
     
 	<div id="container">
         
+        {% block secondary_navigation_wrapper %}
         {% if request.user.is_authenticated %}
         <nav id="secondary_navigation">
         {% block secondary_navigation %}
         {% endblock secondary_navigation %}
         </nav>
         {% endif %}
-    
+        {% endblock secondary_navigation_wrapper %}
+        
         {% block messages %}
         {% endblock messages %}
 		

@@ -69,11 +69,13 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
+    'tracking.middleware.BannedIPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -98,6 +100,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.markup',
     'taggit',
+    'tracking', # https://github.com/ramusus/django-tracking/commit/ab3c43107b89f54539b2f3e6a7b68a99f8d83971
     'sorl.thumbnail',
     'phoenix.apps.core',
     'phoenix.apps.registration',
