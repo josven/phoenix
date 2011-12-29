@@ -126,7 +126,7 @@ def search_article(request, tags=None, user_id=None):
 
     categories = defaultArticleCategories.objects.all()
 
-    tags = [x.lower() for x in tags.split(",")]
+    tags = [x for x in tags.split(",")]
     
     if user_id and tags:
         articles = Article.active.filter(tags__name__in=tags, created_by__id = user_id)
