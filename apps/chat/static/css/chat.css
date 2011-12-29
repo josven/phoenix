@@ -18,3 +18,6 @@ form  textarea   {
      -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
   
 }
+
+/* Overide JQUI auto font bolding on hilighted entries */
+#chatlist li.ui-state-active .entry-content { font-weight:normal; }
