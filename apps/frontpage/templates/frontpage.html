@@ -2,7 +2,6 @@
 {% load entry_tags %}
 {% load markup %}
 {% load thumbnail %}
-{% load tracking_tags %}
 
 {% block secondary_navigation_wrapper %}
 {% endblock secondary_navigation_wrapper %}
@@ -21,13 +20,3 @@
     {% endfor %}
 </ul>
 {% endblock content %}
-
-{% block widgets-inner %}
-<div class="ui-widget ui-widget-content">
-<h4 class="ui-widget-header entry-head">Senast inloggade</h4>
-{% visitors_on_site as visitors %}
-<div class="article-body">
-    Inloggade: {{ visitors }} 
-</div>
-</div>
-{% endblock widgets-inner %}

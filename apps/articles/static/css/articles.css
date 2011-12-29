@@ -43,10 +43,6 @@ table#table_articles th {
 	padding: 5px;
 }
 
-div.dataTables_wrapper {
-    margin-top:16px;
-}
-
 div.dataTables_wrapper:after {
 	content: ".";
 	display: block;

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 def read_frontpage(request):
     
     vars = {
-        'articles' : Article.objects.filter(tags__name__in=["FRONTPAGE"]).order_by('-id')
+        'articles' : Article.objects.filter(tags__name__in=["FRONTPAGE"]).order_by('-id'),
         }
 
     return render(request, 'frontpage.html', vars )

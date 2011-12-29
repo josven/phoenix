@@ -92,10 +92,6 @@ table#table_threads th {
 	padding: 5px;
 }
 
-div.dataTables_wrapper {
-    margin-top:16px;
-}
-
 div.dataTables_wrapper:after {
 	content: ".";
 	display: block;
@@ -109,7 +105,7 @@ html[xmlns] .dataTables_wrapper { display: block; }
 
 /* thread view */
 .thead_wrapper {
-    margin-top: 17px;
+    margin-top: 5px;
 }
 
 .forum_post span.ui-tag {

@@ -2,6 +2,7 @@
 from django.db import models
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
+from tracking.models import Visitor
 
 def find_request():
     """
@@ -49,6 +50,8 @@ def render(request, *args):
     
     vars['app_name'] = mod.__name__.split('.')[1]
     vars['base_template'] = get_base_template(request)
+    vars['active_users'] = Visitor.objects.active()
+    
     request.session['app_name'] = vars['app_name']
     
     return djangorender(request, template, vars)

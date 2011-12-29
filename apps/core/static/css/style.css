@@ -69,6 +69,7 @@ a:hover, a:active { outline: 0; }
 a.link-user {
     color: #ddd;
     text-decoration:none;
+    font-weight:bold;
 }
 a.link-user:visited {color: #ddd;}
 a.link-user:hover {color: #fff;}
@@ -275,7 +276,7 @@ td { vertical-align: top; }
 /* =============================================================================
    Widgets
    ========================================================================== */
-div#widgets { margin: 1em 0; }
+
 
 /* =============================================================================
    Articles
@@ -387,6 +388,7 @@ body  {
 #top-wrapper {
     border-left:none;
     border-right:none;
+    margin-bottom: 1em;
 }
 
 #top-wrapper #main_logo a {
@@ -437,7 +439,7 @@ nav#primary_navigation ul li hr {
 
 /* account button */
 #account {
-    padding: .5em;
+    padding: .5em 0;
     font-size:80%;
     text-align:right;
 }
@@ -470,6 +472,10 @@ nav#secondary_navigation ul li hr {
 .entrylist li {
     margin: 1em 0;
     position: relative;
+}
+
+.entrylist li:first-child {
+    margin: 0;
 }
 
 .entry-head {

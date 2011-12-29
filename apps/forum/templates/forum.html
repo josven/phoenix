@@ -41,7 +41,7 @@
 			<td>{% for tag in thread.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></span>{% endfor %}</td>
 			<td>{{ thread.date_created }}</td>
 			<td>{{ thread.get_number_of_post }}</td>
-			<td>{{ thread.get_latest_post.date_created }} av <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.get_latest_post.created_by }}</a></td>
+			<td>{{ thread.get_latest_post.date_created }} av <a class="link-user" href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.get_latest_post.created_by }}</a></td>
 		</tr>
 {% if forloop.last %}
 	</tbody>

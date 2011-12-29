@@ -1,3 +1,6 @@
+{% load tracking_tags %}
+{% visitors_on_site as visitors %}
+
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -74,8 +77,21 @@
         
         {% block widgets %}
         <div id="widgets">
-		{% block widgets-inner %}
-		{% endblock widgets-inner %}
+            {% block widgets-inner %}
+            <div class="ui-widget ui-widget-content">
+            <h4 class="ui-widget-header entry-head">Inloggade</h4>
+
+            <div class="article-body">
+                <ul class="flat-list">
+                    {% for visitor in active_users %}
+                    {% if visitor.user != None %}
+                    <li><a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a> <em>{{ visitor.session_start|timesince }}</em></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            </div>
+            {% endblock widgets-inner %}
 		</div>
         {% endblock widgets %}
         
