@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from forms import RegisterForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -92,10 +93,20 @@ def auth_register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            form = AuthenticationForm()
-            messages.add_message(request, messages.INFO, "Användare skapad.")
-            return render(request, 'login.html', vars)
+            username = form.cleaned_data['username']
+            
+            try:
+                User.objects.get(username__iexact=username)
+                vars['form'] = form
+                messages.add_message(request, messages.INFO, "Användare {0} finns redan.".format( unicode( username ) ) )
+                return render(request, 'register.html', vars)
+            
+            except:
+                form.save()
+                form = AuthenticationForm()
+                messages.add_message(request, messages.INFO, "Användare skapad.")
+                return render(request, 'login.html', vars)
+                
         else:
             messages.add_message(request, messages.INFO, "Fel fel fel fel")
     else:

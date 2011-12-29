@@ -111,6 +111,7 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = 'profiles.profile'
+AUTHENTICATION_BACKENDS = ('phoenix.apps.accounts.views.CaseInsensitiveModelBackend',)
 
 LOGIN_REDIRECT_URL = '/'
 

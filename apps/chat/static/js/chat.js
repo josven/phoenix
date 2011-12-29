@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
    
    // Hilight a messages with usename.
    var username = $('#username').html();
-   $('.entry-content:contains("'+username+'")').parent('li').addClass('ui-state-active');
+   $('.entry-content:containsinsensitive("'+username+'")').parent('li').addClass('ui-state-active');
 
    
 });
