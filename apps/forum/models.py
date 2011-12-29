@@ -19,6 +19,14 @@ class Thread(Entry):
     def __unicode__(self):
         return u'%s' % self.title
 
+    def get_latest_post(self):
+        return ForumPost.objects.decorated(collection=self).reverse()[0]
+
+    def get_number_of_post(self):
+        number = ForumPost.objects.decorated(collection=self).count() - 1
+        if number < 0:
+            number = 0
+        return number
 
 class ThreadHistory(EntryHistory):
     """
