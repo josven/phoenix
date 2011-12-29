@@ -4,17 +4,10 @@
 {% load markup %}
 
 {% block content %}
-<ul class="flat-list entrylist">
-    <li class="ui-widget ui-widget-content">
+<ul class="flat-list entrylist">    
+    <li class="ui-widget ui-widget-content acticle_post">
         
-        <h4 class="ui-widget-header entry-head">
-            {{ article.title }} av {{ article.created_by }} den {{ article.date_created }}
-            {% if request.user == article.created_by %}
-            <div class="button-wrapper">
-                <a href="{% url ajax_article_body_form request.user.id %}" class="js-quick-edit" rel="article-body">Ändra</a>
-            </div>
-            {% endif %}
-        </h4>
+        {% article_header article %}
         
         <div id="article-body">
             {{ article.body|urlize|textile }}

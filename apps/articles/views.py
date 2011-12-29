@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.cache import never_cache
 from django.http import Http404, HttpResponseRedirect
-from apps.core.utils import render
+from apps.core.utils import render, validate_internal_tags
 from django.core.urlresolvers import reverse
 
 """
@@ -57,19 +57,9 @@ def create_article(request, tags=None):
                 messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
                 return render(request,'create_article.html', vars)
 
-            post_values = request.POST.copy()        
-            
-            for tag in all_tags:
-                is_upper = tag.isupper()
-                is_staff = request.user.is_staff
-                
-                if is_upper and is_staff:
-                    tags = tag.upper()
-                else:
-                    tags = tag.lower()
-            
+            post_values = request.POST.copy()
+            all_tags = validate_internal_tags(request, all_tags)
             post_values['tags'] = ', '.join(all_tags)
-            
             form = ArticleForm(post_values)         
             link = form.save()
 
@@ -151,9 +141,6 @@ def search_article(request, tags=None, user_id=None):
 
     return render(request, 'articles.html', {"articles": articles,"categories":categories})
     
-    
-    
-    
 
 @never_cache    
 @login_required(login_url='/auth/login/')
@@ -174,5 +161,5 @@ def ajax_article_body_form(request,id=None):
     return render(request, 'ajaxform.html', {'form':form,'action':action})
 
     
-        
+       
    

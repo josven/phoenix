@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
-from apps.core.utils import render
+from apps.core.utils import render, validate_internal_tags
 from models import Thread, ForumPost, defaultCategories
 from forms import *
 
@@ -65,6 +65,9 @@ def create_thread(request, tags=None):
                 messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
                 return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
 
+            # Validate INTERNAL tags
+            all_tags = validate_internal_tags(request, all_tags) 
+            
             # Create the thread
             thread = Thread.objects.create(
                 created_by = request.user,
@@ -73,7 +76,7 @@ def create_thread(request, tags=None):
             
             # Apply tags on thread
             for tag in all_tags:
-                thread.tags.add(tag.lower())  
+                thread.tags.add(tag)  
             
             # Create the initial post
             ForumPost.objects.create(

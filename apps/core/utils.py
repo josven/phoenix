@@ -59,3 +59,18 @@ def create_datepicker(form):
     if isinstance(form, models.DateField):
         formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
     return formfield
+
+def validate_internal_tags(request, tags):
+
+    tags_array = []
+    
+    for tag in tags:
+        is_upper = tag.isupper()
+        is_staff = request.user.is_staff
+        
+        if is_upper and is_staff:
+            tags_array.append( tag.upper() )
+        else:
+            tags_array.append( tag.lower() )
+            
+    return tags_array

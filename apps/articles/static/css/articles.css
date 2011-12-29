@@ -1,3 +1,7 @@
+.acticle_post span.ui-tag {
+    font-size:100%;
+}
+
 #article-body {
     padding: 1em;
 }

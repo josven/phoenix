@@ -11,7 +11,10 @@
             
             {% if forloop.first %}
             <li class="forum_post ui-widget ui-widget-content">
-            <h4 class="ui-widget-header entry-head">{{ post.collection.title }} {% for tag in post.collection.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></span>{% endfor %}{% comment %}<form action="" class="ui-tag-edit" method="post"><input type="checkbox" id="edit-tag" /><label for="edit-tag">Redigera taggar</label>{% endcomment %}</h4>
+            {% thread_header post %}
+            {% comment %}
+            <h4 class="ui-widget-header entry-head">{{ post.collection.title }} {% for tag in post.collection.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></span>{% endfor %}</h4>
+            {% endcomment %}
             </li>
             {% endif %}
             
