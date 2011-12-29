@@ -4,15 +4,25 @@
     <h1>Skapa ny tråd</h2>
     <form id="form-create-thread" action="{% url create_thread %}" method="post">
         {% csrf_token %}
+        
+        <h3>Du kan välja upp till 5 kategorier, minst en en huvudtagg</h3>
+        <div class="tag-list-wrapper">
+        {% for field in tagform %}
+        {{ field }}
+        {% endfor %}
+        </div>
+        
         <p>
-            {% for tag in categories %}
-            <span class="ui-tag">
-                <input data-tag="{{ tag }}" {% if tag|lower  == initial_tags|lower  %}checked="checked" {% endif %}type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
-            </span>
-            {% endfor %}
+        {{ form.tags }}
         </p>
         
-        {{ form.as_p }}    
+        <p>
+        {{ form.title }}
+        </p>
+        
+        <p>
+        {{ form.body }}
+        </p>
         <input type="submit" value="Skapa" />
     </form>
 {% endblock content %}

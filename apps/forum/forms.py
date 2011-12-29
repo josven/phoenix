@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.forms.fields import MultipleChoiceField
+from django.forms.widgets import CheckboxSelectMultiple
+
 from taggit.forms import *
+from models import *
+                            
+DEFAULT_CATEGORIES = ( (tag, unicode( tag ).title() ) for tag in defaultCategories.objects.all() )
+               
+class DefaultForumTagsForm(forms.Form):
+    default_tags = forms.MultipleChoiceField(
+        required=True,
+        widget=CheckboxSelectMultiple(attrs={'class':'ui-tag-reformat'}),
+        choices=DEFAULT_CATEGORIES
+    )
 
 class ThreadForm(forms.Form):
     title_min = 10
@@ -17,13 +30,14 @@ class ThreadForm(forms.Form):
             'min_length': 'Titeln måste vara minst %s tecken lång.' % title_min,
         }
     )
-
+    
     tags = TagField(
-        required=True,
+        required=False,
         error_messages={
             'required': 'Du har inte angett någon kategori!',
         },
-        widget=forms.HiddenInput,
+        widget=TagWidget(attrs={'placeholder': 'Egna kategorier, separera dem med comma (,)'}),
+        label = "",
     )
     
     body = forms.CharField(

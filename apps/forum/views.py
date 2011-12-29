@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
 from apps.core.utils import render
 from models import Thread, ForumPost, defaultCategories
-from forms import ThreadForm, ForumPostForm
+from forms import *
 
 @never_cache
 @login_required(login_url='/auth/login/')
@@ -34,39 +34,57 @@ def create_thread(request, tags=None):
     Create a forum thread.
     
     """
+
     threads = Thread.active.all()
-    
     form = ThreadForm()
-    initial_tags = tags
+    tagform = DefaultForumTagsForm()
+    categories = defaultCategories.objects.all()
     
     if tags != None:
-        form = ThreadForm(initial={'tags': initial_tags})
-
-    categories = defaultCategories.objects.all()
+        initial_tags = tags.split(',')
+        tagform = DefaultForumTagsForm(initial={'default_tags': initial_tags })
     
     if request.method == 'POST':    
         form = ThreadForm(request.POST)
-        if form.is_valid():
-            # Create the thread
+        tagform = DefaultForumTagsForm(request.POST)
+        
+        if form.is_valid() & tagform.is_valid():            
+            default_tags = tagform.cleaned_data['default_tags']
+            user_tags = form.cleaned_data['tags']
             
+            # Combine and remove doubles
+            all_tags = list(set(default_tags + user_tags))
+            
+            # Check if a default tag is present
+            if len(default_tags) == 0:
+                messages.add_message(request, messages.INFO, 'Du måste välja minst en huvudkategori!')
+                return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
+
+            # Check maximum allowed tags
+            if len( all_tags ) > 5:
+                messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
+                return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
+
+            # Create the thread
             thread = Thread.objects.create(
                 created_by = request.user,
                 title = form.cleaned_data['title']
-            )            
+            ) 
             
-            tags = form.cleaned_data['tags']
-            for tag in tags:
-                thread.tags.add(tag.lower())
-
+            # Apply tags on thread
+            for tag in all_tags:
+                thread.tags.add(tag.lower())  
+            
             # Create the initial post
             ForumPost.objects.create(
                 created_by=request.user,
                 collection=thread,
                 body=form.cleaned_data['body']
             )
+
             return HttpResponseRedirect(thread.get_absolute_url())
-    
-    return render(request, 'create_thread.html', {"threads": threads, 'form': form, 'categories':categories, 'initial_tags':initial_tags})
+   
+    return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
 
 @never_cache
 @login_required(login_url='/auth/login/')

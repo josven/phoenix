@@ -16,39 +16,60 @@ Articles
 
 @never_cache
 @login_required(login_url='/auth/login/')
-def create_article(request):
+def create_article(request, tags=None):
     """
     Create article
     
     """
-    form = ArticleForm()
     
     vars = {
-        'form':form,
+        'form':ArticleForm(),
+        'tagform' : DefaultArticleTagsForm(),
         'categories':defaultArticleCategories.objects.all(),
         'moderator_categories': ModeratorArticleCategories.objects.all(),
         }
     
+    if tags != None:
+        initial_tags = tags.split(',')
+        vars['tagform'] = DefaultForumTagsForm(initial={'default_tags': initial_tags })
+        
     if request.method == 'POST':
         form = ArticleForm(request.POST)
-        vars['form'] = form
+        tagform = DefaultArticleTagsForm(request.POST)
         
-        if form.is_valid():
+        vars['form'] = form
+        vars['tagform'] = tagform
+        
+        if form.is_valid() & tagform.is_valid():
+            default_tags = tagform.cleaned_data['default_tags']
+            user_tags = form.cleaned_data['tags']
             
-            post_values = request.POST.copy()
-            tags = ""
+            # Combine and remove doubles
+            all_tags = list(set(default_tags + user_tags))
+            
+            # Check if a default tag is present
+            if len(default_tags) == 0:
+                messages.add_message(request, messages.INFO, 'Du måste välja minst en huvudkategori!')
+                return render(request,'create_article.html', vars)
 
-            for tag in post_values['tags'].split():
-                
+            # Check maximum allowed tags
+            if len( all_tags ) > 5:
+                messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
+                return render(request,'create_article.html', vars)
+
+            post_values = request.POST.copy()        
+            
+            for tag in all_tags:
                 is_upper = tag.isupper()
                 is_staff = request.user.is_staff
                 
                 if is_upper and is_staff:
-                    tags += " " + tag.upper()
+                    tags = tag.upper()
                 else:
-                    tags += " " + tag.lower()
-
-            post_values['tags'] = tags.strip()
+                    tags = tag.lower()
+            
+            post_values['tags'] = ', '.join(all_tags)
+            
             form = ArticleForm(post_values)         
             link = form.save()
 

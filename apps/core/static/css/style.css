@@ -116,6 +116,8 @@ ul, ol { margin: 1em 0; padding: 0 0 0 40px; }
 dd { margin: 0 0 0 40px; }
 nav ul, nav ol { list-style: none; list-style-image: none; margin: 0; padding: 0; }
 ul.flat-list,ol.flat-list { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+div.tag-list-wrapper ul { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+div.tag-list-wrapper li { display:inline; }
 
 /* =============================================================================
    Embedded content
@@ -334,13 +336,15 @@ td { vertical-align: top; }
 /* body */
 body  {
     background: #45484d; /* Old browsers */
+}
+
+.cssgradients  body  {
     background: -moz-radial-gradient(center, ellipse cover,  #222 0%, #45484d 100%); /* FF3.6+ */
     background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#222), color-stop(100%,#45484d)); /* Chrome,Safari4+ */
     background: -webkit-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* Chrome10+,Safari5.1+ */
     background: -o-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* Opera 12+ */
     background: -ms-radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* IE10+ */
     background: radial-gradient(center, ellipse cover,  #222 0%,#45484d 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222', endColorstr='#45484d',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     height: 100%;
     margin: 0;
     background-repeat: no-repeat;

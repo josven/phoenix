@@ -6,8 +6,30 @@ $(document).ready(function() {
     * Tags
     * 
     */
+    
+    // HACK until we have real widgets based on CheckboxSelectMultiple for tags 
+    $('input[type=checkbox].ui-tag-reformat').parent('label').each( function() {
+        var label = $(this),
+            input = label.find('input'),
+            tag = input.val();
+        
+        // Format label
+        label.html( tag.charAt(0).toUpperCase() + tag.substr(1).toLowerCase() );
+        
+        // Insert input before label
+        label.before( input );
+        
+        // Add class to parent
+        label.parent().addClass('ui-tag');
+ 
+        // Remove class on input
+        input.removeClass('ui-tag');
+    });
+    
     // Checkboxtags are toggleble tag buttons. Used when new entry are created.
-    $('.ui-tag-edit input[type=checkbox]').button( {icons: {primary:'ui-icon-pencil'}})
+    $('.ui-tag-edit input[type=checkbox]').button( {icons: {primary:'ui-icon-pencil'}});
+    
+    /*
         .click( function () {
             var entry = $(this).parentsUntil('ul').last(),
                 form = entry.find('form');
@@ -16,8 +38,11 @@ $(document).ready(function() {
             console.log( entry );
             console.log( form );
         });
+    */
     
-    $('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}})
+    $('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}});
+    
+    /*
         .click( function () {
             var button = $(this),
                 tag = button.data('tag');
@@ -35,6 +60,8 @@ $(document).ready(function() {
                 tagholder.val( tags.trim() );
             }
         });
+    */
+    
     
     /*
     * Entrys
@@ -54,7 +81,7 @@ $(document).ready(function() {
         });
     
     // Activate initial active tags
-    $('input[type=checkbox].ui-tag-init-active').toggleClass('ui-state-active');
+    //$('input[type=checkbox].ui-tag-init-active').toggleClass('ui-state-active');
     
     // Linktags, these tags are links, simply put.
     $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );

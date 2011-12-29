@@ -4,26 +4,26 @@
     <h1>Skapa ny Artikel</h2>
     <form id="form-create-article" action="" method="post">
         {% csrf_token %}
-        <p>            
-            {% for tag in categories %}
-            <span class="ui-tag">
-                <input data-tag="{{ tag }}" type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
-            </span>
-            {% endfor %}     
-        </p>        
         
-        {% if request.user.is_staff %}
-        <hr />
-        <p>     
-            {% for tag in moderator_categories %}
-            <span class="ui-tag">
-                <input data-tag="{{ tag }}" type="checkbox" id="tag-{{ tag }}" /><label for="tag-{{ tag }}">{{ tag|title }}</label>
-            </span>
-            {% endfor %}  
+        <h3>Du kan välja upp till 5 kategorier, minst en en huvudtagg</h3>
+        <div class="tag-list-wrapper">
+        {% for field in tagform %}
+        {{ field }}
+        {% endfor %}
+        </div>
+
+        <p>
+        {{ form.tags }}
         </p>
-        {% endif %}
         
-        {{ form.as_p }}    
+        <p>
+        {{ form.title }}
+        </p>
+        
+        <p>
+        {{ form.body }}
+        </p>
+          
         <input type="submit" value="Skapa" />
     </form>
 {% endblock content %}
