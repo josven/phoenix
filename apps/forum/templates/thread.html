@@ -1,6 +1,7 @@
 {% extends "forum.html" %}
 {% load entry_tags %}
 {% load markup %}
+{% load thumbnail %}
 
 {% block content %}    
     <div class="thead_wrapper">
@@ -15,11 +16,19 @@
             </li><!-- End thread header -->
             {% endif %}
             
-            <li class="forum_post ui-widget ui-widget-content">
+            <li class="forum_post entry ui-widget ui-widget-content">
                 
                 {% entry_head post %}
                 
-                <div class="ui-text-panel">
+                {% if post.created_by.get_profile.photo %}
+                <div class="entry-profile clearfix">
+                    {% thumbnail post.created_by.get_profile.photo "100x100" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}   
+                </div>
+                {% endif %}
+    
+                <div class="entry-content clearfix">
                 {{ post.body|urlize|textile }}
                 
                     <div class="ui-helper-hidden">

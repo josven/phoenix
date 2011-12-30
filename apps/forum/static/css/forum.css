@@ -163,10 +163,10 @@ html[xmlns] .dataTables_wrapper { display: block; }
 }
 
 /* Dialogs */
-.ui-dialog .ui-text-panel p {
+.ui-dialog .entry-content p {
     width:100%;
 }
-.ui-dialog .ui-text-panel textarea   {
+.ui-dialog .entry-content textarea   {
     margin: 10px 0;
     padding: 1%;
     font-size:130%;

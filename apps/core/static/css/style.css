@@ -325,7 +325,7 @@ td { vertical-align: top; }
     padding-left: 110px;
 }
 
-.entry .entry-content img { 
+.entry .entry-content img,{ 
     border: 7px solid rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     cursor: pointer;

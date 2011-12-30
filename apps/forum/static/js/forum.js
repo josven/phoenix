@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
         event.preventDefault();
         
         var entry = $(this).parentsUntil('ul').last(),
-            content = entry.find('.ui-text-panel').clone();
+            content = entry.find('.entry-content').clone();
         
         entry.addClass('ui-state-active');
         

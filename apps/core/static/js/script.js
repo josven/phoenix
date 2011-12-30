@@ -70,7 +70,7 @@ $(document).ready(function() {
     // Images in enties scales down 
     // in the entry. And scales up in 
     // the dialog when clicked on.
-    $('.entry-content img')
+    $('.entry-content img, .ui-text-panel img')
         .attr('height','80')
         .click( function () {
             $(this).clone().dialog({ 
