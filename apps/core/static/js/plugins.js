@@ -499,3 +499,30 @@ o){return h<o?1:h>o?-1:0},"date-pre":function(h){h=Date.parse(h);if(isNaN(h)||h=
 jQuery.expr[':'].containsinsensitive = function(a, i, m) { 
   return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0; 
 };
+
+
+if(!Modernizr.input.placeholder){
+
+
+
+/*
+ * jQuery placeholder fix
+ * http://kamikazemusic.com/quick-tips/jquery-html5-placeholder-fix/
+ */
+$(document).ready(function() {
+	if(!Modernizr.input.placeholder){
+		$("input").each(
+			function(){
+				if($(this).val()=="" && $(this).attr("placeholder")!=""){
+					$(this).val($(this).attr("placeholder"));
+					$(this).focus(function(){
+						if($(this).val()==$(this).attr("placeholder")) $(this).val("");
+					});
+					$(this).blur(function(){
+						if($(this).val()=="") $(this).val($(this).attr("placeholder"));
+					});
+				}
+		});
+	}
+});
+}
