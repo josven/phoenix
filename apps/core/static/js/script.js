@@ -3,6 +3,21 @@ testvar = {}
 $(document).ready(function() {
 
     /*
+    * Time formating
+    *
+    */
+    $('.js-time-last-update').each( function () {
+    
+        if ( this.innerHTML.match(/hour/) ){
+            this.innerHTML = "Borta";
+        } else {
+            this.innerHTML = "Aktiv";
+        }
+    
+    });
+    
+    
+    /*
     * Tags
     * 
     */

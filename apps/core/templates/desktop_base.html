@@ -1,4 +1,5 @@
 {% load tracking_tags %}
+{% load filters %}
 {% visitors_on_site as visitors %}
 
 <!doctype html>
@@ -78,18 +79,23 @@
         {% block widgets %}
         <div id="widgets">
             {% block widgets-inner %}
-            <div class="ui-widget ui-widget-content">
-            <h4 class="ui-widget-header entry-head">Inloggade</h4>
-
-            <div class="article-body">
-                <ul class="flat-list">
-                    {% for visitor in active_users %}
-                    {% if visitor.user != None %}
-                    <li><a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a> <em>{{ visitor.session_start|timesince }}</em></li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
+            <div id="widget-user-activity" class="ui-widget ui-widget-content">
+                <h4 class="ui-widget-header entry-head">Användare</h4>
+      
+                <div class="article-body">
+                    <ul class="flat-list">
+                        {% for visitor in active_users %}
+                        {% if visitor.user != None %}
+                        <li>
+                            <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
+                            {% if visitor.last_update|minutessince > 5 %}
+                            <span class="ui-icon ui-icon-clock">&nbsp;</span>                        
+                            {% endif %}
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
             {% endblock widgets-inner %}
 		</div>
