@@ -511,7 +511,7 @@ if(!Modernizr.input.placeholder){
  */
 $(document).ready(function() {
 	if(!Modernizr.input.placeholder){
-		$("input").each(
+		$("input, textarea").each(
 			function(){
 				if($(this).val()=="" && $(this).attr("placeholder")!=""){
 					$(this).val($(this).attr("placeholder"));
