@@ -54,7 +54,7 @@ class ForumPostForm(forms.Form):
     thread_id = forms.IntegerField()
     parent_id = forms.IntegerField()
     body = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'placeholder':'Fortsätt på tråden:'}),
         required=True,
         error_messages={
             'required': 'Du måste fylla i detta fält.',

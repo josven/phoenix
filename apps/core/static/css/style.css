@@ -470,12 +470,8 @@ nav#secondary_navigation ul li hr {
 /* entrys */
 
 .entrylist li {
-    margin: 1em 0;
+    margin-bottom: 1em;
     position: relative;
-}
-
-.entrylist li:first-child {
-    margin: 0;
 }
 
 .entry-head {

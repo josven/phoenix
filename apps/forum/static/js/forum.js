@@ -1,7 +1,9 @@
 jQuery(document).ready(function() {
     
     // Reply button
-    jQuery(".js-reply").click(function() {
+    jQuery(".js-replyTEST").click(function() {
+        alert('lol');
+        
         var button = $(this),
             item = $(this).parents('.forum_post').next();
        
@@ -17,14 +19,53 @@ jQuery(document).ready(function() {
         return false;
     });
     
-    // Activate/deavivate reply
-    $('.inactive_reply textarea').focus( function () {
-        var item = $(this).parentsUntil('.subthread').last();
+    $('.js-reply').click( function (event) {
+        event.preventDefault();
         
-        item.removeClass('inactive_reply');
-        item.addClass('ui-state-active');
+        var entry = $(this).parentsUntil('ul').last(),
+            content = entry.find('.ui-text-panel').clone();
+        
+        entry.addClass('ui-state-active');
+        
+        dialog = content.dialog({
+            width: "500",
+            title: "Svara " + $(this).data('replyTo'),
+            buttons: {
+                    "Svara": function() {
+                        dialog.find('form').submit();
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+            },
+            close: function(event, ui) { 
+                entry.removeClass('ui-state-active');
+            },
+        });
+        
+        dialog.find('div.ui-helper-hidden').show();
+        dialog.find('textarea').attr('placeholder','Skriv ditt svar...');
+        dialog.find('p.ui-helper-hidden').hide();
+        
+    entry.addClass('ui-state-active');
+        return false;
+    });
+    
+    // Activate/deavivate reply
+    $('.full_width_reply textarea').focus( function () {
+        var item = $(this).parentsUntil('.subthread').last();
+        $(this).animate({height: '200',});
         item.find('p.ui-helper-hidden').show();
-        item.prev().find('.js-reply').addClass('ui-state-highlight');
+    });
+        
+    $('.js-collapse').click( function (event) {
+        event.preventDefault();
+        var item = $(this).parentsUntil('.subthread').last();   
+        console.log( item );
+        
+        item.find('textarea').animate({height: '25',});        
+        item.find('p.ui-helper-hidden').hide();
+        return false;
     });
     
     

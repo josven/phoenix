@@ -145,21 +145,44 @@ html[xmlns] .dataTables_wrapper { display: block; }
 .inactive_reply textarea {
     height: 25px;
 }
-.full_width_reply label {
-    margin:10px;
-    font-weight: bold;
-    color: #666;
-}
+
 .full_width_reply textarea {
-    width:90%;
-    border:0px solid black;
-    padding:0;
-    outline:none;
-    color: #222;
+    width: 98%;
+    border: 0px solid black;
+    padding: 1%;
+    outline: none;
+    color: #fff;
     background-color: transparent;
+    height: 25px;
 }
+
 .full_width_reply p {
     text-align: right;
     padding: 10px;
     margin:0;
+}
+
+/* Dialogs */
+.ui-dialog .ui-text-panel p {
+    width:100%;
+}
+.ui-dialog .ui-text-panel textarea   {
+    margin: 10px 0;
+    padding: 1%;
+    font-size:130%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 98%;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  
 }

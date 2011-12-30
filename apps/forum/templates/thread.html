@@ -12,37 +12,52 @@
             {% if forloop.first %}
             <li class="forum_post ui-widget ui-widget-content">
             {% thread_header post %}
-            {% comment %}
-            <h4 class="ui-widget-header entry-head">{{ post.collection.title }} {% for tag in post.collection.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></span>{% endfor %}</h4>
-            {% endcomment %}
-            </li>
+            </li><!-- End thread header -->
             {% endif %}
             
             <li class="forum_post ui-widget ui-widget-content">
+                
                 {% entry_head post %}
                 
                 <div class="ui-text-panel">
                 {{ post.body|urlize|textile }}
-                </div>
                 
-                {% if not post.last_in_subthread %}
-                {% endif %}
-             
+                    <div class="ui-helper-hidden">
+                        {% include "reply_form.html" %}
+                    </div>
+                </div>
+ 
             </li><!-- End post -->
         
         {% if post.last_in_subthread or forloop.last %}
-            <li class="full_width_reply inactive_reply">
+            <li class="full_width_reply">
             {% include "reply_form.html" %}
             </li>
         </ul><!-- End subthread -->
-        {% else %}
-             <li class="full_width_reply inactive_reply ui-helper-hidden">
-            {% include "reply_form.html" %}
-            </li>
         {% endif %}
-
     {% endfor %}
     </div>
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
          
     {% comment %}
     
