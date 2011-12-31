@@ -23,7 +23,7 @@ class ActiveManager(models.Manager):
     
     """
     def get_query_set(self):
-        return super(ActiveManager, self).get_query_set().exclude(date_deleted__isnull=True)
+        return super(ActiveManager, self).get_query_set().exclude(deleted_by__isnull=False)
 
 
 class Entry(models.Model):
@@ -198,7 +198,7 @@ class ThreadedManager(models.Manager):
     def decorated(self, *args, **kwargs):
         print kwargs
         # Get the items in the thread ordered by hierarchy
-        items = super(ThreadedManager, self).get_query_set().filter(**kwargs)
+        items = super(ThreadedManager, self).get_query_set().filter(**kwargs).exclude(deleted_by__isnull=False)
 
         li = None # Last item
         for item in items:

@@ -73,6 +73,11 @@ a.link-user {
 }
 a.link-user:visited {color: #ddd;}
 a.link-user:hover {color: #fff;}
+footer a {
+    color: #DDD;
+    text-decoration: none;
+    font-weight: bold;
+}
 
 /* =============================================================================
    Typography
@@ -320,7 +325,10 @@ td { vertical-align: top; }
     display: inline;
 }
    
-.entry .entry-content p { 
+.entry .entry-content p,
+.entry .entry-content h1,
+.entry .entry-content h2,
+.entry .entry-content h3 { 
     display: block;
     word-wrap: break-word;
     margin-top: 0;
