@@ -198,7 +198,7 @@ class ThreadedManager(models.Manager):
     def decorated(self, *args, **kwargs):
         print kwargs
         # Get the items in the thread ordered by hierarchy
-        items = super(ThreadedManager, self).get_query_set().filter(**kwargs).exclude(deleted_by__isnull=False)
+        items = super(ThreadedManager, self).get_query_set().filter(**kwargs)
 
         li = None # Last item
         for item in items:
