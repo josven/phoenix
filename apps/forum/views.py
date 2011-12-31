@@ -103,7 +103,7 @@ def read_thread(request, id):
     except:
         raise Http404
 
-    posts = ForumPost.objects.decorated(collection=thread) #.exclude(deleted_by__isnull=False)
+    posts = ForumPost.objects.decorated(collection=thread)
     
     for post in posts:
         print post.deleted_by
