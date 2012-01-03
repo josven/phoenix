@@ -19,7 +19,6 @@ def find_request():
     return request
 
 def set_base_template(request, base):
-    print base
     if base == 'touch':
         request.session['base_template'] = 'touch_base.html'
     else:

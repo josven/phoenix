@@ -71,7 +71,7 @@ jQuery(document).ready(function() {
     
     // Apply datatables
     $('#table_threads').dataTable({
-        "aaSorting": [[5,'desc']],
+        "aaSorting": [[6,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ artiklar per sida",
@@ -81,6 +81,15 @@ jQuery(document).ready(function() {
             "sInfoFiltered": "(filtrerat från _MAX_ antal artiklar)",
             "sSearch": "Filter"
         },
-        "iDisplayLength": 50
+        "iDisplayLength": 50,
+        "aoColumns": [ 
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			{ "bVisible":    false },
+		]
     });
 });

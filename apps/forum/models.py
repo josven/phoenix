@@ -20,7 +20,7 @@ class Thread(Entry):
         return u'%s' % self.title
 
     def get_latest_post(self):
-        return ForumPost.objects.decorated(collection=self).reverse()[0]
+        return ForumPost.objects.filter(collection=self).order_by('-id')[0]
 
     def get_number_of_post(self):
         number = ForumPost.objects.decorated(collection=self).count() - 1

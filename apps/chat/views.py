@@ -66,8 +66,6 @@ def chatpost(request,id,type):
     """
     try:
         post = Post.objects.get(id=id)
-        print "test"
-        print perms.post
     except:
         # "no match"
         raise Http404  

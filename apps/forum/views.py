@@ -19,7 +19,7 @@ def read_forum(request):
 
     categories = defaultCategories.objects.all()
     threads = Thread.active.all()
-    
+  
     vars = {
             "threads": threads,
             "categories":categories
@@ -105,9 +105,6 @@ def read_thread(request, id):
 
     posts = ForumPost.objects.decorated(collection=thread, deleted_by=None)
     
-    for post in posts:
-        print post.deleted_by
-    
     form = ForumPostForm()
 
     data = {"thread": thread, 'posts': posts, 'form': form, 'categories':categories}
@@ -143,7 +140,6 @@ def create_forumpost(request, tags=None):
             collection=thread,
             body=form.cleaned_data['body']
         )
-        print "test"
         return HttpResponseRedirect(thread.get_absolute_url())
 
     try:
