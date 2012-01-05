@@ -28,6 +28,7 @@
 <ul>
     <li><a href="{% url guestbook user.id %}">Gästbok</a></li>
     <li><a href="{% url read_user_articles  user_id=user.id tags='dagbok' %}">Dagbok</a></li>
+    <li><a href="{% url read_user_articles  user_id=user.id tags='logg' %}">Logg</a></li>
 </ul>
 </nav>
 {% endblock secondary_navigation %}

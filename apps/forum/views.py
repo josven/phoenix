@@ -94,7 +94,7 @@ def create_thread(request, tags=None):
             )
             
             return HttpResponseRedirect(thread.get_absolute_url())
-   
+
     return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
 
 @never_cache
