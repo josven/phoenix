@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
@@ -52,9 +53,15 @@ def create_thread(request, tags=None):
             default_tags = tagform.cleaned_data['default_tags']
             user_tags = form.cleaned_data['tags']
             
-            # Combine and remove doubles
-            all_tags = list(set(default_tags + user_tags))
+            # Clean tags from non alphanumeric chars
+            cleaned_tags = list( re.sub(r'\W', ' ', tag).strip() for tag in user_tags) 
+                
+            # Filter list from empty strings
+            cleaned_tags = filter(None, cleaned_tags)
             
+            # Combine and remove doubles
+            all_tags = list(set(default_tags + cleaned_tags))
+                
             # Check if a default tag is present
             if len(default_tags) == 0:
                 messages.add_message(request, messages.INFO, 'Du måste välja minst en huvudkategori!')
@@ -68,6 +75,7 @@ def create_thread(request, tags=None):
             # Validate INTERNAL tags
             all_tags = validate_internal_tags(request, all_tags) 
             
+            print all_tags
             # Create the thread
             thread = Thread.objects.create(
                 created_by = request.user,
@@ -84,7 +92,7 @@ def create_thread(request, tags=None):
                 collection=thread,
                 body=form.cleaned_data['body']
             )
-
+            
             return HttpResponseRedirect(thread.get_absolute_url())
    
     return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
