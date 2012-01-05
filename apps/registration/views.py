@@ -85,7 +85,7 @@ def auth_register(request):
     
     """
     
-    return render(request,'comming_soon.html')
+    #return render(request,'comming_soon.html')
     
     
     vars = {

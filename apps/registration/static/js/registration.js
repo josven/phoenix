@@ -1,7 +1,7 @@
 $(document).ready(function() {
     
     // DISABLE REGISTER BUTTON
-    $( "#register_button" ).button( "option", "disabled", true );
+    //$( "#register_button" ).button( "option", "disabled", true );
     
     // Modals for register and login. Can be reused for any modalforms
     $( '*[data-modal-form=true]' ).click( function(event) {
