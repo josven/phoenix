@@ -1,24 +1,5 @@
 jQuery(document).ready(function() {
     
-    // Reply button
-    jQuery(".js-replyTEST").click(function() {
-        alert('lol');
-        
-        var button = $(this),
-            item = $(this).parents('.forum_post').next();
-       
-        item.fadeToggle('fast', function() {
-            // Animation complete.
-            item.find('textarea').putCursorAtEnd();
-            item.is(':visible') ? button.addClass('ui-state-highlight') : button.removeClass('ui-state-highlight');
-          }).removeClass('ui-helper-hidden');
-        
-        
-        //$( this ).toggleClass('ui-state-highlight');
-        
-        return false;
-    });
-    
     $('.js-reply').click( function (event) {
         event.preventDefault();
         
@@ -44,7 +25,7 @@ jQuery(document).ready(function() {
         });
         
         dialog.find('div.ui-helper-hidden').show();
-        dialog.find('textarea').attr('placeholder','Skriv ditt svar...');
+        dialog.find('textarea').val('');
         dialog.find('p.ui-helper-hidden').hide();
         
     entry.addClass('ui-state-active');
