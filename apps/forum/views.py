@@ -169,4 +169,3 @@ def get_threads_by_tags(request,tags):
         messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
 
     return render(request, 'forum.html', {"threads": threads,"categories":categories,"tags":tags})
-    
