@@ -51,13 +51,11 @@ def create_thread(request, tags=None):
         
         if form.is_valid() & tagform.is_valid():            
             default_tags = tagform.cleaned_data['default_tags']
-            user_tags = form.cleaned_data['tags']
             
-            # Clean tags from non alphanumeric chars
-            cleaned_tags = list( re.sub(r'\W', ' ', tag).strip() for tag in user_tags) 
-                
+            user_tags = form.cleaned_data['tags']
+                       
             # Filter list from empty strings
-            cleaned_tags = filter(None, cleaned_tags)
+            cleaned_tags = filter(None, user_tags)
             
             # Combine and remove doubles
             all_tags = list(set(default_tags + cleaned_tags))
