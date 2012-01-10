@@ -23,6 +23,7 @@
 
     <li>&nbsp;</li>
     
+    <li><a href="{{ user.get_profile.get_absolute_url }}">Profil</a></li>
     <li><a href="{% url guestbook user.id %}">Gästbok</a></li>
     <li><a href="{% url read_user_articles  user_id=user.id tags='dagbok' %}">Dagbok</a></li>
     <li><a href="{% url read_user_articles  user_id=user.id tags='logg' %}">Logg</a></li>
