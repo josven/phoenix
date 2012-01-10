@@ -2,18 +2,17 @@
 {% load entry_tags %}
 {% load thumbnail %}
 
-{% block secondary_navigation %}
-<h3>Artikelmeny</h3>
-<ul>
-    <li><a href="{% url read_article %}">Artiklar</a></li>
-    <li><a href="{% url create_article %}">Ny</a></li>
-    <li>&nbsp;</li>
-    <li><h3>Huvudkategorier</h3></li>
+{% block app_navigation %}
+<ul id="app_navigation" >
+    <li><h4 class="ui-widget-header entry-head" >Artikelmeny</h4></li>
+    <li><a href="{% url read_article %}">Alla artiklar</a></li>
+    <li><a href="{% url create_article %}">Skriv ny</a></li>
+    <li><h4 class="ui-widget-header entry-head" >Huvudkategorier</h4></li>
     {% for tag in categories %}
     <li><a href="{% url search_article tag %}">{{ tag|title }}</a></li>
     {% endfor %}
 </ul>
-{% endblock secondary_navigation %}
+{% endblock app_navigation %}
 
 {% block content %}
 {% for article in articles %}

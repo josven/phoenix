@@ -2,18 +2,17 @@
 {% load markup %}
 {% load thumbnail %}
 
-{% block secondary_navigation %}
-<nav>
-<ul class="flat-list entrylist">
+{% block app_navigation %}
+<ul id="app_navigation" class="flat-list entrylist">
     <li class="ui-widget">
-        {% thumbnail user.get_profile.photo "150x150" crop="center" as im %}
-        <img class="ui-widget-content" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% thumbnail user.get_profile.photo "300x300" crop="center" as im %}
+        <img class="profile-picture" src="{{ im.url }}" width="100%">
         {% empty %}
         <p>Ingen bild</p>
         {% endthumbnail %}   
     </li>
     
-    <li>
+    <li class="profile-details">
         <h3>{{ user }}</h3>
     </li>
     
@@ -21,17 +20,18 @@
     <li class="profile-details">Bor: {{ user.get_profile.location }}</li>
     <li class="profile-details">Kön: {{ user.get_profile.gender }}</li>
     <li class="profile-details">Född: {{ user.get_profile.birthdate }}</li>
-</ul>
-</nav>
 
-<nav>
-<ul>
+    <li>&nbsp;</li>
+    
     <li><a href="{% url guestbook user.id %}">Gästbok</a></li>
     <li><a href="{% url read_user_articles  user_id=user.id tags='dagbok' %}">Dagbok</a></li>
     <li><a href="{% url read_user_articles  user_id=user.id tags='logg' %}">Logg</a></li>
+    
+    <li>&nbsp;</li>
+    
 </ul>
-</nav>
-{% endblock secondary_navigation %}
+
+{% endblock app_navigation %}
 
 {% block content %}
 <ul class="flat-list entrylist">

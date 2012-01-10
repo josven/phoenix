@@ -281,9 +281,44 @@ td { vertical-align: top; }
 /* =============================================================================
    Widgets
    ========================================================================== */
-#widget-user-activity div ul li span.ui-icon{
+
+/* widget-online-users */
+#widget-online-users  li  {
+    margin-bottom:0.2em;
+}
+
+#widget-online-users   li a {
+    color:#ddd;
+    text-decoration:none;
+    font-weight:bold;
+    margin-left:1em;
+}
+
+#widget-online-users  li span.ui-icon{
     display:inline-block;
 }
+
+#widget-online-users li a:hover {
+    color:#fff;
+}
+
+#widget-online-users li a:active {
+    color:#fff;
+}
+
+/* =============================================================================
+   User profiles
+   ========================================================================== */
+.profile-picture {
+   border-bottom: 1px solid #666;
+}
+
+#app_navigation .profile-details {
+    color:#888;
+    font-weight:bold;
+    margin-left:1em;
+}
+
 
 /* =============================================================================
    Articles
@@ -454,23 +489,27 @@ nav#primary_navigation ul li hr {
     text-align:right;
 }
 
-/* secondary navigation */
-nav#secondary_navigation ul  li a {
+/* app navigation */
+#app_navigation li  {
+    margin-bottom:0.2em;
+}
+
+#app_navigation  li a {
     color:#ddd;
     text-decoration:none;
     font-weight:bold;
+    margin-left:1em;
 }
-nav#secondary_navigation ul  li a:hover {
+
+#app_navigation li a:hover {
     color:#fff;
 }
-nav#secondary_navigation ul  li a:active {
+
+#app_navigation li a:active {
     color:#fff;
 }
-nav#secondary_navigation ul li hr {
-    background-color: #666;
-    border-top: none;
-    height: 2px;
-}
+
+
 
 /* content */
 #main {
@@ -520,11 +559,6 @@ nav#secondary_navigation ul li hr {
     text-decoration: none;
 }
 
-/* user profile sidebar */
-.profile-details {
-    color:#888;
-    font-weight:bold;
-}
 
 /* ui-styles */
 .ui-text-panel {

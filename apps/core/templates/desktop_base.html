@@ -57,18 +57,41 @@
     
 	<div id="container">
         
-        {% block secondary_navigation_wrapper %}
+        {% block left-sidebar %}
         {% if request.user.is_authenticated %}
-        <nav id="secondary_navigation">
-        {% block secondary_navigation %}
-        {% endblock secondary_navigation %}
+        <nav class="ui-widget ui-widget-content" id="left-sidebar">
+            
+                {% block app_header %}
+                {% endblock app_header %}  
+                
+                {% block app_navigation %}
+                {% endblock app_navigation %}       
+            
+                {% block widgets %}
+                <ul id="widget-online-users" class="flat-list">
+                    <li>
+                        <h4 class="ui-widget-header entry-head">Användare</h4>
+                    </li>
+
+                    {% for visitor in active_users %}
+                    {% if visitor.user != None %}
+                    <li>
+                        <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
+                        {% if visitor.last_update|minutessince > 5 %}
+                        <span class="ui-icon ui-icon-clock">&nbsp;</span>                        
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endblock widgets %}
         </nav>
         {% endif %}
-        {% endblock secondary_navigation_wrapper %}
+        {% endblock left-sidebar %}
         
         {% block messages %}
         {% endblock messages %}
-		
+        
         {% block main %}
 		<div id="main" role="main">
 		{% block content %}
@@ -76,34 +99,9 @@
 		</div>
         {% endblock main %}
         
-        {% block widgets %}
-        <div id="widgets">
-            {% block widgets-inner %}
-            <div id="widget-user-activity" class="ui-widget ui-widget-content">
-                <h4 class="ui-widget-header entry-head">Användare</h4>
-      
-                <div class="article-body">
-                    <ul class="flat-list">
-                        {% for visitor in active_users %}
-                        {% if visitor.user != None %}
-                        <li>
-                            <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
-                            {% if visitor.last_update|minutessince > 5 %}
-                            <span class="ui-icon ui-icon-clock">&nbsp;</span>                        
-                            {% endif %}
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            {% endblock widgets-inner %}
-		</div>
-        {% endblock widgets %}
-        
 		<footer>
 		{% block footer %}
-        <a href="irc://irc.efnet.org:port/phx.se">IRC: phx.se@irc.efnet.org</a>
+        <a href="irc://irc.efnet.org/phx.se">IRC: phx.se@irc.efnet.org</a>
 		{% endblock footer %}
 		</footer>
 
