@@ -49,7 +49,11 @@ def render(request, *args):
     
     vars['app_name'] = mod.__name__.split('.')[1]
     vars['base_template'] = get_base_template(request)
-    vars['active_users'] = Visitor.objects.active()
+    
+    users = Visitor.objects.active()
+    seen = set()
+    seen_add = seen.add
+    vars['active_users'] = [ x for x in users if x.user not in seen and not seen_add(x.user)]
     
     request.session['app_name'] = vars['app_name']
     

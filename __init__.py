@@ -20,5 +20,7 @@ settings.TEMPLATE_LOADERS += (
 )
 
 # clear cache, this if testing, not to use in production
+'''
 from django.core.cache import cache
 cache.clear()
+'''
