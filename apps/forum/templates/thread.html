@@ -22,7 +22,7 @@
                 
                 {% if post.created_by.get_profile.photo %}
                 <div class="entry-profile clearfix">
-                    {% thumbnail post.created_by.get_profile.photo "100x100" crop="center" as im %}
+                    {% thumbnail post.created_by.get_profile.photo "75x75" crop="center" as im %}
                     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                     {% endthumbnail %}   
                 </div>

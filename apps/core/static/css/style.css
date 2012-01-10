@@ -345,8 +345,8 @@ td { vertical-align: top; }
 }
 
 .entry .entry-profile {
-    width:100px;
-    height:100px;
+    width:75px;
+    height:75px;
     margin-left: 0;
     margin-bottom:-.5em;
 }
@@ -367,7 +367,7 @@ td { vertical-align: top; }
     display: block;
     word-wrap: break-word;
     margin-top: 0;
-    padding-left: 110px;
+    padding-left: 80px;
 }
 
 .entry .entry-content img { 
