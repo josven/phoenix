@@ -28,7 +28,7 @@ class Profile(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name="Beskrivning")
     location = models.CharField(max_length=50, blank=True, null=True, verbose_name="Ort")
 
-    photo = ImageField(upload_to=get_image_path, null=True, blank=True)
+    photo = ImageField(upload_to=get_image_path, null=True, blank=True, verbose_name="Bildfil (max 2MB)")
 
     def get_absolute_url(self):
         return "/user/%s/" % self.user_id
