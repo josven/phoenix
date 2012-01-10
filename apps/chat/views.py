@@ -21,7 +21,7 @@ from apps.core.utils import render
 """
     Constants
 """
-LIST_ITEM_LIMIT = 20
+LIST_ITEM_LIMIT = 30
 
 @never_cache
 @login_required(login_url='/auth/login/')
