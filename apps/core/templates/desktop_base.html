@@ -59,33 +59,35 @@
         
         {% block left-sidebar %}
         {% if request.user.is_authenticated %}
-        <nav class="ui-widget ui-widget-content" id="left-sidebar">
-            
-                {% block app_header %}
-                {% endblock app_header %}  
+        <div id="left-sidebar">
+            <nav class="ui-widget ui-widget-content">
                 
-                {% block app_navigation %}
-                {% endblock app_navigation %}       
-            
-                {% block widgets %}
-                <ul id="widget-online-users" class="flat-list">
-                    <li>
-                        <h4 class="ui-widget-header entry-head">Användare</h4>
-                    </li>
+                    {% block app_header %}
+                    {% endblock app_header %}  
+                    
+                    {% block app_navigation %}
+                    {% endblock app_navigation %}       
+                
+                    {% block widgets %}
+                    <ul id="widget-online-users" class="flat-list">
+                        <li>
+                            <h4 class="ui-widget-header entry-head">Användare</h4>
+                        </li>
 
-                    {% for visitor in active_users %}
-                    {% if visitor.user != None %}
-                    <li>
-                        <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
-                        {% if visitor.last_update|minutessince > 5 %}
-                        <span class="ui-icon ui-icon-clock">&nbsp;</span>                        
+                        {% for visitor in active_users %}
+                        {% if visitor.user != None %}
+                        <li>
+                            <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
+                            {% if visitor.last_update|minutessince > 5 %}
+                            <span class="ui-icon ui-icon-clock">&nbsp;</span>                        
+                            {% endif %}
+                        </li>
                         {% endif %}
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-                {% endblock widgets %}
-        </nav>
+                        {% endfor %}
+                    </ul>
+                    {% endblock widgets %}
+            </nav>
+        </div>
         {% endif %}
         {% endblock left-sidebar %}
         
