@@ -60,7 +60,7 @@ def create_article(request, tags=None):
             post_values = request.POST.copy()
             all_tags = validate_internal_tags(request, all_tags)
             post_values['tags'] = ', '.join(all_tags)
-            form = ArticleForm(post_values)         
+            form = ArticleForm(post_values)  
             link = form.save()
 
             return HttpResponseRedirect(reverse('read_article', args=[link.id]))
