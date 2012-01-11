@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
         event.preventDefault();
         
         var entry = $(this).parentsUntil('ul').last(),
-            content = entry.find('.entry-content').clone();
+            content = entry.find('.entry-content').first().clone();
         
         entry.addClass('ui-state-active');
         

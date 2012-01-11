@@ -13,4 +13,7 @@ urlpatterns = patterns('',
 
 
     url(r'^forumpost/create/$', 'apps.forum.views.create_forumpost', name='create_forumpost'),
+    
+    url(r'^forumpost/reply/$', 'apps.forum.views.create_forumpost', name='reply_on_forumpost'),
+    url(r'^forumthread/reply/$', 'apps.forum.views.create_forumpost', name='reply_on_thread'),
 )

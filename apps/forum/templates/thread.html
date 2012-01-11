@@ -3,7 +3,55 @@
 {% load markup %}
 {% load thumbnail %}
 
-{% block content %}    
+{% block content %}
+
+    <div class="thead_wrapper">
+        {% for post in posts %}
+            
+            {% if not post.first_in_subthread %}
+            </li><!-- END PREVIOUS POST IF NOT FIRST IN SUBTHREAD -->
+            {% else %}
+            <ul class="subthread ui-widget-content"><!-- start subthread -->
+            {% endif %}
+            
+            {% if forloop.first %}
+            <li class="forum_post ui-widget ui-widget-content">
+            {% thread_header post %}
+            </li><!-- End thread header -->
+            {% endif %}
+            
+            <!-- START POST -->
+            <li id="post-{{ post.id }}" class="forum_post entry ui-widget ui-widget-content">
+                
+                {% entry_head post %}
+                
+                {% if post.created_by.get_profile.photo %}
+                <div class="entry-profile clearfix">
+                    {% thumbnail post.created_by.get_profile.photo "75x75" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}   
+                </div>
+                {% endif %}
+    
+                <div class="entry-content clearfix">
+                {{ post.body|urlize|textile }}
+                
+                    <div class="ui-helper-hidden">
+                        {% include "reply_form.html" %}
+                    </div>
+                </div>
+
+            {% if post.last_in_subthread %}
+                <li class="full_width_reply">
+                {% include "reply_form.html" %}
+                </li>
+            </ul><!-- last_in_subthread -->
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+ {% comment %}   
     <div class="thead_wrapper">
     {% for post in posts %}
         {% if post.first_in_subthread or forloop.first %}
@@ -46,7 +94,7 @@
         {% endif %}
     {% endfor %}
     </div>
-         
+ {% endcomment %}        
          
          
          
