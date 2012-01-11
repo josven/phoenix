@@ -109,11 +109,15 @@ def read_thread(request, id):
     except:
         raise Http404
 
-    posts = ForumPost.objects.decorated(collection=thread, deleted_by=None)
-    
-    form = ForumPostForm()
+    posts =  ForumPost.objects.decorated(collection=thread, deleted_by=None)
 
-    data = {"thread": thread, 'posts': posts, 'form': form, 'categories':categories}
+    data = {
+        'thread': thread,
+        'posts': posts, 
+        'form': ForumPostForm(), 
+        'categories':categories
+        }
+        
     return render(request, 'thread.html', data)
 
 @never_cache

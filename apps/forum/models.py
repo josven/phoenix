@@ -44,6 +44,12 @@ class ForumPost(ThreadedEntry):
     """
     collection = models.ForeignKey(Thread)
     body = models.TextField()
+    
+    def __unicode__(self):
+    
+        text = u"Forumpost #{0} av {1}. {2}...".format(self.id, self.created_by, self.body[:10])
+        
+        return text
 
 
 class ForumPostHistory(ThreadedEntryHistory):

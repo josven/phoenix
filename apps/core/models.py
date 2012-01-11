@@ -4,7 +4,7 @@ from django.db.models import get_model
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from utils import find_request
-
+from distutils.version import LooseVersion
 
 class Profile(models.Model):
     """
@@ -190,7 +190,7 @@ class EntryHistory(models.Model):
 class ThreadedManager(models.Manager):
     """
     Adds "decorated" to objects manager, decorates a thread of items with 
-    template variables first_in_subthread and first_in_subthread, to make them 
+    template variables first_in_subthread and last_in_subthread, to make them 
     easier to render.
     
     """
@@ -198,19 +198,28 @@ class ThreadedManager(models.Manager):
     def decorated(self, *args, **kwargs):
         # Get the items in the thread ordered by hierarchy
         items = super(ThreadedManager, self).get_query_set().filter(**kwargs)
-
+        
+        # Sort the items by hierarchy, using LooseVersion
+        items = sorted(items, key=lambda x: LooseVersion( x.hierarchy ))
         li = None # Last item
+
         for item in items:
-            ihl = item.hierarchy_level
-            lhl = 0
+            item.first_in_subthread = False
+            item.last_in_subthread = False
+        
+            ihl = LooseVersion( vstring = str( item.hierarchy_level) )
+            lhl = LooseVersion( vstring = str( '0' ) )
+            
+            # If there exist a prev item, assign last_hierarchy_level
             if li:
-                lhl = li.hierarchy_level
+                lhl = LooseVersion( vstring = str( li.hierarchy_level ) )
+
             # If hierarchy_level increased, this is first in a sub-thread
             if ihl > lhl:
                 item.first_in_subthread = True
 
             # If hierarchy_level decreased, previous item was last in sub-thread
-            elif li and ihl < lhl:
+            if li and ihl < lhl:
                 li.last_in_subthread = True
 
             # If hierarchy are the same, but sub-thread changed. Last item
@@ -220,9 +229,15 @@ class ThreadedManager(models.Manager):
                 li.last_in_subthread = True
 
             li = item
-            lhl = item.hierarchy_level
+            lhl = LooseVersion( vstring = str( item.hierarchy_level ) )
             lst = item.sub_thread
-
+        
+        # First item in the list are ALWAYS first in subthread
+        items[0].first_in_subthread = True
+        
+        # Last item in the list are ALWAYS last in subthread
+        items[-1].last_in_subthread = True
+        
         return items
 
 
