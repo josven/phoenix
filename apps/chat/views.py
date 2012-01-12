@@ -1,10 +1,11 @@
-﻿from models import *
+﻿import json 
+from models import *
 from forms import *
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.cache import never_cache
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.conf import settings
 
 from apps.core.utils import render
@@ -48,6 +49,25 @@ def chat(request):
     else:
         form = PostForm()
 
+    if request.is_ajax():
+        posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
+        
+        client_post = int(float( request.GET.get('s', '0') ) )
+        current_post = int(float( posts[0].id ) )
+
+        number_of_posts = current_post - client_post
+        
+        print client_post
+        print current_post
+        print current_post - client_post
+        
+        if current_post - client_post != 0 :
+            vars['posts'] = posts[0:number_of_posts]
+            return render(request,'_chat.html', vars)
+            
+        json_data = json.dumps({"status":302})
+        return HttpResponse(json_data, mimetype="application/json")
+        
     posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
     
     vars['form'] = form

@@ -21,4 +21,29 @@ jQuery(document).ready(function() {
    $('.entry-content:containsinsensitive("'+username+':")').parent('li').addClass('ui-state-active');
 
    
+   // Auto update
+   
+   var auto_refresh = setInterval(
+    function ()
+    {
+       if ( $('#autoupdate').is(':checked') ) {
+           $.ajax({
+              url: window.location.pathname,
+              data: {'s':$("li:[data-id]").first().data('id')},
+              success: function(data) {
+                if( data["status"] != 302) {
+                    var amount = $('#chatlist li.entry').length;
+                    $(data).hide().prependTo("#chatlist").fadeIn("slow");
+                    $('#chatlist li.entry:gt(49)').fadeOut().remove()
+              }}
+            });
+        }
+    }, 10000); // refresh every 10000 milliseconds
+
+    $( "#autoupdate" ).button();
+   
+   
+
+   
+   
 });

@@ -7,11 +7,13 @@
 
     {{ form.text }}
     <br />
-    <input type="submit" value="Skicka" />
+    <input type="submit" value="Skicka" /><input type="checkbox" id="autoupdate" /><label for="autoupdate">Automatik</label>
 
 </form>
+
+<br />
+
 {% endif %}
-<hr />
 <ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
 {% for entry in posts %}
 {% include "_entry.html" %}
