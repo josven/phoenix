@@ -31,8 +31,7 @@ def read_profile(request, user_id=None):
         template = 'profile.html'
         
     return render(request, template, {"profile": profile,'user':user})
-
-
+    
 @login_required(login_url='/auth/login/')
 def update_profile(request):
     """

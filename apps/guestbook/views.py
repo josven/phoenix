@@ -46,5 +46,9 @@ def guestbook(request,userid,start=None):
         else:
             messages.add_message(request, messages.INFO, 'Nu blev det något fel')
 
+    if request.is_ajax():
+        template = "_guestbook.html"
+    else:
+        template = "guestbook.html"
 
-    return render(request, 'guestbook.html', vars )
+    return render(request, template, vars )

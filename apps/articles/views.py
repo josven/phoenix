@@ -80,11 +80,13 @@ def update_article(request,id):
     
 @never_cache
 @login_required(login_url='/auth/login/')
-def read_article(request,id=None):
+def read_article(request,user_id=None, id=None):
     """
     Read article
     
     """
+    print "läs"
+    
     vars = {
         'categories': defaultArticleCategories.objects.all(),
         }
@@ -99,7 +101,13 @@ def read_article(request,id=None):
     
     vars['article'] = Article.objects.get(id=id)
     
-    return render(request,'article.html', vars)
+    if user_id:
+        template = "user_article.html"
+        vars['user'] = User.objects.get(pk=user_id)
+    else:
+        template = "article.html"
+           
+    return render(request,template, vars)
 
 @never_cache
 @login_required(login_url='/auth/login/')
@@ -130,6 +138,9 @@ def search_article(request, tags=None, user_id=None):
     
     if user_id and tags:
         articles = Article.active.filter(tags__name__in=tags, created_by__id = user_id)
+        template = 'user_articles.html'
+    else:
+        template = 'articles.html'
     
     if tags and not user_id:
         articles = Article.active.filter(tags__name__in=tags)
@@ -138,10 +149,15 @@ def search_article(request, tags=None, user_id=None):
         
     if len( articles ) < 1:
         messages.add_message(request, messages.INFO, 'Hittade inga artiklar =(')
-
-    return render(request, 'articles.html', {"articles": articles,"categories":categories})
     
-
+    vars = {"articles": articles,
+            "categories":categories
+            }
+    if user_id:
+        vars['user'] = User.objects.get(pk=user_id)
+    
+    return render(request, template, vars)
+    
 @never_cache    
 @login_required(login_url='/auth/login/')
 def ajax_article_body_form(request,id=None):

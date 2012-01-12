@@ -1,0 +1,29 @@
+{% if not request.user == profile.user %}
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.text }}
+    <br />
+    <input type="submit" value="Skicka" />
+</form>
+
+<hr />
+{% endif %}
+
+<ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
+{% for entry in posts %}
+{% include "_entry.html" %}
+{% if forloop.last %}
+</ul>
+
+<div class="buttonset">
+    {% if not start|add:negincrement < 0 %}
+    <a href="{% url guestbook user.id start|add:negincrement %}">Föregånde</a>
+    {% endif %}
+    
+    {% if forloop.counter = increment|add:padding %}
+    <a href="{% url guestbook user.id start|add:increment %}">Nästa</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endfor %}

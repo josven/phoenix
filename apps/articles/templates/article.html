@@ -1,17 +1,9 @@
 {% extends "articles.html" %}
-{% load entry_tags %}
-{% load thumbnail %}
-{% load markup %}
 
 {% block content %}
 <ul class="flat-list entrylist">    
     <li class="ui-widget ui-widget-content acticle_post">
-        
-        {% article_header article %}
-        
-        <div class="article-body">
-            {{ article.body|urlize|textile }}
-        </div>
+        {% include "_article.html" %}
     </li>
 </ul>
 {% endblock content %}
