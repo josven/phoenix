@@ -1,5 +1,30 @@
-$(document).ready(function() {
+// Images in enties scales down 
+// in the entry. And scales up in 
+// the dialog when clicked on.
+var formatImageDialogs = function() {
+    $('.entry-content img, .ui-text-panel img')
+        .attr('height','80')
+        .unbind('click')
+        .click( function () {
+            $(this).clone().dialog({ 
+                                    resizable: false,
+                                    modal: true,
+                                    width:'auto'
+                                    });
+            });
+}
 
+var formatJsReplyButton = function() {
+    $('.js-reply').button({
+        icons: {
+            primary: "ui-icon-comment"
+        },
+        text: false
+    });
+};
+
+$(document).ready(function() {
+        
     /*
     * Polyfills
     *
@@ -44,18 +69,7 @@ $(document).ready(function() {
     * Entrys
     *
     */
-    // Images in enties scales down 
-    // in the entry. And scales up in 
-    // the dialog when clicked on.
-    $('.entry-content img, .ui-text-panel img')
-        .attr('height','80')
-        .click( function () {
-            $(this).clone().dialog({ 
-                                    resizable: false,
-                                    modal: true,
-                                    width:'auto'
-                                    });
-        });
+    formatImageDialogs();
     
     // Linktags, these tags are links, simply put.
     $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
@@ -65,12 +79,7 @@ $(document).ready(function() {
     $( "input:submit, a.ui-button, button").button();
     $( ".buttonset" ).buttonset();
 
-    $('.js-reply').button({
-            icons: {
-                primary: "ui-icon-comment"
-            },
-            text: false
-    });
+    formatJsReplyButton();
 
     $( "#account_button" )
 			.button()
@@ -111,14 +120,11 @@ $(document).ready(function() {
         
         menu.fadeIn("fast");
    });
+   
    $('ul.username-hover-menu').mouseleave( function () {
         
         $(this).fadeOut("fast");
-   })
-
-
-
-
+   });
 
 
 
