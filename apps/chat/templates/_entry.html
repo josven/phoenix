@@ -1,9 +1,24 @@
 {% load thumbnail %}
 {% load entry_tags %}
 {% load markup %}
+{% load humanize %}
 
 <li class="entry ui-widget ui-widget-content">
-    {% entry_head entry %}    
+    
+    <h4 class="ui-widget-header entry-head">
+        {% endif %}
+        <a class="link-user" href="{% url read_profile entry.created_by.id %}">{{ entry.created_by }}</a> - {{ entry.date_created|naturalday  }} {{ entry.date_created|time:"TIME_FORMAT"  }}
+        <div class="button-wrapper">
+            {% if request.user != entry.created_by or app_name == "forum" %}
+            <a href="#" data-reply-to="{{ entry.created_by }}" class="js-reply">Svara</a>
+            {% endif %}
+        </div>
+    </h4>
+
+    <ul class="username-hover-menu ui-helper-hidden ui-widget ui-widget-content">
+        <li><a href="{% url read_profile entry.created_by.id %}">Profil</a></li>
+        <li><a href="{% url guestbook entry.created_by.id %}">Gästbok</a></li>
+    </ul>   
     
     {% if entry.created_by.get_profile.photo %}
     <div class="entry-profile clearfix">

@@ -24,8 +24,13 @@ def read_profile(request, user_id=None):
     else:
         user = User.objects.get(pk=user_id)
     profile, created = Profile.objects.select_related().get_or_create(user=user)
-
-    return render(request, 'profile.html', {"profile": profile,'user':user})
+    
+    if request.is_ajax():
+        template = '_profile.html'
+    else:
+        template = 'profile.html'
+        
+    return render(request, template, {"profile": profile,'user':user})
 
 
 @login_required(login_url='/auth/login/')

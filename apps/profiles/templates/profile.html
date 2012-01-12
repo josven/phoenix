@@ -35,6 +35,15 @@
 {% endblock app_navigation %}
 
 {% block content %}
+<div id="example">
+     <ul>
+         <li><a href="{{ user.get_profile.get_absolute_url }}"><span>Profil</span></a></li>
+         <li><a href="{% url guestbook user.id %}"><span>Gästbok</span></a></li>
+         <li><a href="{% url read_user_articles  user_id=user.id tags='dagbok' %}"><span>Dagbok</span></a></li>
+         <li><a href="{% url read_user_articles  user_id=user.id tags='logg' %}"><span>Logg</span></a></li>
+     </ul>
+</div>
+
 <ul class="flat-list entrylist">
     <li class="ui-widget ui-widget-content">
         

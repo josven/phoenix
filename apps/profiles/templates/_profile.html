@@ -1,0 +1,10 @@
+{% load markup %}
+{% load thumbnail %}
+<div id="profile-description">
+    {{ profile.description|urlize|textile }}
+</div>
+{% if request.user == user %}
+<div class="button-wrapper">
+    <a href="{% url ajax_user_description_form request.user.id %}" class="js-quick-edit" rel="profile-description">Ändra</a>
+</div>
+{% endif %}
