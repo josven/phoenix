@@ -12,7 +12,9 @@ class Thread(Entry):
     """
     title = models.CharField(max_length=100)
     tags = TaggableManager()
-
+    posts_index = models.IntegerField(null=True, blank=True)
+    last_post = models.ForeignKey('ForumPost', null=True, blank=True, default = None)
+    
     def get_absolute_url(self):
         return "/forum/thread/read/%s/" % self.id
     
@@ -20,12 +22,21 @@ class Thread(Entry):
         return u'%s' % self.title
 
     def get_latest_post(self):
-        return ForumPost.objects.filter(collection=self).order_by('-id')[0]
+        if not self.last_post:
+            self.last_post = ForumPost.objects.filter(collection=self).order_by('-id')[0]
+        return self.last_post
 
     def get_number_of_post(self):
-        number = ForumPost.objects.decorated(collection=self).count() - 1
+        
+        if not self.posts_index:
+            number = len ( ForumPost.objects.decorated(collection=self) )
+            self.posts_index = number
+        
+        number = self.posts_index -1
+        
         if number < 0:
             number = 0
+            
         return number
 
 class ThreadHistory(EntryHistory):

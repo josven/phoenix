@@ -52,19 +52,19 @@ jQuery(document).ready(function() {
     
     // Apply datatables
     $('#table_threads').dataTable({
-        "aaSorting": [[6,'desc']],
+        "bAutoWidth": false,
+        "aaSorting": [[5,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ artiklar per sida",
+            "sLengthMenu": "Visar _MENU_ trådar per sida",
             "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ artiklar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 artiklar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal artiklar)",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
             "sSearch": "Filter"
         },
         "iDisplayLength": 50,
         "aoColumns": [ 
-			null,
 			null,
 			null,
 			null,

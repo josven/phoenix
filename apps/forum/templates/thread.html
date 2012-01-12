@@ -2,6 +2,7 @@
 {% load entry_tags %}
 {% load markup %}
 {% load thumbnail %}
+{% load humanize %}
 
 {% block content %}
 
@@ -23,7 +24,17 @@
             <!-- START POST -->
             <li id="post-{{ post.id }}" class="forum_post entry ui-widget ui-widget-content">
                 
-                {% entry_head post %}
+                <h4 class="ui-widget-header entry-head">
+                    <a class="link-user" href="{% url read_profile post.created_by.id %}">{{ post.created_by }}</a> - {{ post.date_created|naturalday  }} {{ post.date_created|time:"TIME_FORMAT"  }}
+                    <div class="button-wrapper">
+                        <a href="#" data-reply-to="{{ post.created_by }}" class="js-reply">Svara</a>
+                    </div>
+                </h4>
+
+                <ul class="username-hover-menu ui-helper-hidden ui-widget ui-widget-content">
+                    <li><a href="{% url read_profile post.created_by.id %}">Profil</a></li>
+                    <li><a href="{% url guestbook post.created_by.id %}">Gästbok</a></li>
+                </ul>  
                 
                 {% if post.created_by.get_profile.photo %}
                 <div class="entry-profile clearfix">

@@ -60,6 +60,8 @@ jQuery(document).ready(function() {
     
     // Apply datatables
     $('#table_articles').dataTable({
+        "bAutoWidth": false,
+        "aaSorting": [[4,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ trådar per sida",
@@ -71,6 +73,12 @@ jQuery(document).ready(function() {
             
         },
         "iDisplayLength": 50,
-        "aaSorting": [[3,'desc']]
+        "aoColumns": [ 
+			null,
+			null,
+			null,
+			null,
+			{ "bVisible":    false },
+		]
     });
 });

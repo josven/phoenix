@@ -196,6 +196,7 @@ class ThreadedManager(models.Manager):
     """
 
     def decorated(self, *args, **kwargs):
+        print "test decorated"
         # Get the items in the thread ordered by hierarchy
         items = super(ThreadedManager, self).get_query_set().filter(**kwargs)
         
@@ -349,7 +350,15 @@ ThreadedEntryHistory instead.
 
             # Call the Entry save() method.
             super(ThreadedEntry, self).save(*args, **kwargs)
+        
+        # Update counter in thread
+        if self.collection.posts_index:
+            self.collection.posts_index += 1
 
+        # Update latset post in Thread
+        if self.collection.last_post:
+            self.collection.last_post = self
+            
     def is_latest_in_thread(self):
         if self.__class__.objects.filter(
             collection=self.collection,

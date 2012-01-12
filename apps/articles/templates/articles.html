@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load entry_tags %}
 {% load thumbnail %}
+{% load humanize %}
 
 {% block app_navigation %}
 <ul id="app_navigation" >
@@ -24,6 +25,7 @@
 			<th>Skapad av</th>
             <th>Kategorier</th>
             <th>Skapad</th>
+            <th>Sortering</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -32,8 +34,9 @@
 			<td><a href="{% url read_article article.id %}">{{ article.title }}</a></td>
 			<td><a href="{{ article.created_by.get_profile.get_absolute_url }}">{{ article.created_by }}</a></td>
 			<td>{% for tag in article.tags.all %}<span class="ui-tag"><a href="{% url search_article tag %}">{{ tag|title }}</a></span>{% endfor %}</td>
-            <td>{{ article.date_created }}</td>
-		</tr>
+            <td>{{ article.date_created|naturalday  }} {{ article.date_created|time:"TIME_FORMAT"  }}</td>
+            <td>{{ article.id }}</td>
+        </tr>
 {% if forloop.last %}
 	</tbody>
 </table>
