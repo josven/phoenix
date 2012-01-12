@@ -462,7 +462,8 @@ nav#primary_navigation  ul {
 
 nav#primary_navigation  ul li {
  display: inline;
- margin: 0 0.5em 0 0;
+ margin: 0 2em 0 0;
+ font-size: 110%;
 }
 
 nav#primary_navigation ul  li a {
