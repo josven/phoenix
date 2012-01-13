@@ -10,6 +10,7 @@ var updateChat = function() {
             formatJsReplyButton();
             formatImageDialogs();
             bindReplyButton();
+            hilightUserName();
       }}
     });
 }
