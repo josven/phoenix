@@ -1,5 +1,14 @@
 jQuery(document).ready(function() {
     
+    //Fix all the orphan-forms
+    $('.orphan-form').each( function () {
+        var parent_id = $(this).parents('ul').first().children('li.entry').last().find('#id_parent_id').val();
+        console.log( parent_id );
+        console.log( $(this).find('#id_parent_id').attr('value') );
+        $(this).find('#id_parent_id').attr('value',parent_id); 
+        
+    });
+    
     $('.js-reply').click( function (event) {
         event.preventDefault();
         

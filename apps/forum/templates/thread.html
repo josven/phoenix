@@ -3,17 +3,49 @@
 {% load markup %}
 {% load thumbnail %}
 {% load humanize %}
+{% do_assign jumps 0 %}
 
 {% block content %}
-
     <div class="thead_wrapper">
-        {% for post in posts %}
-            
-            {% if not post.first_in_subthread %}
-            </li><!-- END PREVIOUS POST IF NOT FIRST IN SUBTHREAD -->
+        {% for post in posts %}    
+            {% if jumps %}
+            {% comment %}{{ post.hierarchy_level|endlist:jumps|safe }}{% endcomment %}
+            {% for jump in post.hierarchy_level|jumpdowns:jumps %}
+            {% if forloop.first %}
+            </ul>
             {% else %}
+            <li class="full_width_reply">
+                <form class="orphan-form" action="{% url create_forumpost %}" method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="fieldWrapper">
+                        {{ form.subject.errors }}
+                        {{ form.body }}
+                    </div>
+
+                    <input class="ui-helper-hidden" type="text" name="thread_id" id="id_thread_id" value="{{ thread.id }}">
+                    <input class="ui-helper-hidden" type="text" name="parent_id" id="id_parent_id" value="{{ post.id }}">
+                    <input class="ui-helper-hidden save_method" type="text" name="save_method" id="save_method_id" value="continue">
+
+                    <p class="ui-helper-hidden">
+                        <button class="js-collapse">Göm</button>
+                        <input type="submit" value="Svara" />
+                    </p>
+                </form>
+            </li> 
+            </ul>
+            {{ jump }}
+            
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            
+            
+            {% if post.first_in_subthread %}
             <ul class="subthread ui-widget-content"><!-- start subthread -->
             {% endif %}
+            
+            
             
             {% if forloop.first %}
             <li class="forum_post ui-widget ui-widget-content">
@@ -45,19 +77,54 @@
                 {% endif %}
     
                 <div class="entry-content clearfix">
-                {{ post.body|urlize|textile }}
-                
+                {% if jumps %}<h3>HOPP {{ jumps }}</h3>{% endif %}
+                    <h1>{{ post.hierarchy }}</h1>
+                    {{ post.body|urlize|textile }}
                     <div class="ui-helper-hidden">
                         {% include "reply_form.html" %}
                     </div>
                 </div>
-
+            </li><!-- END POST -->
+            
             {% if post.last_in_subthread %}
-                <li class="full_width_reply">
+            <li class="full_width_reply">
                 {% include "reply_form.html" %}
-                </li>
-            </ul><!-- last_in_subthread -->
+            </li>     
+            {% if forloop.last %}
+            {% for jump in post.hierarchy_level|jumpdowns:jumps %}
+            {% if forloop.first %}
+            {% else %}
+            </ul>
+            
+            <li class="full_width_reply">
+                <form class="orphan-form" action="{% url create_forumpost %}" method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="fieldWrapper">
+                        {{ form.subject.errors }}
+                        {{ form.body }}
+                    </div>
+
+                    <input class="ui-helper-hidden" type="text" name="thread_id" id="id_thread_id" value="{{ thread.id }}">
+                    <input class="ui-helper-hidden" type="text" name="parent_id" id="id_parent_id" value="{{ post.id }}">
+                    <input class="ui-helper-hidden save_method" type="text" name="save_method" id="save_method_id" value="continue">
+
+                    <p class="ui-helper-hidden">
+                        <button class="js-collapse">Göm</button>
+                        <input type="submit" value="Svara" />
+                    </p>
+                </form>
+            </li>
+            
+            </ul>
             {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% do_assign jumps post.hierarchy_level %}
+            {% else %}           
+            {% do_assign jumps 0 %}     
+            {% endif %}
+
         {% endfor %}
     </div>
 
@@ -88,6 +155,7 @@
                 {% endif %}
     
                 <div class="entry-content clearfix">
+                
                 {{ post.body|urlize|textile }}
                 
                     <div class="ui-helper-hidden">

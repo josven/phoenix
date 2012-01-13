@@ -67,3 +67,43 @@ def article_header(entry):
     html = u"<h4 class=\"ui-widget-header entry-head\">{0} av {1} den {2} {3} </h4>".format( unicode( title ), unicode( entry.created_by ), unicode( entry.date_created ), unicode( tags ) )
     
     return html
+    
+    
+    
+
+class AssignNode(template.Node):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+        
+    def render(self, context):
+        context[self.name] = self.value.resolve(context, True)
+        return ''
+
+@register.filter 
+def endlist(value, arg):
+    jumps =  abs(int(float(value)) - int(float(arg)))
+    return " ".join( ["</ul><!-- GENERATED number{0} of {1} -->".format(count, jumps)  for count in range(0,jumps)] )
+
+@register.filter 
+def jumpdowns(value, arg):
+    jumps =  abs(int(float(value)) - int(float(arg)))
+    return ["<h3>jumpdown!</h3>" for count in range(0,jumps)]
+
+    
+@register.tag   
+def do_assign(parser, token):
+    """
+    Assign an expression to a variable in the current context.
+    
+    Syntax::
+        {% assign [name] [value] %}
+    Example::
+        {% assign list entry.get_related %}
+        
+    """
+    bits = token.contents.split()
+    if len(bits) != 3:
+        raise template.TemplateSyntaxError("'%s' tag takes two arguments" % bits[0])
+    value = parser.compile_filter(bits[2])
+    return AssignNode(bits[1], value)

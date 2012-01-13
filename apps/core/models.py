@@ -335,7 +335,14 @@ ThreadedEntryHistory instead.
 
                 # If this post just continue current subthread
                 if save_method == "continue":
-                    chie = str( parent.hierarchy )
+                    # Remove last part of parents hierarchy and add the new pk to it
+                    first_dot = parent.hierarchy.rfind(".")
+                    if first_dot == -1:
+                        # This was at hierarchy level one, just set hierarchy as pk
+                        print parent.get_sub_thread() + str(self.id)
+                        chie = parent.get_sub_thread() + str(self.id)
+                    else:
+                        chie = parent.hierarchy[0:first_dot] + "." + parent.get_sub_thread() + str(self.id)
                     
             if not chie and not save_method:
                 # Check if parent is latest in the sub-thread. If it is, this answer
