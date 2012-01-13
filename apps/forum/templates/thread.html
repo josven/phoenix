@@ -33,8 +33,6 @@
                 </form>
             </li> 
             </ul>
-            {{ jump }}
-            
             {% endif %}
             {% endfor %}
             {% endif %}
@@ -88,7 +86,6 @@
             {% if forloop.last %}
             {% for jump in post.hierarchy_level|jumpdowns:jumps %}
             {% if forloop.first %}
-            {% else %}
             </ul>
             
             <li class="full_width_reply">
@@ -109,11 +106,15 @@
                         <input type="submit" value="Svara" />
                     </p>
                 </form>
+                
             </li>
-            
             </ul>
+            
             {% endif %}
+            
             {% endfor %}
+            
+            
             {% endif %}
             {% do_assign jumps post.hierarchy_level %}
             {% else %}           

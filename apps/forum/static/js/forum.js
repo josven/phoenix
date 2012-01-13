@@ -1,5 +1,9 @@
 jQuery(document).ready(function() {
     
+    // Really ugly hack, until the forum are fully fixed =(
+    // This removes replys that gets outside the main thread
+    $('.thead_wrapper .subthread').first().siblings().remove();
+    
     //Fix all the orphan-forms
     $('.orphan-form').each( function () {
         var parent_id = $(this).parents('ul').first().children('li.entry').last().find('#id_parent_id').val();
