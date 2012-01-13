@@ -287,7 +287,15 @@ class ThreadedEntry(Entry):
         by the number of "." in the hierarchy. 24 has hierarchy level 0, 24.28
         has hierarchy level 1, etc.
         """
-
+        
+        # Store save method if we need to overide
+        save_method = kwargs.pop('save_method', None)
+        print save_method
+        
+        if not (( save_method == "continue" ) or ( save_method == "reply" )):
+            save_method = None
+        
+        print save_method        
         # Check that we are not using a normal history with a threaded entry
         history_name = self.__class__.__name__ + "History"
         history_model = get_model(self._meta.app_label, history_name)
@@ -318,7 +326,18 @@ ThreadedEntryHistory instead.
                 # We are unfortunatly going to need the parent object now
                 parent = self.__class__.objects.get(pk=self.parent_id)
 
-            if not chie:
+            # Overide normal hierarchy 
+            if not chie and save_method:
+            
+                # If the post is a reply. Create a new subthread
+                if save_method == "reply":
+                    chie = parent.hierarchy + "." + str(self.id)
+
+                # If this post just continue current subthread
+                if save_method == "continue":
+                    chie = str( parent.hierarchy )
+                    
+            if not chie and not save_method:
                 # Check if parent is latest in the sub-thread. If it is, this answer
                 # should appear just under it on the same hierarchy level.
                 if parent.is_latest_in_thread():

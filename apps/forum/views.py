@@ -134,6 +134,8 @@ def create_forumpost(request, tags=None):
         except:
             raise Http404
 
+        save_method = request.POST['save_method']
+        
         # If the parent does not equal the given thread, abort!
         if 'parent_id' in form.cleaned_data and form.cleaned_data['parent_id']:
             try:
@@ -144,12 +146,17 @@ def create_forumpost(request, tags=None):
                 raise Http404
 
         # Create the post
-        ForumPost.objects.create(
+        post = ForumPost(
             parent_id=form.cleaned_data['parent_id'],
             created_by=request.user,
             collection=thread,
-            body=form.cleaned_data['body']
+            body=form.cleaned_data['body'],
         )
+        
+        # Overide the save method
+        if save_method:
+            post.save(save_method=save_method)
+        
         return HttpResponseRedirect(thread.get_absolute_url())
 
     try:

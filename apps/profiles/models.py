@@ -8,9 +8,10 @@ from sorl.thumbnail import ImageField
 
 
 GENDER_CHOICES = (
-    ('O', 'Obesvarat'),
-    ('M', 'Kille'),
-    ('T', 'Tjej'),
+    ('O', 'Odefinerat'),
+    ('M', 'Man'),
+    ('K', 'Kvinna'),
+    ('T', 'Transperson'),
 )
 
 class Profile(models.Model):

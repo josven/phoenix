@@ -24,6 +24,7 @@ jQuery(document).ready(function() {
             },
         });
         
+        dialog.find('input.save_method').attr('value','reply');
         dialog.find('div.ui-helper-hidden').show();
         dialog.find('textarea').val('');
         dialog.find('p.ui-helper-hidden').hide();

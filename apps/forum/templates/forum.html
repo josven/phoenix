@@ -39,7 +39,7 @@
 			<td><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></td>
 			<td>{% for tag in thread.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag|urlencode %}">{{ tag|title }}</a></span>{% endfor %}</td>
 			<td>{{ thread.date_created|naturalday  }} {{ thread.date_created|time:"TIME_FORMAT"  }} av <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a></td>
-			<td>{{ thread.get_number_of_post }}</td>
+			<td></td>
 			<td><a title="Gå till sensate svar" href="{% url read_thread thread.id %}#post-{{ thread.get_latest_post.id }}"> {{ thread.get_latest_post.date_created|naturalday  }} {{ thread.get_latest_post.date_created|time:"TIME_FORMAT"  }} av {{ thread.get_latest_post.created_by }}</a></td>
 			<td>{{ thread.get_latest_post.id }}</td>
 		</tr>
