@@ -72,6 +72,7 @@
                 {% endif %}
     
                 <div class="entry-content clearfix">
+                    <h1> {{ post.hierarchy }}</h1>
                     {{ post.body|urlize|textile }}
                     <div class="ui-helper-hidden">
                         {% include "reply_form.html" %}
