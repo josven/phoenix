@@ -9,7 +9,6 @@
     <div class="thead_wrapper">
         {% for post in posts %}    
             {% if jumps %}
-            {% comment %}{{ post.hierarchy_level|endlist:jumps|safe }}{% endcomment %}
             {% for jump in post.hierarchy_level|jumpdowns:jumps %}
             {% if forloop.first %}
             </ul>
@@ -45,8 +44,6 @@
             <ul class="subthread ui-widget-content"><!-- start subthread -->
             {% endif %}
             
-            
-            
             {% if forloop.first %}
             <li class="forum_post ui-widget ui-widget-content">
             {% thread_header post %}
@@ -77,8 +74,6 @@
                 {% endif %}
     
                 <div class="entry-content clearfix">
-                {% if jumps %}<h3>HOPP {{ jumps }}</h3>{% endif %}
-                    <h1>{{ post.hierarchy }}</h1>
                     {{ post.body|urlize|textile }}
                     <div class="ui-helper-hidden">
                         {% include "reply_form.html" %}

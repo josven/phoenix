@@ -15,9 +15,9 @@
 	<meta name="author" content="phx" />
     
     {% block css %}
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css" />
-    {% if app_name %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ app_name }}.css" />{% endif %}
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css?ac" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css?ac" />
+    {% if app_name %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ app_name }}.css?ac" />{% endif %}
 	{% endblock css %}
     
     {% block script %}
@@ -29,8 +29,8 @@
 	<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.min.js"></script>
 	
     <script defer type="text/javascript" src="{{ STATIC_URL }}js/plugins.js"></script>
-	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js"></script>
-	<script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js"></script>
+	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js?ac"></script>
+	<script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js?ac"></script>
     {% endblock script %}
 </head>
 
