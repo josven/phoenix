@@ -43,9 +43,11 @@ def chat(request):
                 # Send back a new form
                 form = PostForm()
                 
-                messages.add_message(request, messages.INFO, 'Meddelande skickat')
+                if not request.is_ajax():
+                    messages.add_message(request, messages.INFO, 'Meddelande skickat')
             else:
-                messages.add_message(request, messages.ERROR, 'Meddelande måste vara fem tecken eller mer')
+                if not request.is_ajax():
+                    messages.add_message(request, messages.ERROR, 'Meddelande måste vara fem tecken eller mer')
     else:
         form = PostForm()
 
