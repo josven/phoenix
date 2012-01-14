@@ -25,13 +25,6 @@
         <div class="entry-content clearfix">
             {{ forum.body|urlize|textile  }}
         </div>
-    
-        {% comment %}
-        <h4 class="ui-widget-header entry-head">{{ forum.title }} av <a class="link-user" href="{% url read_profile forum.created_by.id %}">{{ forum.created_by }}</a> den {{ forum.date_created|naturalday  }} {{ forum.date_created|time:"TIME_FORMAT"  }} {% with tags=forum.tags.all %}{% for tag in tags %}<span class="ui-tag"><a href="{% url search_article tag %}" >{{ tag|title }}</a></span>{% endfor %}{% endwith %} </h4>
-        <div class="forum-body">
-        {{ forum.body|urlize|textile }}
-        </div>
-        {% endcomment %}
     </li>
 </ul>
 

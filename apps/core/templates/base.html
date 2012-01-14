@@ -4,7 +4,7 @@
 <ul>
     <li><a href="{{  request.user.get_profile.get_absolute_url }}">{{ request.user }}</a></li>
     <li><a href="{% url list_forum %}">Nya forumet</a></li>
-    <li><a href="{% url read_forum %}">Gamla forumer</a></li>
+    <li><a href="{% url read_forum %}">Gamla forumet</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
     <li><a href="{% url guestbook request.user.id %}">Gästbok</a></li>
     <li><a href="{% url read_article %}">Artiklar</a></li>

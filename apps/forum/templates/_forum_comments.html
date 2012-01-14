@@ -15,7 +15,7 @@
 
 <ul class="flat-list entrylist forumtree">
 {% recursetree comments %}
-<li class="entry ui-widget ui-widget-content">
+<li class="entry ui-widget ui-widget-content" id="comment-{{ node.id }}">
     <h4 class="ui-widget-header entry-head">
         <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
         <div class="button-wrapper">
