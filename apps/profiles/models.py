@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 
-
 GENDER_CHOICES = (
     ('O', 'Odefinerat'),
     ('M', 'Man'),

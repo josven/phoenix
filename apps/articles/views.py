@@ -60,9 +60,16 @@ def create_article(request, tags=None):
             post_values = request.POST.copy()
             all_tags = validate_internal_tags(request, all_tags)
             post_values['tags'] = ', '.join(all_tags)
+            
+            try:
+                if post_values['allow_comments'] == "on":
+                    post_values['allow_comments'] = True
+            except:
+                post_values['allow_comments'] = False
+                
             form = ArticleForm(post_values)  
             link = form.save()
-
+            
             return HttpResponseRedirect(reverse('read_article', args=[link.id]))
             
     return render(request,'create_article.html', vars)
@@ -89,6 +96,7 @@ def read_article(request,user_id=None, id=None):
     
     vars = {
         'categories': defaultArticleCategories.objects.all(),
+        'ArticleBodyForm': ArticleCommentForm(),
         }
     
     if id==None:
@@ -100,7 +108,8 @@ def read_article(request,user_id=None, id=None):
         return render(request,'articles.html', vars)
     
     vars['article'] = Article.objects.get(id=id)
-    
+    vars['comments'] = ArticleComment.objects.filter(post=vars['article'])
+
     if user_id:
         template = "user_article.html"
         vars['user'] = User.objects.get(pk=user_id)
@@ -178,4 +187,36 @@ def ajax_article_body_form(request,id=None):
 
     
        
-   
+@never_cache
+@login_required(login_url='/auth/login/')
+def comment_article(request,article_id):
+    """
+    Comment article
+    
+    """
+    
+    post = Article.objects.get(id=article_id)
+    
+    
+    vars = {
+        
+    }
+    
+    if request.method == 'POST':
+        author = request.user
+        form = ArticleCommentForm(request.POST)
+        
+        if form.is_valid(): 
+            comment = ArticleComment(
+                post = post,
+                created_by = request.user,
+                author=author,
+                comment=request.POST['comment'],
+            )
+            
+            # if this is a reply to a comment, not to a post
+            if request.POST['parent_id'] != '':
+                comment.parent = ArticleComment.objects.get(id=request.POST['parent_id'])
+            comment.save()
+ 
+    return HttpResponseRedirect(reverse('read_article', args=[article_id]))

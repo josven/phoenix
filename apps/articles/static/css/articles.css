@@ -3,6 +3,85 @@
 .categories { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 .categories .ui-selectee { cursor:pointer; padding: .2em 0.4em; height: 18px; }
 
+/* Dialogs */
+.ui-dialog-content .entry-content p {
+    width:100%;
+}
+.ui-dialog-content  textarea   {
+    margin: 10px 0;
+    padding: 1%;
+    font-size:130%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 98%;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  
+}
+
+/* comment threads */
+form#comment-article-form input {
+    margin-bottom: 10px;
+}
+
+form#comment-article-form textarea   {
+    margin-bottom: 10px;
+    padding: 1%;
+    font-size:130%;
+    border: 1px solid #666;
+    outline:none;
+    color: #444;
+    width: 98%;
+    height: 100px;
+    
+    -webkit-box-shadow: inset 0px 0px 15px #888; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+       -moz-box-shadow: inset 0px 0px 15px #888; /* FF3.5 - 3.6 */
+            box-shadow: inset 0px 0px 15px #888; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+          
+
+    -webkit-border-radius: 5px; 
+       -moz-border-radius: 5px; 
+            border-radius: 5px;      
+     -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  
+}
+
+ul.entrylist.child-ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+li.entry.ui-widget.ui-widget-content {
+    margin-bottom:0;
+}
+
+li.entry.ui-widget.ui-widget-content.accordion.ui-accordion  {
+    margin-bottom:1em;
+}
+
+ul.entrylist li.accordion  h4 {
+    padding:0;
+}
+
+ul.entrylist li.accordion  .ui-accordion-content {
+    padding:0;
+    overflow:hidden;
+}
+
+ul.entrylist li.accordion  .ui-accordion-content textarea{
+    width:100%;
+    height:200px;
+    border:0;
+}
 
 /* List threads, data tables styles */
 div.dataTables_length {
@@ -102,4 +181,8 @@ html[xmlns] .dataTables_wrapper { display: block; }
             border-radius: 5px;      
      -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
 
+}
+
+#form-create-article  input[type=checkbox] {
+    width:50px;
 }

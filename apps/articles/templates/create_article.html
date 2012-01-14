@@ -6,10 +6,11 @@
         {% csrf_token %}
         
         <h3>Du kan välja upp till 5 kategorier, minst en en huvudtagg</h3>
-        <div class="tag-list-wrapper">
+        <div class="tag-list-wrapper">       
         {% for field in tagform %}
         {{ field }}
         {% endfor %}
+        
         </div>
 
         <p>
@@ -23,7 +24,9 @@
         <p>
         {{ form.body }}
         </p>
-          
+                
+        {{ form.allow_comments }}<label for="id_allow_comments">Tillåt kommentarer</label>
+     
         <input type="submit" value="Skapa" />
     </form>
 {% endblock content %}

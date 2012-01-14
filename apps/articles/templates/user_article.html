@@ -5,4 +5,9 @@
         {% include "_article.html" %}
     </li>
 </ul>
+
+{% if article.allow_comments %}
+{% include "_article_comments.html" %}
+{% endif %}
+
 {% endblock content %}

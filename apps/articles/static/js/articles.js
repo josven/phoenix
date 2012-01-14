@@ -1,4 +1,45 @@
 jQuery(document).ready(function() {
+
+$('#id_allow_comments').button();
+
+$('.accordion').accordion({
+			collapsible: true,
+            active: false,            
+		});
+    
+        
+    $('.js-reply').click( function (event) {
+        event.preventDefault();
+        
+        var entry = $(this).parentsUntil('ul').last(),
+            content = entry.find('.entry-content').first().clone();
+        
+        entry.addClass('ui-state-active');
+        
+        dialog = content.dialog({
+            width: "500",
+            title: "Svara " + $(this).data('replyTo'),
+            buttons: {
+                    "Svara": function() {
+                        dialog.find('form').submit();
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+            },
+            close: function(event, ui) { 
+                entry.removeClass('ui-state-active');
+            },
+        });
+        
+        dialog.find('form.ui-helper-hidden').show();
+        dialog.find('textarea').val('');
+        dialog.find('p.ui-helper-hidden').hide();
+        
+    entry.addClass('ui-state-active');
+        return false;
+    });
+    
     // quick edit button
     $('.js-quick-edit').button({
                             icons: {
