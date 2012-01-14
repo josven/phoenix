@@ -26,6 +26,15 @@ LIST_ITEM_LIMIT = 50
 
 @never_cache
 @login_required(login_url='/auth/login/')
+def camchat(request):
+    vars = {
+        'app_name':'camchat'
+        }
+    messages.add_message(request, messages.INFO, 'Lösenord är:fisk')    
+    return render(request,'tinychat.html', vars)
+    
+@never_cache
+@login_required(login_url='/auth/login/')
 def chat(request):
 
     vars = {

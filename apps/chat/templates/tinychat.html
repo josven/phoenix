@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+{% block left-sidebar %}
+{% endblock left-sidebar %}
+<script>
+var tinychat = { room: 'likstrom' };
+</script>
+<script src='http://tinychat.com/js/embed.js'></script>
+<div id='client'></div>
+{% endblock content %}
+

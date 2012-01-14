@@ -19,5 +19,10 @@ form  textarea   {
   
 }
 
+.tinychat_embed {
+    height: 85% !important;
+    margin-top: 3%;
+}
+
 /* Overide JQUI auto font bolding on hilighted entries */
 #chatlist li.ui-state-active .entry-content { font-weight:normal; }

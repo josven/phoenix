@@ -9,4 +9,7 @@ urlpatterns = patterns('',
     
     # Return a range posts
     url(r'^(?P<id1>\d*)-(?P<id2>\d*)\.(?P<type>\w*)$', 'apps.chat.views.chatposts', name='chatposts'),
+    
+    #Tinychat
+     url(r'^camchat$', 'apps.chat.views.camchat', name='camchat'),
 )

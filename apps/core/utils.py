@@ -46,8 +46,13 @@ def render(request, *args):
         vars = args[1]
     except:
         vars = {}
+        
+    try:
+        app_name = vars['app_name']
+    except:
+        app_name = mod.__name__.split('.')[1]
     
-    vars['app_name'] = mod.__name__.split('.')[1]
+    vars['app_name'] = app_name
     vars['base_template'] = get_base_template(request)
     
     users = Visitor.objects.active()

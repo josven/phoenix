@@ -47,7 +47,9 @@ var hilightUserName = function() {
 jQuery(document).ready(function() {    
     
 
-   
+   // tinychat
+    $('.tinychat_embed').css({'height':'85%','margin-top':'3%'});
+
     bindReplyButton();
     hilightUserName();
     
