@@ -502,6 +502,21 @@ jQuery.expr[':'].containsinsensitive = function(a, i, m) {
 
 
 /*
+* External links
+* Open exterbnal links in new window
+*/
+$('a').each(function() {
+   var a = new RegExp('/' + window.location.host + '/');
+   if(!a.test(this.href)) {
+       $(this).click(function(event) {
+           event.preventDefault();
+           event.stopPropagation();
+           window.open(this.href, '_blank');
+       });
+   }
+});
+
+/*
 * Polyfills
 * More here: https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills
 */
