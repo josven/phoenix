@@ -1,69 +1,18 @@
 {% extends "base.html" %}
 {% load entry_tags %}
-{% load humanize %}
 
 {% block app_navigation %}
 <ul id="app_navigation" >
         <li><h4 class="ui-widget-header entry-head">Forumsmeny</h4></li>
-        <li><a href="{% url read_forum %}">Trådar</a></li>
+        <li><a href="{% url list_forum %}">Forum</a></li>
         {% if tags %}
-        <li><a href="{% url create_thread_by_tags tags %}">Skapa tråd</a></li>
+        <li><a href="{% url create_forum tags %}">Skapa tråd</a></li>
         {% else %}
-        <li><a href="{% url create_thread %}">Skapa tråd</a></li>
+        <li><a href="{% url create_forum %}">Skapa tråd</a></li>
         {% endif %}
         <li><h4 class="ui-widget-header entry-head">Huvudkategorier</h4></li>
         {% for tag in categories %}
-        <li><a href="{% url get_threads_by_tags tag %}">{{ tag|title }}</a></li>
+        <li><a href="{% url list_forum tag %}">{{ tag|title }}</a></li>
         {% endfor %}
 </ul>
 {% endblock app_navigation %}
-
-
-{% block content %}
-{% for thread in threads %}
-{% if forloop.first %}
-<table id="table_threads">
-	<thead>
-		<tr>
-			<th>Trådtitel</th>
-            <th>Kategorier</th>
-            <th>Skapad</th>
-			<th>Antal svar</th>
-			<th>Senaste svar</th>
-			<th>Senaste svar sortering (ID)</th>
-		</tr>
-	</thead>
-	<tbody>
-{% endif%}
-		<tr class="ui-widget-content">
-			<td><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></td>
-			<td>{% for tag in thread.tags.all %}<span class="ui-tag"><a href="{% url get_threads_by_tags tag|urlencode %}">{{ tag|title }}</a></span>{% endfor %}</td>
-			<td>{{ thread.date_created|naturalday  }} {{ thread.date_created|time:"TIME_FORMAT"  }} av <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a></td>
-			<td></td>
-			<td><a title="Gå till sensate svar" href="{% url read_thread thread.id %}#post-{{ thread.get_latest_post.id }}"> {{ thread.get_latest_post.date_created|naturalday  }} {{ thread.get_latest_post.date_created|time:"TIME_FORMAT"  }} av {{ thread.get_latest_post.created_by }}</a></td>
-			<td>{{ thread.get_latest_post.id }}</td>
-		</tr>
-{% if forloop.last %}
-	</tbody>
-</table>
-{% endif %}
-{% endfor %}
-
-{% comment %}
-<ul id="threadlist" class="flat-list entrylist" data-role="listview" data-inset="true">
-{% for thread in threads %}
-<li class="ui-widget ui-widget-content">
-    {% entry_head thread %}
-    
-    <div class="ui-text-panel">
-        <h3><a href="{% url read_thread thread.id %}">{{ thread.title }}</a></h3>
-        <p>Skapad av <a href="{{ thread.created_by.get_profile.get_absolute_url }}">{{ thread.created_by }}</a>, {{ thread.date_created }} <br/>
-           Läst X gånger, X svar.<br/>
-           Kategorier:
-        </p>
-    </div>
-</li>
-{% endfor %}
-</ul>
-{% endcomment %}
-{% endblock content %}

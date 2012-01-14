@@ -21,16 +21,26 @@ class Forum(Entry):
     title = models.CharField(max_length=128)
     body = models.TextField(max_length=5120)
     tags = TaggableManager()
+    last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None)
+    posts_index = models.IntegerField(null=True, blank=True)
 
+    def get_posts_index(self):
+    
+        if not self.posts_index:
+            number = ForumComment.objects.filter(post=self).count()
+            self.posts_index = number
+        
+        number = self.posts_index
+            
+        return number
+     
     def get_absolute_url(self):
-        return "/articles/read/%s/" % self.id
+        return "/forum/read/%s/" % self.id
         
     def __unicode__(self):
         return u'%s' % self.title
-
  
 class ForumComment(MPTTModel):
-    """ Threaded comments for blog posts """
     post = models.ForeignKey(Forum)
     author = models.CharField(max_length=60)
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)

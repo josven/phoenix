@@ -2,7 +2,7 @@
 from django.conf import urls
 
 urlpatterns = patterns('',
-    url(r'^$', 'apps.forum.views.read_forum', name='read_forum'),
+    url(r'^old$', 'apps.forum.views.read_old_forum', name='read_forum'),
     
     url(r'^thread/create/$', 'apps.forum.views.create_thread', name='create_thread'),
     url(r'^thread/create/(?P<tags>(.+)(,\s*.+)*)/', 'apps.forum.views.create_thread', name='create_thread_by_tags'),
@@ -16,4 +16,21 @@ urlpatterns = patterns('',
     
     url(r'^forumpost/reply/$', 'apps.forum.views.create_forumpost', name='reply_on_forumpost'),
     url(r'^forumthread/reply/$', 'apps.forum.views.create_forumpost', name='reply_on_thread'),
+    
+    
+    
+    
+    
+    
+    url(r'^list/$', 'apps.forum.views.list_forum', name='list_forum'),
+    url(r'^list/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.list_forum', name='list_forum'),
+    
+    url(r'^read/(?P<id>\d*)/$', 'apps.forum.views.read_forum', name='read_forum'),
+    
+    url(r'^create/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.create_forum', name='create_forum'),
+    url(r'^create/$', 'apps.forum.views.create_forum', name='create_forum'),
+    
+        
+    url(r'^read/(?P<forum_id>\d*)/comment/$', 'apps.forum.views.comment_forum', name='comment_forum'),
+    
 )

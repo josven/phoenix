@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.forms import ModelForm, Textarea
 from django.forms.fields import MultipleChoiceField
 from django.forms.widgets import CheckboxSelectMultiple
 
@@ -15,6 +16,33 @@ class DefaultForumTagsForm(forms.Form):
         choices=DEFAULT_CATEGORIES
     )
 
+class ForumForm(ModelForm):
+    """
+    Form for articles
+
+    """    
+
+    tags = TagField(
+        required=False,
+        error_messages={
+            'required': 'Du har inte angett någon kategori!',
+        },
+        widget=TagWidget(attrs={'placeholder': 'Egna kategorier, separera dem med comma (,)'}),
+        label = "",
+    )
+    
+    class Meta:
+        model = Forum
+        fields = ('title','body','tags',)
+        widgets = {'body': Textarea(attrs={'cols': 80, 'rows': 5, 'placeholder': "Minst fem tecken."})}
+
+class ForumCommentForm(ModelForm):
+
+    class Meta:
+        model = ForumComment
+        fields = ('comment',)
+        
+''' ######################### OLD ############################# '''    
 class ThreadForm(forms.Form):
     title_min = 5
     title_max = 100

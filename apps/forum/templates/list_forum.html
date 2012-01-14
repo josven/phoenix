@@ -1,0 +1,35 @@
+{% extends "forum.html" %}
+{% load humanize %}
+
+{% block content %}
+{% for forum in forums %}
+{% if forloop.first %}
+<table id="table_threads">
+	<thead>
+		<tr>
+			<th>Trådtitel</th>
+            <th>Kategorier</th>
+            <th>Skapad</th>
+			<th>Antal svar</th>
+			<th>Senaste svar</th>
+			<th>Senaste svar sortering (ID)</th>
+		</tr>
+	</thead>
+	<tbody>
+{% endif %}
+		<tr class="ui-widget-content">
+			<td><a href="{% url read_forum forum.id %}">{{ forum.title }}</a></td>
+			<td>{% for tag in forum.tags.all %}<span class="ui-tag"><a href="{% url list_forum tag|urlencode %}">{{ tag|title }}</a></span>{% endfor %}</td>
+			<td>{{ forum.date_created|naturalday  }} {{ forum.date_created|time:"TIME_FORMAT"  }} av <a href="{{ forum.created_by.get_profile.get_absolute_url }}">{{ forum.created_by }}</a></td>
+			<td>{{ forum.get_posts_index }}</td>
+			<td><a title="Gå till sensate svar" href="{% url read_thread forum.id %}#comment-{{ forum.last_comment.id }}"> {{ forum.last_comment.added|naturalday  }} {{ forum.last_comment.added|time:"TIME_FORMAT"  }} av {{ forum.last_comment.created_by }}</a></td>
+			<td>{{ forum.get_latest_post.id }}</td>
+		</tr>
+{% if forloop.last %}
+	</tbody>
+</table>
+{% endif %}
+{% empty %}
+<h1>Tomt forum</h1>
+{% endfor %}
+{% endblock content %}

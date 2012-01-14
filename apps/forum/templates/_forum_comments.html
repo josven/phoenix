@@ -1,0 +1,76 @@
+{% load mptt_tags %}
+{% load markup %}
+{% load humanize %}
+{% load thumbnail %}
+{% load entry_tags %}
+
+<form id="comment-forum-form" method="POST" action="{% url comment_forum forum.id %}">
+    {% csrf_token %}
+    {% for field in ArticleBodyForm %}
+    {{ field }}
+    {% endfor %}
+    <input type="hidden" name="parent_id" value="">
+    <input type="submit" value="Svara">
+</form>
+
+<ul class="flat-list entrylist forumtree">
+{% recursetree comments %}
+<li class="entry ui-widget ui-widget-content">
+    <h4 class="ui-widget-header entry-head">
+        <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
+        <div class="button-wrapper">
+            <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara</a>
+        </div>
+    </h4>
+
+    <ul class="username-hover-menu ui-helper-hidden ui-widget ui-widget-content">
+        <li><a href="{% url read_profile node.created_by.id %}">Profil</a></li>
+        <li><a href="{% url guestbook node.created_by.id %}">Gästbok</a></li>
+    </ul>   
+    
+    <div class="entry-profile clearfix">
+        {% thumbnail node.created_by.get_profile.photo "75x75" crop="center" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}   
+    </div>
+
+    
+    <div class="entry-content clearfix">
+        {{ node.comment|urlize|textile  }}
+    
+        <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
+            {% csrf_token %}
+            <textarea name="comment"></textarea>
+            <input type="hidden" name="parent_id" value="{{ node.id}}">
+        </form>
+    </div>
+
+    
+    {# recursion! children of a given comment #}
+    {% if not node.is_leaf_node %}
+        <ul class="flat-list child-ul entrylist forumbranch">
+        {{ children }}
+        
+        
+        <li class="accordion">
+            <h4 class="ui-widget-header entry-head">
+                <a href="#">Fortsätt på tråden</a>
+            </h4> 
+                          
+            <div class="entry-content clearfix">
+                <form method="POST" action="{% url comment_forum forum.id %}">
+                    {% csrf_token %}
+                    <textarea name="comment"></textarea>
+                    <input type="hidden" name="parent_id" value="{{ node.id}}">
+                    <input type="submit" value="Svara">
+                </form>
+            </div>
+        </li>
+        
+        </ul>
+    {% endif %}
+    
+</li>
+{% endrecursetree %}
+</ul>
+

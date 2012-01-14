@@ -7,12 +7,165 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
 from apps.core.utils import render, validate_internal_tags
-from models import Thread, ForumPost, defaultCategories
+from models import *
 from forms import *
+
+''' New forum '''
+
+
 
 @never_cache
 @login_required(login_url='/auth/login/')
-def read_forum(request):
+def list_forum(request, tags=None):
+
+    """
+    List of forum threads.
+    
+    """
+    vars = {
+        "categories":defaultCategories.objects.all()
+        }
+            
+    if tags:
+        tags_array = tags.split(",")
+        forums = Forum.active.filter(tags__name__in=tags_array)
+        vars['tags'] = tags
+        
+        if len( forums ) < 1:
+            messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
+        else:
+            vars['forums'] = forums
+
+    else:
+        vars['forums'] = Forum.active.all()
+       
+
+    
+    return render(request, 'list_forum.html', vars )
+
+
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def read_forum(request, id):
+
+    vars = {
+        'categories': defaultCategories.objects.all(),
+        'ArticleBodyForm': ForumCommentForm(),
+        }
+        
+    vars['forum'] = Forum.objects.get(id=id)
+    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
+    
+    return render(request, 'read_forum.html', vars )
+
+
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def create_forum(request, tags=None):
+
+    if tags:
+        initial_tags = tags.split(',')
+        tagform = DefaultForumTagsForm(initial={'default_tags': initial_tags })
+    else:
+        tagform = DefaultForumTagsForm()
+
+        
+    vars = {
+            'form' : ForumForm(),
+            'tagform' : tagform,
+            'categories' : defaultCategories.objects.all(),
+        }
+        
+    if request.method == 'POST':    
+        form = ForumForm(request.POST)
+        tagform = DefaultForumTagsForm(request.POST)
+        
+        if form.is_valid() & tagform.is_valid():            
+            default_tags = tagform.cleaned_data['default_tags']
+            
+            user_tags = form.cleaned_data['tags']
+                       
+            # Filter list from empty strings
+            cleaned_tags = filter(None, user_tags)
+            
+            # Combine and remove doubles
+            all_tags = list(set(default_tags + cleaned_tags))
+                
+            # Check if a default tag is present
+            if len(default_tags) == 0:
+                messages.add_message(request, messages.INFO, 'Du måste välja minst en huvudkategori!')
+                return render(request, 'create_thread.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
+
+            # Check maximum allowed tags
+            if len( all_tags ) > 5:
+                messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
+                return render(request, 'create_thread.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
+
+            # Validate INTERNAL tags
+            all_tags = validate_internal_tags(request, all_tags) 
+            
+            post_values = request.POST.copy()
+            all_tags = validate_internal_tags(request, all_tags)
+            post_values['tags'] = ', '.join(all_tags)
+            
+            form = ForumForm(post_values)  
+            link = form.save()
+            
+            return HttpResponseRedirect(reverse('read_forum', args=[link.id]))
+    
+    return render(request, 'create_forum.html', vars )
+
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def comment_forum(request,forum_id):
+    """
+    Comment article
+    
+    """
+    
+    post = Forum.objects.get(id=forum_id)
+    
+    vars = {
+        
+    }
+    
+    if request.method == 'POST':
+        author = request.user
+        form = ForumCommentForm(request.POST)
+        
+        if form.is_valid(): 
+            comment = ForumComment(
+                post = post,
+                created_by = request.user,
+                author=author,
+                comment=request.POST['comment'],
+            )
+            
+            # if this is a reply to a comment, not to a post
+            if request.POST['parent_id'] != '':
+                comment.parent = ForumComment.objects.get(id=request.POST['parent_id'])
+            
+            comment.save()
+            
+            post.last_comment = comment
+            
+            if post.posts_index:
+                post.posts_index  += 1
+            else:
+                post.posts_index = post.get_posts_index()
+                
+            post.save()
+    
+    return HttpResponseRedirect(reverse('read_forum', args=[forum_id]))
+
+''' ######################## old forum ############################ '''
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def read_old_forum(request):
     """
     Read the list of forum threads.
     
@@ -26,7 +179,7 @@ def read_forum(request):
             "categories":categories
             }
 
-    return render(request, 'forum.html', vars )
+    return render(request, 'old_forum.html', vars )
 
 @never_cache
 @login_required(login_url='/auth/login/')
@@ -179,4 +332,4 @@ def get_threads_by_tags(request,tags):
     if len( threads ) < 1:
         messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
 
-    return render(request, 'forum.html', {"threads": threads,"categories":categories,"tags":tags})
+    return render(request, 'old_forum.html', {"threads": threads,"categories":categories,"tags":tags})

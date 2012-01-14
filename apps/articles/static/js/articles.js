@@ -1,8 +1,8 @@
 jQuery(document).ready(function() {
 
-$('#id_allow_comments').button();
+    $('#id_allow_comments').button();
 
-$('.accordion').accordion({
+    $('.accordion').accordion({
 			collapsible: true,
             active: false,            
 		});

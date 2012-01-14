@@ -92,7 +92,6 @@ def read_article(request,user_id=None, id=None):
     Read article
     
     """
-    print "läs"
     
     vars = {
         'categories': defaultArticleCategories.objects.all(),
