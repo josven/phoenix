@@ -21,7 +21,7 @@ def guestbook_reciver(sender, **kwargs):
     instance = kwargs['instance']
 
     notification = Notification(
-        type = "Gästboksinlägg",
+        type = 1, #guestbook
         message = 'Nytt gästboksinlägg!',
         status = 1, #NEW
         receiver = instance.user_id,
