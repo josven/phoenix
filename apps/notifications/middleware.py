@@ -12,7 +12,7 @@ class AnnonuceNotifications(object):
     def process_request(self, request):
         if not request.is_ajax():
             if request.user.is_authenticated():
-                data = get_notifications(request.user)
+                data = get_notifications(request)
         
                 # Annonce guestbook notifications
                 guestbook_announcements = data['a']['gb']

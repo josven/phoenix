@@ -17,16 +17,16 @@ NOTIFICATION_TYPES = (
 def updates(request, format):
     
     if request.is_ajax():
-        
-        data = get_notifications(request.user)
-        
-        if format == 'xml':
-            mimetype = 'application/xml; charset=utf8'
+        if request.user.is_authenticated():
+            data = get_notifications(request.user)
             
-        if format == 'json':
-            mimetype = 'application/javascript; charset=utf8'
-        
-        json_data = simplejson.dumps( data )
+            if format == 'xml':
+                mimetype = 'application/xml; charset=utf8'
+                
+            if format == 'json':
+                mimetype = 'application/javascript; charset=utf8'
+            
+            json_data = simplejson.dumps( data )
  
         return HttpResponse(json_data,mimetype)
    
@@ -35,11 +35,11 @@ def updates(request, format):
         return HttpResponse(status=400)       
     
 @login_required(login_url='/auth/login/') 
-def get_notifications(user):
+def get_notifications(request):
     
     d = {}
 
-    notifications = Notification.objects.filter(receiver=user)
+    notifications = Notification.objects.filter(receiver=request.user)
     
     if notifications:
 
