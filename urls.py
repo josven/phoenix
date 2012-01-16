@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     (r'^user/', include('apps.profiles.urls')),
     (r'^chat/', include('apps.chat.urls')),
     (r'^claim/', include('apps.claim.urls')),
+    (r'^notifications/', include('apps.notifications.urls')),
     (r'^', include('apps.articles.urls')),
     (r'^accounts/', include('apps.accounts.urls')),
 

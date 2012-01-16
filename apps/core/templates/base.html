@@ -6,7 +6,7 @@
     <li><a href="{% url list_forum %}">Nya forumet</a></li>
     <li><a href="{% url read_forum %}">Gamla forumet</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
-    <li><a href="{% url guestbook request.user.id %}">Gästbok</a></li>
+    <li class="ui-corner-all"><a href="{% url guestbook request.user.id %}">Gästbok <span id="gb-indicator">{% if request.indicators.gb %}{{ request.indicators.gb }}{% endif %}</span></a></li>
     <li><a href="{% url read_article %}">Artiklar</a></li>
     <li><a href="{% url camchat %}">Camchat</a></li>
     {% comment %}

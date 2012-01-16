@@ -2,13 +2,34 @@
 from django.core import serializers
 from django.contrib import messages
 from apps.notifications.models import *
-
+from apps.notifications.views import get_notifications
+ 
 NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
 )
 
 class AnnonuceNotifications(object):
 
+    def process_request(self, request):
+        
+        if not request.is_ajax():
+            data = get_notifications(request.user)
+    
+            # Annonce guestbook notifications
+            guestbook_announcements = data['a']['gb']
+            if guestbook_announcements == 1:
+                messages.add_message(request, messages.INFO, "Nytt gästboksinlägg")
+            
+            if guestbook_announcements > 1:
+                messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_announcements ) )
+
+            # Put indicators on 
+            request.__class__.indicators = data['i']
+
+
+
+
+    '''
     def process_request(self, request):
         """
         Notification
@@ -27,7 +48,7 @@ class AnnonuceNotifications(object):
                     typearray = []
                     
                     for notification in notifications:
-
+                         
                         # Only annonce new notification
                         if notification.status == 1: #NEW
                             
@@ -45,7 +66,7 @@ class AnnonuceNotifications(object):
                             
                     # if only one note of that type
                     if amount_of_messages == 1:
-                        messages_array.append( u"{0}".format(notification.message) );
+                        messages_array.append( "{0}".format(notification.message) );
                             
                     # If more then one note in that type, collect them in one message
                     elif amount_of_messages > 1:
@@ -53,20 +74,4 @@ class AnnonuceNotifications(object):
               
                 for message in messages_array:
                     messages.add_message(request, messages.INFO, message)
-
-
-            
-                    
-     
-    
-        '''
-        try:
-            real_ip = request.META['HTTP_X_FORWARDED_FOR']
-        except KeyError:
-            pass
-        else:
-            # HTTP_X_FORWARDED_FOR can be a comma-separated list of IPs.
-            # Take just the first one.
-            real_ip = real_ip.split(",")[0]
-            request.META['REMOTE_ADDR'] = real_ip
-        '''
+    '''

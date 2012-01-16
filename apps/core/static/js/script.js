@@ -1,6 +1,9 @@
 // Images in enties scales down 
 // in the entry. And scales up in 
 // the dialog when clicked on.
+
+var testvar;
+
 var formatImageDialogs = function() {
     $('.entry-content img, .ui-text-panel img')
         .attr('height','80')
@@ -23,8 +26,70 @@ var formatJsReplyButton = function() {
     });
 };
 
-$(document).ready(function() {
+
+
+// process all new updates
+var process_updates = function(data) {
         
+    // Display new notifications 
+    display_notifications(data);
+
+}
+
+
+var display_notifications = function(data) {
+     
+ 
+    // Annonce guestbook notifications
+    if ( data.a.gb == 1 ) {
+        $.jGrowl( "Nytt gästboksinlägg" );
+    } else if ( data.a.gb > 1 ) {
+        $.jGrowl( String( data.a.gb ) + " nya gästboksinlägg" );
+    }
+    
+    // Set guestbook indicator
+    if ( data.i.gb > 0 ) {
+        $('#gb-indicator').html(data.i.gb);
+        
+    }
+};
+
+
+
+$(document).ready(function() {
+     
+
+    /*
+    * Updates
+    *
+    */ 
+    
+    // Data to catch
+    var get_data = {
+                    "n": true,
+                    };
+                    
+   // Auto updater
+   var auto_update = setInterval(
+    
+    function ()
+    {
+        console.log('UPDATE!');
+        $.ajax({
+            data: get_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: "/notifications/updates.json",
+            success: function(data){ 
+                process_updates( data );
+            }
+        });
+        
+    }, 30000); // refresh every 30000 milliseconds
+
+    
+
+    
     /*
     * Polyfills
     *
