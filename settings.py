@@ -76,7 +76,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'tracking.middleware.VisitorTrackingMiddleware',
-    #'phoenix.apps.notifications.middleware.AnnonuceNotifications',
+    'phoenix.apps.notifications.middleware.AnnonuceNotifications',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 

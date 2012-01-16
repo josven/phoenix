@@ -9,22 +9,21 @@ NOTIFICATION_TYPES = (
 )
 
 class AnnonuceNotifications(object):
-
     def process_request(self, request):
-        
         if not request.is_ajax():
-            data = get_notifications(request.user)
-    
-            # Annonce guestbook notifications
-            guestbook_announcements = data['a']['gb']
-            if guestbook_announcements == 1:
-                messages.add_message(request, messages.INFO, "Nytt gästboksinlägg")
-            
-            if guestbook_announcements > 1:
-                messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_announcements ) )
+            if request.user.is_authenticated():
+                data = get_notifications(request.user)
+        
+                # Annonce guestbook notifications
+                guestbook_announcements = data['a']['gb']
+                if guestbook_announcements == 1:
+                    messages.add_message(request, messages.INFO, "Nytt gästboksinlägg")
+                
+                if guestbook_announcements > 1:
+                    messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_announcements ) )
 
-            # Put indicators on 
-            request.__class__.indicators = data['i']
+                # Put indicators on 
+                request.__class__.indicators = data['i']
 
 
 
