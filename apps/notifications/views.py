@@ -18,7 +18,7 @@ def updates(request, format):
     
     if request.is_ajax():
         
-        data = get_notifications(request.user)
+        data = {} #get_notifications(request.user)
         
         if format == 'xml':
             mimetype = 'application/xml; charset=utf8'
