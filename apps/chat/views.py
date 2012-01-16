@@ -68,10 +68,6 @@ def chat(request):
 
         number_of_posts = current_post - client_post
         
-        print client_post
-        print current_post
-        print current_post - client_post
-        
         if current_post - client_post != 0 :
             vars['posts'] = posts[0:number_of_posts]
             return render(request,'_chat.html', vars)

@@ -6,6 +6,8 @@ from django.views.decorators.cache import never_cache
 from apps.core.utils import render
 from forms import *
 
+from apps.notifications.models import Notification
+ 
 @never_cache
 @login_required(login_url='/auth/login/')
 def guestbook(request,userid,start=None):
@@ -23,6 +25,43 @@ def guestbook(request,userid,start=None):
         start = int(0)
 
     posts = Guestbooks.active.filter(user_id=user.id).order_by('-date_created')[start:int(start)+increment+padding]
+
+    '''
+    Notifications
+    '''
+    
+    if request.user == user:
+        notes = Notification.objects.filter(receiver=request.user, instance_type="Guestbooks")
+        
+        # Get hiligted
+        hilight_numbers = []
+        for note in notes:
+            if note.status < 3:
+                hilight_numbers.append( note.instance_id )
+                
+        # Get Unreplied posts
+        unreplied_munber = []
+        for note in notes:
+            if note.status == 4:
+                unreplied_munber.append( note.instance_id )
+            
+            
+        # Set status on posts
+        hilight_posts = []
+        for post in posts:
+            if post.id in hilight_numbers:
+                post.hajlajt = True
+                hilight_posts.append( post.id )
+            
+            if post.id in unreplied_munber:
+                post.unreplied = True
+                
+        
+        # Set status on hilightes to unreplied ( those we alredy have displayed )
+        for note in notes:
+            if note.instance_id in hilight_posts:
+                note.status = 4
+                note.save()
 
     form = GuestbookForm()
     vars = {
@@ -42,7 +81,7 @@ def guestbook(request,userid,start=None):
         post_values['user_id'] = str(userid)
         form = GuestbookForm(post_values)
         if form.is_valid():
-            form.save()
+            guestbook = form.save()
         else:
             messages.add_message(request, messages.INFO, 'Nu blev det något fel')
 

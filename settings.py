@@ -76,6 +76,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'tracking.middleware.VisitorTrackingMiddleware',
+    'phoenix.apps.notifications.middleware.AnnonuceNotifications',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -112,9 +113,11 @@ INSTALLED_APPS = (
     'phoenix.apps.profiles',
     'phoenix.apps.articles',
     'phoenix.apps.accounts',
+    'phoenix.apps.notifications',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.profile'
+
 AUTHENTICATION_BACKENDS = ('phoenix.apps.accounts.views.CaseInsensitiveModelBackend',)
 
 LOGIN_REDIRECT_URL = '/'

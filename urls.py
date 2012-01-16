@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     (r'^claim/', include('apps.claim.urls')),
     (r'^', include('apps.articles.urls')),
     (r'^accounts/', include('apps.accounts.urls')),
+
 )
 
 if settings.DEBUG:

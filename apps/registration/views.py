@@ -9,7 +9,6 @@ from forms import RegisterForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from models import BetaReg
 
-
 from apps.core.utils import render
 
 @require_POST
@@ -59,6 +58,7 @@ def auth_login(request):
                 login(request, user)
                 request.session.set_expiry(0)
                 messages.add_message(request, messages.INFO, "Du loggade just in.")
+
                 return HttpResponseRedirect(reverse('start'))
                 
             else:
