@@ -58,6 +58,13 @@ var display_notifications = function(data) {
 
 $(document).ready(function() {
      
+    /*
+    * Break out site from frames
+    *
+    */
+    if (top.location != self.location) {
+        top.location = self.location;
+    }
 
     /*
     * Updates
