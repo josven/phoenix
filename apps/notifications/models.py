@@ -19,6 +19,9 @@ class Notification(models.Model):
     # Type of notification, mail, frindrequest ect
     type = models.CharField(max_length="1024")
     
+    # Date created
+    date_created = models.DateTimeField(auto_now_add = True, null=True)
+    
     # Message, simple message that describes the notification
     message = models.CharField(max_length="1024")
     

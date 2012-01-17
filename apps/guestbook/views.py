@@ -10,7 +10,7 @@ from apps.notifications.models import Notification
  
 @never_cache
 @login_required(login_url='/auth/login/')
-def guestbook(request,userid,start=None):
+def guestbook(request,userid,start=None, id=None):
     """
     Guestbook
     
@@ -24,7 +24,11 @@ def guestbook(request,userid,start=None):
     if start == None:
         start = int(0)
 
-    posts = Guestbooks.active.filter(user_id=user.id).order_by('-date_created')[start:int(start)+increment+padding]
+    if id:
+        id = int( float( id ) )
+        posts = Guestbooks.active.filter(user_id=user.id, id__lt=id+1).order_by('-date_created')[start:int(start)+increment+padding]
+    else:
+        posts = Guestbooks.active.filter(user_id=user.id).order_by('-date_created')[start:int(start)+increment+padding]
 
     '''
     Notifications
@@ -81,6 +85,14 @@ def guestbook(request,userid,start=None):
         post_values['user_id'] = str(userid)
         form = GuestbookForm(post_values)
         if form.is_valid():
+            
+            try:
+                unreplied_id = post_values['unreplied'] 
+                unreplied = Notification.objects.get(receiver=request.user, instance_type="Guestbooks", instance_id=unreplied_id)
+                unreplied.delete()
+            except:
+                pass
+                
             guestbook = form.save()
         else:
             messages.add_message(request, messages.INFO, 'Nu blev det något fel')

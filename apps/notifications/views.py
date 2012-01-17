@@ -7,10 +7,31 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 
 from apps.notifications.models import *
+from django.http import HttpResponseRedirect  
+from apps.core.utils import render
 
 NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
 )
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def delete_notification(request):
+    
+    vars = {}
+    
+    if request.method == 'POST':
+        try:
+            notification_id = request.POST.get('notification')
+            notification_type = int( float(request.POST.get('type') ) )
+            notification = Notification.objects.get(receiver=request.user,instance_id=notification_id, type=notification_type)
+            if notification:
+                notification.delete()
+
+        except:
+            pass
+
+    return HttpResponseRedirect(request.META["HTTP_REFERER"]) 
 
 @never_cache
 @login_required(login_url='/auth/login/')
@@ -62,6 +83,38 @@ def get_notifications(request):
      
     return d
 
+    
+@never_cache
+@login_required(login_url='/auth/login/')    
+def notifications(request):
+    vars ={}
+    
+    notifications = Notification.objects.filter(receiver=request.user)
+
+    vars['notifications'] = notifications
+    
+    return render(request, "notifications.html", vars )
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
     
 '''
         for status in STATUS_CHOICES:
