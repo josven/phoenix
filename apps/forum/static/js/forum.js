@@ -160,5 +160,29 @@ jQuery(document).ready(function() {
 			{"iDataSort": 6, "sWidth": "22.5%" },
 			{ "bVisible":    false },
 		]
+    });    
+    
+    // OLD FORUM
+    $('#table_threads').dataTable({
+        "bAutoWidth": false,
+        "aaSorting": [[5,'desc']],
+        "bJQueryUI": true,
+        "oLanguage": {
+            "sLengthMenu": "Visar _MENU_ trådar per sida",
+            "sZeroRecords": "Hittade ingeting =(",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
+            "sSearch": "Filter"
+        },
+        "iDisplayLength": 10,
+        "aoColumns": [ 
+			null,
+			null,
+			null,
+			null,
+			null,
+			{ "bVisible":    false },
+		]
     });
 });
