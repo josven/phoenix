@@ -18,7 +18,7 @@ def updates(request, format):
     
     if request.is_ajax():
         if request.user.is_authenticated():
-            data = get_notifications(request.user)
+            data = get_notifications(request)
             
             if format == 'xml':
                 mimetype = 'application/xml; charset=utf8'
@@ -34,12 +34,12 @@ def updates(request, format):
     
         return HttpResponse(status=400)       
     
-@login_required(login_url='/auth/login/') 
+
 def get_notifications(request):
     
     d = {}
-
-    notifications = Notification.objects.filter(receiver=request.user)
+    user = request.user
+    notifications = Notification.objects.filter(receiver=user)
     
     if notifications:
 
