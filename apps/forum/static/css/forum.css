@@ -76,19 +76,21 @@ div.dataTables_paginate,
 div.dataTables_info {
 	padding: 6px;
 }
-table#table_threads a {
+
+
+table.tread_table a {
     color:#DDD;
     font-weight:bold;
     text-decoration:none;
 }
 
-table#table_threads {
+table.tread_table {
 	clear: both;
     width: 100%;
 }
 
-table#table_threads td,
-table#table_threads th {
+table.tread_table td,
+table.tread_table th {
 	padding: 5px;
 }
 

@@ -114,7 +114,7 @@ jQuery(document).ready(function() {
     
     
     // Apply datatables
-    $('#table_threads').dataTable({
+    $('#table_latest_replies').dataTable({
         "bAutoWidth": false,
         "aaSorting": [[5,'desc']],
         "bJQueryUI": true,
@@ -126,14 +126,38 @@ jQuery(document).ready(function() {
             "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
             "sSearch": "Filter"
         },
-        "iDisplayLength": 50,
+        "iDisplayLength": 10,
         "aoColumns": [ 
-			null,
-			null,
-			{"iDataSort": 3 },
+			{"sWidth": "25%"},
+			{"sWidth": "25%"},
+			{"iDataSort": 3, "sWidth": "22.5%" },
 			{ "bVisible":    false },
-			null,
-			{"iDataSort": 6 },
+			{"sWidth": "2.5%"},
+			{"iDataSort": 6, "sWidth": "22.5%" },
+			{ "bVisible":    false },
+		]
+    });
+    
+    $('#table_latest_threads').dataTable({
+        "bAutoWidth": false,
+        "aaSorting": [[3,'desc']],
+        "bJQueryUI": true,
+        "oLanguage": {
+            "sLengthMenu": "Visar _MENU_ trådar per sida",
+            "sZeroRecords": "Hittade ingeting =(",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
+            "sSearch": "Filter"
+        },
+        "iDisplayLength": 10,
+        "aoColumns": [ 
+			{"sWidth": "25%"},
+			{"sWidth": "25%"},
+			{"iDataSort": 3, "sWidth": "22.5%" },
+			{ "bVisible":    false },
+			{"sWidth": "2.5%"},
+			{"iDataSort": 6, "sWidth": "22.5%" },
 			{ "bVisible":    false },
 		]
     });
