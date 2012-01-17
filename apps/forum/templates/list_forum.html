@@ -10,6 +10,7 @@
 			<th>Trådtitel</th>
             <th>Kategorier</th>
             <th>Skapad</th>
+            <th>Skapad sortering (ID)</th>
 			<th>Antal svar</th>
 			<th>Senaste svar</th>
 			<th>Senaste svar sortering (ID)</th>
@@ -21,9 +22,10 @@
 			<td><a href="{% url read_forum forum.id %}">{{ forum.title }}</a></td>
 			<td>{% for tag in forum.tags.all %}<span class="ui-tag"><a href="{% url list_forum tag|urlencode %}">{{ tag|title }}</a></span>{% endfor %}</td>
 			<td>{{ forum.date_created|naturalday  }} {{ forum.date_created|time:"TIME_FORMAT"  }} av <a href="{{ forum.created_by.get_profile.get_absolute_url }}">{{ forum.created_by }}</a></td>
+			<td>{{ forum.id }}</td>
 			<td>{{ forum.get_posts_index }}</td>
 			<td>{% if forum.last_comment %}<a title="Gå till sensate svar" href="{% url read_forum forum.id %}#comment-{{ forum.last_comment.id }}"> {{ forum.last_comment.added|naturalday  }} {{ forum.last_comment.added|time:"TIME_FORMAT"  }} av {{ forum.last_comment.created_by }}</a>{% else %} Inga svar {% endif %}</td>
-			<td>{{ forum.id }}</td>
+			<td>{{ forum.last_comment.id }}</td>
 		</tr>
 {% if forloop.last %}
 	</tbody>

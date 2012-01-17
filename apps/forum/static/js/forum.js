@@ -130,9 +130,10 @@ jQuery(document).ready(function() {
         "aoColumns": [ 
 			null,
 			null,
+			{"iDataSort": 3 },
+			{ "bVisible":    false },
 			null,
-			null,
-			null,
+			{"iDataSort": 6 },
 			{ "bVisible":    false },
 		]
     });
