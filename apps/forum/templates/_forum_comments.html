@@ -19,7 +19,7 @@
     <h4 class="ui-widget-header entry-head">
         <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
         <div class="button-wrapper">
-            <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara</a>
+            <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara bara till {{ node.created_by }} och avvik ifrån konversationen i tråden</a>
         </div>
     </h4>
 
@@ -54,7 +54,7 @@
         
         <li class="accordion">
             <h4 class="ui-widget-header entry-head">
-                <a href="#">Fortsätt på tråden</a>
+                <a href="#">Delta i konversation, och svara alla</a>
             </h4> 
                           
             <div class="entry-content clearfix">
