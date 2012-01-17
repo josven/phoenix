@@ -512,7 +512,7 @@ $('a').each(function() {
            event.preventDefault();
            event.stopPropagation();
            window.open(this.href, '_blank');
-       });
+       }).attr('target','_blank');
    }
 });
 
