@@ -23,11 +23,11 @@ urlpatterns = patterns('',
     
     
     url(r'^list/$', 'apps.forum.views.list_forum', name='list_forum'),
-    url(r'^list/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.list_forum', name='list_forum'),
+    url(r'^list/(?P<tags>(.+)(,\s*.+)*)$', 'apps.forum.views.list_forum', name='list_forum'),
     
     url(r'^read/(?P<id>\d*)/$', 'apps.forum.views.read_forum', name='read_forum'),
     
-    url(r'^create/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.create_forum', name='create_forum'),
+    url(r'^create/(?P<tags>(.+)(,\s*.+)*)$', 'apps.forum.views.create_forum', name='create_forum'),
     url(r'^create/$', 'apps.forum.views.create_forum', name='create_forum'),
     
         
