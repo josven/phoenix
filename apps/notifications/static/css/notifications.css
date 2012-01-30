@@ -23,23 +23,23 @@ div.dataTables_info {
 }
 
 
-table.notification_table a {
+table#notification_table a {
     color:#DDD;
     font-weight:bold;
     text-decoration:none;
 }
 
-table.notification_table .button-mark {
+table#notification_table .button-mark {
     font-size:80%;
 }
 
-table.notification_table {
+table#notification_table {
 	clear: both;
     width: 100%;
 }
 
-table.notification_table td,
-table.notification_table th {
+table#notification_table td,
+table#notification_table th {
 	padding: 5px;
 }
 

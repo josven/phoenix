@@ -1,3 +1,4 @@
+
 var updateChat = function() {
    $.ajax({
       url: window.location.pathname,
@@ -11,6 +12,8 @@ var updateChat = function() {
             formatImageDialogs();
             bindReplyButton();
             hilightUserName();
+            $('#chat_form textarea, #chat_form input').prop('disabled', false);
+            $('#chat_form input').removeClass('ui-state-hover');
       }}
     });
 }
@@ -63,6 +66,9 @@ jQuery(document).ready(function() {
                 url: window.location.pathname,
                 cache: false,
                 data: formData,
+                beforeSend: function( ) {
+                    $('#chat_form textarea, #chat_form input').prop('disabled', true);
+                },
                 success: function () {
                     $('#chat_form textarea').val('');
                     $.jGrowl('Medelande skickat!');
@@ -70,12 +76,13 @@ jQuery(document).ready(function() {
                 },
                 error: function () {
                     $.jGrowl('Något blev fel!');
+                    $('#chat_form textarea, #chat_form input').prop('disabled', false);
                 }
             });
             return false;
         }
    });
-   
+        
    // Auto update
    var auto_refresh = setInterval(
     function ()
@@ -86,4 +93,5 @@ jQuery(document).ready(function() {
     }, 10000); // refresh every 10000 milliseconds
 
     $( "#autoupdate" ).button();
+
 });

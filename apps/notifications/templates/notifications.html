@@ -4,37 +4,40 @@
 {% block content %}
 
 {% for notification in notifications %}
-{% if notification.type == '1' %}
 {% if forloop.first %}
-<h2>Gästboksinlägg</h2>
-<table id="table_latest_guestbook" class="notification_table">
+<h2>Notifieringar</h2>
+<table id="notification_table">
 	<thead>
 		<tr>
+            <th>Typ</th>
+            <th>Beskrivning</th>
             <th>Status</th>
             <th>Tid</th>
             <th>Från</th>
 			<th>Länk</th>
-			<th>Markera</th>
+			<th>Ta bort</th>
 			<th>ID (Sortering)</th>
 		</tr>
 	</thead>
 	<tbody>
 {% endif %}
 		<tr class="ui-widget-content">
-			<td>{% if notification.status < 3 %}Nytt{% else %}Obesvarat{% endif %}</td>
+			<td>{{ notification }}</td>
+			<td>{{ notification.message }}</td>
+			<td>{{ notification.get_status }}</td>
 			<td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
 			<td><a href="{{ notification.sender.get_profile.get_absolute_url }}">{{ notification.sender }}</a></td>
-			<td><a href="{% url guestbook_entry request.user.id notification.instance_id %}">Gå till gästboken</a></td>
-			<td><form action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="1" id="t{{ notification.id }}" name="type" ><input type="hidden" value="{{ notification.instance_id }}" id="n{{ notification.instance_id }}" name="notification" ><input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" /></form></td>
+			<td><a href="{{ notification.instance_url }}">Gå till {{ notification|lower }}</a></td>
+			<td><form action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" ><input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" /></form></td>
 			<td>{{ notification.id }}</td>
 		</tr>
 {% if forloop.last %}
 	</tbody>
 </table>
 {% endif %}
-{% endif %}
+
 {% empty %}
-<h2>Inga gästboksinlägg</h2>
+<h2>Inga notifieringar</h2>
 {% endfor %}
 
 {% endblock content %}

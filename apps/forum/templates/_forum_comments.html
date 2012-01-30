@@ -15,10 +15,11 @@
 
 <ul class="flat-list entrylist forumtree">
 {% recursetree comments %}
-<li class="entry ui-widget ui-widget-content" id="comment-{{ node.id }}">
+<li class="{% if node.id in hilighted %}ui-state-active{% endif %} entry ui-widget ui-widget-content" id="comment-{{ node.id }}">
     <h4 class="ui-widget-header entry-head">
         <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
         <div class="button-wrapper">
+            {% if node.id in unreplied or node.id in hilighted %}<form action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="2" id="t{{ node.id }}" name="type" ><input type="hidden" value="{{ node.id }}" id="i{{ node.id }}" name="instance_id" ><input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" /></form>{% endif %}
             <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara bara till {{ node.created_by }} och avvik ifrån konversationen i tråden</a>
         </div>
     </h4>
@@ -36,11 +37,16 @@
 
     
     <div class="entry-content clearfix">
+    
+        {% if node.id in unreplied %}<h1>unreplied</h1>{% endif %}
         {{ node.comment|urlize|textile  }}
     
         <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
             {% csrf_token %}
             <textarea name="comment"></textarea>
+            {% if node.id in unreplied %}
+            <input type="hidden" name="unreplied" value="{{ node.id }}">
+            {% endif %}
             <input type="hidden" name="parent_id" value="{{ node.id}}">
         </form>
     </div>

@@ -10,6 +10,8 @@
         {% else %}
         <li><a href="{% url create_forum %}">Skapa tråd</a></li>
         {% endif %}
+        <li><a href="{% url read_forum %}">Gamla forumet</a></li>
+        
         <li><h4 class="ui-widget-header entry-head">Huvudkategorier</h4></li>
         {% for tag in categories %}
         <li><a href="{% url list_forum tag %}">{{ tag|title }}</a></li>

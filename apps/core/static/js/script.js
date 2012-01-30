@@ -3,7 +3,7 @@
 // the dialog when clicked on.
 
 var testvar;
-
+                    
 var formatImageDialogs = function() {
     $('.entry-content img, .ui-text-panel img')
         .attr('height','80')
@@ -27,34 +27,67 @@ var formatJsReplyButton = function() {
 };
 
 
-
+// Data to catch
+var get_data = {
+                "n": true,
+                };
+                
 // process all new updates
 var process_updates = function(data) {
-        
+  
     // Display new notifications 
-    display_notifications(data);
-
+    update_notifications(data);
+    
+    // Display indicators
+    update_indicators(data);
 }
 
 
-var display_notifications = function(data) {
-     
- 
+var update_notifications = function(data) {
+
     // Annonce guestbook notifications
-    if ( data.a.gb == 1 ) {
-        $.jGrowl( "Nytt gästboksinlägg" );
-    } else if ( data.a.gb > 1 ) {
-        $.jGrowl( String( data.a.gb ) + " nya gästboksinlägg" );
-    }
-    
-    // Set guestbook indicator
-    if ( data.i.gb > 0 ) {
-        $('#gb-indicator').html(data.i.gb);
+    if ( data.a.gb != 0 ) {
         
+        if ( data.a.gb == 1 ) {
+            $.jGrowl( "Nytt gästboksinlägg" );
+        
+        } else if ( data.a.gb > 1 ) {
+            $.jGrowl( String( data.a.gb ) + " nya gästboksinlägg" );
+        }
+    }
+    // Annonce forum notifications
+    if ( data.a.fo != 0 ) {
+        
+        if ( data.a.fo == 1 ) {
+            $.jGrowl( "Nytt svar i forumet" );
+        
+        } else if ( data.a.fo > 1 ) {
+            $.jGrowl( String( data.a.fo ) + " nya svar i forumet" );
+        }
     }
 };
 
+var update_indicators = function(data) {
 
+    // Set guestbook indicator
+    if ( data.i.gb != 0 ) {
+        if ( data.i.gb > 0 ) {
+            $('#gb-indicator').html(data.i.gb);    
+        }
+    }
+    // Set guestbook indicator
+    if ( data.i.fc != 0 ) {
+        if ( data.i.fc > 0 ) {
+            $('#fc-indicator').html(data.i.fc);    
+        }
+    }
+}
+
+var update_chat = function(data) {
+    
+    
+
+}
 
 $(document).ready(function() {
      
@@ -70,25 +103,22 @@ $(document).ready(function() {
     * Updates
     *
     */ 
-    
-    // Data to catch
-    var get_data = {
-                    "n": true,
-                    };
                     
    // Auto updater
    var auto_update = setInterval(
     
     function ()
     {
-        console.log('UPDATE!');
         $.ajax({
             data: get_data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             url: "/notifications/updates.json",
-            success: function(data){ 
+            success: function(data){
                 process_updates( data );
+            },
+            error: function() {
+                $.jGrowl("Något fel har inträffat");
             }
         });
         

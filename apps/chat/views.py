@@ -60,7 +60,7 @@ def chat(request):
     else:
         form = PostForm()
 
-    if request.is_ajax():
+    if request.is_ajax() and request.method == 'GET':
         posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
         
         client_post = int(float( request.GET.get('s', '0') ) )

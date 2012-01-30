@@ -10,6 +10,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from apps.core.models import ThreadedEntry, ThreadedEntryHistory, Entry, EntryHistory
 from apps.articles.models import Article
 
+from apps.core.signals import *
 
 ''' NEW FORUM '''
 
@@ -54,6 +55,10 @@ class ForumComment(MPTTModel):
     class MPTTMeta:
         # comments on one level will be ordered by date of creation
         order_insertion_by=['added']
+        
+    def get_absolute_url(self):
+        return "/forum/read/{0}/#comment-{1}".format( self.post.id, self.id )
+        
         
 ''' END NEW FORUM '''   
 

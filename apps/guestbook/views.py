@@ -56,6 +56,7 @@ def guestbook(request,userid,start=None, id=None):
             if post.id in hilight_numbers:
                 post.hajlajt = True
                 hilight_posts.append( post.id )
+                post.unreplied = True
             
             if post.id in unreplied_munber:
                 post.unreplied = True

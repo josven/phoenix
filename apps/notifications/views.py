@@ -12,6 +12,7 @@ from apps.core.utils import render
 
 NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
+    (2, 'Forumsvar'),
 )
 
 @never_cache
@@ -21,15 +22,20 @@ def delete_notification(request):
     vars = {}
     
     if request.method == 'POST':
-        try:
-            notification_id = request.POST.get('notification')
-            notification_type = int( float(request.POST.get('type') ) )
-            notification = Notification.objects.get(receiver=request.user,instance_id=notification_id, type=notification_type)
+        
+        notification_id = request.POST.get('notification_id', None)       
+        instance_id = request.POST.get('instance_id', None)        
+        type = request.POST.get('type', None)
+        
+        if notification_id:      
+            notification = Notification.objects.get(receiver=request.user,id=notification_id)       
             if notification:
-                notification.delete()
+                notification.delete()      
 
-        except:
-            pass
+        elif instance_id and type:
+            notification = Notification.objects.get(receiver=request.user, instance_id=instance_id, type=type)        
+            if notification:
+                notification.delete()      
 
     return HttpResponseRedirect(request.META["HTTP_REFERER"]) 
 
@@ -62,10 +68,13 @@ def get_notifications(request):
     user = request.user
     notifications = Notification.objects.filter(receiver=user)
     
-    if notifications:
+    count_new_guestbook = 0
+    count_indicator_guestbook = 0
 
-        count_new_guestbook = 0
-        count_indicator_guestbook = 0
+    count_new_forum = 0
+    count_indicator_forum = 0
+        
+    if notifications:
         
         for notification in notifications:
         
@@ -77,9 +86,19 @@ def get_notifications(request):
             
             # Get guestbook indicator       
             if ( notification.instance_type == "Guestbooks" ) & ( int( float( notification.status ) ) < 4 ):
-                count_indicator_guestbook += 1
+                count_indicator_guestbook += 1    
+                
+            # Get new forum annuoucements            
+            if ( notification.instance_type == 'ForumComment' ) & ( int( float( notification.status ) ) == 1 ):
+                count_new_forum += 1
+                notification.status = 2
+                notification.save()
+            
+            # Get forum indicator       
+            if ( notification.instance_type == 'ForumComment' ) & ( int( float( notification.status ) ) < 4 ):
+                count_indicator_forum += 1
         
-        d = { 'a' : { 'gb' : count_new_guestbook }, 'i' : { 'gb' : count_indicator_guestbook } }
+    d = { 'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum }, 'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum } }
      
     return d
 

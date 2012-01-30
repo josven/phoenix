@@ -10,6 +10,8 @@ from apps.core.utils import render, validate_internal_tags
 from models import *
 from forms import *
 
+from apps.notifications.models import Notification
+
 ''' New forum '''
 
 
@@ -23,7 +25,8 @@ def list_forum(request, tags=None):
     
     """
     vars = {
-        "categories":defaultCategories.objects.all()
+        "categories":defaultCategories.objects.all(),
+        "notes" : Notification.objects.filter(receiver=request.user, instance_type="ForumComment"),
         }
             
     if tags:
@@ -56,7 +59,28 @@ def read_forum(request, id):
         
     vars['forum'] = Forum.objects.get(id=id)
     vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
+  
+    '''
+    Notifications
+    '''
+    # List of ID:s to filter
+    object_id_list = [ post.id for post in vars['comments'] ]    
+    notes = Notification.objects.filter(receiver=request.user, instance_type="ForumComment", instance_id__in = object_id_list)
     
+    #Get hilighted
+    hilighted = [ note.instance_id for note in notes if note.status < 3]  
+    vars['hilighted'] = hilighted
+    
+    # Get unreplied
+    unreplied = [ note.instance_id for note in notes if note.status == 4]
+    vars['unreplied'] = unreplied
+    
+    #Set status on hilightes to unreplied
+    for note in notes:
+        if note.instance_id in hilighted:
+            note.status = 4
+            note.save()   
+       
     return render(request, 'read_forum.html', vars )
 
 
@@ -143,6 +167,12 @@ def comment_forum(request,forum_id):
                 author=author,
                 comment=request.POST['comment'],
             )
+            
+            # If this is an answear to an unreplied post, remove the notification
+            instance_id = request.POST.get('unreplied', None)
+            if instance_id:
+                note = Notification.objects.get(receiver=request.user, instance_type="ForumComment", instance_id = instance_id)
+                note.delete()
             
             # if this is a reply to a comment, not to a post
             if request.POST['parent_id'] != '':

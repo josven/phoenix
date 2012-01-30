@@ -19,5 +19,4 @@ class Guestbooks(Entry):
     text = models.CharField(max_length=5120)
 
     def get_absolute_url(self):
-        return "/user/{0}/guestbook/".format( self.user_id.id )
-
+        return "/user/{0}/guestbook/entry/{1}".format( self.user_id.id, self.id )

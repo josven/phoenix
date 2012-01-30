@@ -1,5 +1,7 @@
 jQuery(document).ready(function() {
-
+    
+    $( "#tabs" ).tabs();
+    
     $('.forumtree .accordion').accordion({
         collapsible: true,
         active: false,            
@@ -160,7 +162,34 @@ jQuery(document).ready(function() {
 			{"iDataSort": 6, "sWidth": "22.5%" },
 			{ "bVisible":    false },
 		]
+    });     
+
+    $('#notification_table').dataTable({
+        "bAutoWidth": false,
+        "aaSorting": [[6,'desc']],
+        "bJQueryUI": true,
+        "oLanguage": {
+            "sLengthMenu": "Visar _MENU_ notifieringar per sida",
+            "sZeroRecords": "Inga notifieringar",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ notifieringar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal notifieringar)",
+            "sSearch": "Filter"
+        },
+        "iDisplayLength": 30,
+        "aoColumns": [ 
+			{"sWidth": "40%"},
+			{"sWidth": "10%"},
+			{"sWidth": "10%"},
+			{"sWidth": "15%"},
+			{"sWidth": "15%", "iDataSort": 6},
+            {"sWidth": "10%"},
+			{ "bVisible":    false }
+		],
+        "sDom": '<"H"l<"form_wrapper">fr>t<"F"ip>'
     });    
+    
+    $('input.button-mark').button();    
     
     // OLD FORUM
     $('#table_threads').dataTable({

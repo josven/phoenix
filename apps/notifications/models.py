@@ -7,12 +7,16 @@ from django.contrib.auth.models import User
 from apps.guestbook.models import Guestbooks
 
 STATUS_CHOICES = (
-    (1, 'New'),
-    (2, 'Announced'),
-    (3, 'Hilighted'),
-    (4, 'Unreplied'),
+    (1, u'Nytt'),
+    (2, u'Nytt'),
+    (3, u'Obesvarat'),
+    (4, u'Obesvarat'),
 )
 
+NOTIFICATION_TYPES = (
+    (1, u'Gästboksinlägg'),
+    (2, u'Forumsvar'),
+)
 
 class Notification(models.Model):
     
@@ -39,4 +43,11 @@ class Notification(models.Model):
     instance_type = models.CharField(max_length="1024")
     instance_id = models.IntegerField()
     instance_url = models.CharField(max_length="1024", blank=True, null=True)
+    
+    def __unicode__(self):        
+        return NOTIFICATION_TYPES[ int( float( self.type ) ) - 1 ][1]
+        
+    def get_status(self):
+        return STATUS_CHOICES[ int( float( self.status ) ) - 1 ][1]
+    
     

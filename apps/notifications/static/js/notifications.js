@@ -1,8 +1,8 @@
 jQuery(document).ready(function() {
-
-    oTable = $('#table_latest_guestbook').dataTable({
+    
+    oTable = $('#notification_table').dataTable({
         "bAutoWidth": false,
-        "aaSorting": [[4,'desc']],
+        "aaSorting": [[7,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ notifieringar per sida",
@@ -14,11 +14,13 @@ jQuery(document).ready(function() {
         },
         "iDisplayLength": 30,
         "aoColumns": [ 
-			{"sWidth": "25%"},
-			{"sWidth": "25%"},
-			{"sWidth": "25%"},
-			{"sWidth": "20%", "iDataSort": 5},
-            {"sWidth": "5%"},
+			{"sWidth": "10%"},
+			{"sWidth": "30%"},
+			{"sWidth": "10%"},
+			{"sWidth": "10%"},
+			{"sWidth": "15%"},
+			{"sWidth": "15%", "iDataSort": 7},
+            {"sWidth": "10%"},
 			{ "bVisible":    false }
 		],
         "sDom": '<"H"l<"form_wrapper">fr>t<"F"ip>'
