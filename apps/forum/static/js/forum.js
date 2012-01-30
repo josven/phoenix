@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
     
     $( "#tabs" ).tabs();
-    
+
     $('.forumtree .accordion').accordion({
         collapsible: true,
         active: false,            
