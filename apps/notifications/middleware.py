@@ -25,8 +25,8 @@ class AnnonuceNotifications(object):
                         if guestbook_annoncements == 1:
                             messages.add_message(request, messages.INFO, "Nytt gästboksinlägg")
                         
-                        if guestbook_announcements > 1:
-                            messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_announcements ) )
+                        if guestbook_annoncements > 1:
+                            messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_annoncements ) )
                         
                     # Get forum annoncements
                     forum_annoncements = annoncements.get('fo', None)
