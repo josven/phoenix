@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from sets import Set
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -32,20 +33,34 @@ def forum_reciver(sender, **kwargs):
     instance = kwargs['instance']
     
     if instance.parent:
-        receiver = instance.parent.created_by
+        receivers = [instance.parent.created_by]
     else:
-        receiver = instance.post.created_by       
+        receivers = [instance.post.created_by]     
 
-    notification = Notification(
-        type = 2, #forumcomment
-        message = u'Svar i tråden "{0}"'.format( instance.post.title ),
-        status = 1, #NEW
-        receiver = receiver,
-        sender = instance.created_by,
-        sender_name = instance.created_by.username,
-        instance_type = instance.__class__.__name__,
-        instance_id = instance.id,
-        instance_url = instance.get_absolute_url(),
-        )
-        
-    notification.save()
+    # Need to notify all siblings theres a new post
+    if instance.is_child_node():
+        try:
+            siblings = instance.get_siblings(include_self=False)
+            siblings_receivers = [sibling.created_by for sibling in siblings]
+            receivers += siblings_receivers
+        except:
+            pass
+    
+    # Reduce list for recivers, so no one get duplicate notifications
+    receivers = sorted(set(receivers))
+    
+    for receiver in receivers:
+        if receiver != instance.created_by:
+            notification = Notification(
+                type = 2, #forumcomment
+                message = u'Svar i tråden "{0}"'.format( instance.post.title ),
+                status = 1, #NEW
+                receiver = receiver,
+                sender = instance.created_by,
+                sender_name = instance.created_by.username,
+                instance_type = instance.__class__.__name__,
+                instance_id = instance.id,
+                instance_url = instance.get_absolute_url(),
+                )
+                
+            notification.save()

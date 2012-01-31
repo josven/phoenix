@@ -22,9 +22,9 @@ def delete_notification(request):
     vars = {}
     
     if request.method == 'POST':
-        
-        notification_id = request.POST.get('notification_id', None)       
-        instance_id = request.POST.get('instance_id', None)        
+            
+        notification_id = request.POST.get('notification_id', None)     
+        instance_id = request.POST.get('instance_id', None)                 
         type = request.POST.get('type', None)
         
         if notification_id:      

@@ -168,17 +168,35 @@ def comment_forum(request,forum_id):
                 comment=request.POST['comment'],
             )
             
-            # If this is an answear to an unreplied post, remove the notification
-            instance_id = request.POST.get('unreplied', None)
-            if instance_id:
-                note = Notification.objects.get(receiver=request.user, instance_type="ForumComment", instance_id = instance_id)
-                note.delete()
             
             # if this is a reply to a comment, not to a post
             if request.POST['parent_id'] != '':
                 comment.parent = ForumComment.objects.get(id=request.POST['parent_id'])
             
+            # Save comment
             comment.save()
+            
+            # Get instance ids for all siblings
+            # if there are any unreplied siblings we need to remove them
+            instance_ids = []
+            if comment.is_child_node():              
+                try:
+                    siblings = comment.get_siblings(include_self=False)
+                    instance_ids = [sibling.id for sibling in siblings]
+                except:
+                    pass
+
+            # If this is an answear to an unreplied post, include them in the
+            # in the instance array for notification remowal
+            instance_id = request.POST.get('unreplied', None)
+            if instance_id:
+                instance_ids += [instance_id]
+                
+            # Remowe notifications
+            if instance_ids:
+                notes = Notification.objects.filter(receiver=request.user, instance_type="ForumComment", instance_id__in = instance_ids)
+                for note in notes:
+                    note.delete()
             
             post.last_comment = comment
             
