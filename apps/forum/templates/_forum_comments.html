@@ -38,7 +38,6 @@
     
     <div class="entry-content clearfix">
     
-        {% if node.id in unreplied %}<h1>unreplied</h1>{% endif %}
         {{ node.comment|urlize|textile  }}
     
         <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
