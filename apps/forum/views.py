@@ -189,6 +189,7 @@ def comment_forum(request,forum_id):
             # If this is an answear to an unreplied post, include them in the
             # in the instance array for notification remowal
             instance_id = request.POST.get('unreplied', None)
+
             if instance_id:
                 instance_ids += [instance_id]
                 

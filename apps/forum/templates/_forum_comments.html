@@ -19,7 +19,19 @@
     <h4 class="ui-widget-header entry-head">
         <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
         <div class="button-wrapper">
-            {% if node.id in unreplied or node.id in hilighted %}<form action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="2" id="t{{ node.id }}" name="type" ><input type="hidden" value="{{ node.id }}" id="i{{ node.id }}" name="instance_id" ><input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" /></form>{% endif %}
+            {% if node.id in unreplied or node.id in hilighted %}
+            <form action="{% url delete_notification %}" method="post" >
+                {% csrf_token %}
+                <input type="hidden" value="2" id="t{{ node.id }}" name="type" >
+                <input type="hidden" value="{{ node.id }}" id="i{{ node.id }}" name="instance_id" >
+                
+                {% if node.id in unreplied %}
+                <input type="hidden" name="unreplied" value="{{ node.id }}">
+                {% endif %}
+
+                <input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" />
+            </form>
+            {% endif %}
             <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara bara till {{ node.created_by }} och avvik ifrån konversationen i tråden</a>
         </div>
     </h4>
@@ -37,7 +49,7 @@
 
     
     <div class="entry-content clearfix">
-    
+
         {{ node.comment|urlize|textile  }}
     
         <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
