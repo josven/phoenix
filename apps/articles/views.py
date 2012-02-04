@@ -133,8 +133,7 @@ def read_article(request,user_id=None, id=None):
         """
         return all articles
         """
-        
-        vars['articles'] = Article.objects.all()
+
         vars['notes'] = Notification.objects.filter(receiver=request.user, instance_type="ArticleComment")
 
         return render(request,'articles.html', vars)

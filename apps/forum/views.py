@@ -65,18 +65,7 @@ def list_forum(request, tags=None):
             
     if tags:
         tags_array = tags.split(",")
-        forums = Forum.active.filter(tags__name__in=tags_array)
         vars['tags'] = tags
-        
-        if len( forums ) < 1:
-            messages.add_message(request, messages.INFO, 'Hittade inga trådar =(')
-        else:
-            vars['forums'] = forums
-
-    else:
-        vars['forums'] = Forum.active.all()
-       
-
     
     return render(request, 'list_forum.html', vars )
 
@@ -309,7 +298,6 @@ def create_thread(request, tags=None):
             # Validate INTERNAL tags
             all_tags = validate_internal_tags(request, all_tags) 
             
-            print all_tags
             # Create the thread
             thread = Thread.objects.create(
                 created_by = request.user,
