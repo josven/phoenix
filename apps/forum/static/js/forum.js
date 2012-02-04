@@ -1,10 +1,10 @@
 jQuery(document).ready(function() {
     
     
-    $('#table_threads').dataTable({
+    var table_threads = $('#table_threads').dataTable({
         "bServerSide": true,
         "bJQueryUI": true,
-        "aaSorting": [[5,'desc']],
+        "aaSorting": [[3,'desc']],
         "bAutoWidth": false,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ trådar per sida",
@@ -32,6 +32,16 @@ jQuery(document).ready(function() {
 
 
     $( "#tabs" ).tabs();
+
+    // Soring tabs
+    $('.js-sort-latest-threads').click( function () {
+        table_threads.fnSort( [ [3,'desc'] ] );
+
+    });
+    
+    $('.js-sort-latest-replies').click( function () {
+        table_threads.fnSort( [ [5,'desc'] ] );
+    });
 
     $('.forumtree .accordion').accordion({
         collapsible: true,

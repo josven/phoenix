@@ -79,23 +79,43 @@ var update_notifications = function(data) {
 
 var update_indicators = function(data) {
 
+    var window_indicator = 0;
+    console.log(window_indicator);
     // Set guestbook indicator
     if ( data.i.gb != 0 ) {
-        if ( data.i.gb > 0 ) {
-            $('#gb-indicator').html("(" + data.i.gb + ")");    
-        }
+        $('#gb-indicator').html("(" + data.i.gb + ")");    
+        window_indicator += data.i.gb;
+        console.log(window_indicator);
+    } else {
+        $('#gb-indicator').html("");
     }
+    
     // Set guestbook indicator
-    if ( data.i.fc != 0 ) {
-        if ( data.i.fc > 0 ) {
-            $('#fc-indicator').html("(" + data.i.fc + ")");    
-        }
+    if ( data.i.fo != 0 ) {
+        $('#fc-indicator').html("(" + data.i.fo + ")");
+        window_indicator += data.i.fo;
+
+        console.log(data.i.fo);
+        console.log(window_indicator);
+    } else {
+        $('#fc-indicator').html("");
     }    
+
     // Set guestbook indicator
     if ( data.i.ar != 0 ) {
-        if ( data.i.ar > 0 ) {
-            $('#ar-indicator').html("(" + data.i.ar + ")");    
-        }
+        $('#ar-indicator').html("(" + data.i.ar + ")");
+        window_indicator += data.i.ar; 
+        console.log(window_indicator);
+    } else {
+        $('#ar-indicator').html("");    
+    }
+    
+    // Window title indicator
+    if ( window_indicator != 0 ) {
+        $('title').html('('+ window_indicator +') phx');
+        console.log(window_indicator);
+    } else {
+        $('title').html('PHX');
     }
 }
 

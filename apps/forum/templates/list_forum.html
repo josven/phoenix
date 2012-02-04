@@ -4,7 +4,8 @@
 {% block content %}
 <div id="tabs">
     <ul>
-        <li><a href="#tabs-1">Trådar</a></li>
+        <li><a class="js-sort-latest-threads" href="#tabs-1">Senaste trådar</a></li>
+        <li><a class="js-sort-latest-replies" href="#tabs-1">Senaste Svar</a></li>
         {% if notes %}<li><a href="#tabs-2">Notifieringar ({{ notes|length }})</a></li>{% endif %}
     </ul>
 
