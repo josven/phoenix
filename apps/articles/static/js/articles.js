@@ -98,28 +98,58 @@ jQuery(document).ready(function() {
                 e.metaKey = e.ctrlKey;
             }
         });
-    
-    // Apply datatables
+
     $('#table_articles').dataTable({
-        "bAutoWidth": false,
+        "bServerSide": true,
+        "bJQueryUI": true,
         "aaSorting": [[4,'desc']],
+        "bAutoWidth": false,
+        "oLanguage": {
+            "sLengthMenu": "Visar _MENU_ artiklar per sida",
+            "sZeroRecords": "Hittade ingeting =(",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ artiklar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 artiklar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal artiklar)",
+            "sSearch": "Sök bland artikeltitlar"
+        },
+        "sAjaxSource": window.location.pathname + "json/",
+        "aoColumns": [
+                        { "mDataProp": "title", "bSortable": false},
+                        { "mDataProp": "created", "iDataSort": 4 , "bSearchable" : false},
+                        { "mDataProp": "tags" , "bSortable": false, "bSearchable" : false},                       
+                        { "mDataProp": "allow_comments", "bSearchable" : false, "bSortable": false},
+                        { "mDataProp": "id" , "bSortable": true, "bSearchable" : false,"bVisible": false }
+                ],
+        "fnDrawCallback": function() {
+            $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
+        }
+    });  
+
+
+    $('#notification_table').dataTable({
+        "bAutoWidth": false,
+        "aaSorting": [[5,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ trådar per sida",
-            "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
+            "sLengthMenu": "Visar _MENU_ notifieringar per sida",
+            "sZeroRecords": "Inga notifieringar",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ notifieringar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 notifieringar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal notifieringar)",
             "sSearch": "Filter"
-            
         },
-        "iDisplayLength": 50,
+        "iDisplayLength": 30,
         "aoColumns": [ 
-			null,
-			null,
-			null,
-			null,
-			{ "bVisible":    false },
-		]
-    });
+            {"sWidth": "50%"},
+            {"sWidth": "10%"},
+            {"sWidth": "15%"},
+            {"sWidth": "20%"},
+            {"sWidth": "5%", "iDataSort": 5},
+            { "bVisible":    false }
+        ],
+        "sDom": '<"H"l<"form_wrapper">fr>t<"F"ip>'
+    }); 
+
+    $( "#tabs" ).tabs();
+
 });

@@ -1,3 +1,7 @@
+/* jquery-ui tabs */
+.ui-tabs { padding:0;}
+.ui-tabs .ui-tabs-panel { padding:0;}
+
 .categories .ui-selecting { background: #eee; }
 .categories .ui-selected{ background: #888; color: #fff; }
 .categories { list-style-type: none; margin: 0; padding: 0; width: 60%; }
@@ -106,20 +110,22 @@ div.dataTables_paginate,
 div.dataTables_info {
 	padding: 6px;
 }
-table#table_articles a {
+
+
+table.articles_table a {
     color:#DDD;
     font-weight:bold;
     text-decoration:none;
 }
 
-table#table_articles {
-	clear: both;
+table.articles_table {
+    clear: both;
     width: 100%;
 }
 
-table#table_articles td,
-table#table_articles th {
-	padding: 5px;
+table.articles_table td,
+table.articles_table th {
+    padding: 5px;
 }
 
 div.dataTables_wrapper:after {

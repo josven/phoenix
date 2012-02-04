@@ -64,6 +64,16 @@ var update_notifications = function(data) {
         } else if ( data.a.fo > 1 ) {
             $.jGrowl( String( data.a.fo ) + " nya svar i forumet" );
         }
+    }    
+    // Annonce article notifications
+    if ( data.a.ar != 0 ) {
+        
+        if ( data.a.ar == 1 ) {
+            $.jGrowl( "Ny artikelkommentar" );
+        
+        } else if ( data.a.ar > 1 ) {
+            $.jGrowl( String( data.a.ar ) + " nya artikelkommentarer" );
+        }
     }
 };
 
@@ -72,13 +82,19 @@ var update_indicators = function(data) {
     // Set guestbook indicator
     if ( data.i.gb != 0 ) {
         if ( data.i.gb > 0 ) {
-            $('#gb-indicator').html(data.i.gb);    
+            $('#gb-indicator').html("(" + data.i.gb + ")");    
         }
     }
     // Set guestbook indicator
     if ( data.i.fc != 0 ) {
         if ( data.i.fc > 0 ) {
-            $('#fc-indicator').html(data.i.fc);    
+            $('#fc-indicator').html("(" + data.i.fc + ")");    
+        }
+    }    
+    // Set guestbook indicator
+    if ( data.i.ar != 0 ) {
+        if ( data.i.ar > 0 ) {
+            $('#ar-indicator').html("(" + data.i.ar + ")");    
         }
     }
 }

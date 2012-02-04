@@ -1,7 +1,13 @@
 import datetime
 
+from urllib import quote
+
 from django.db import models
 from django.contrib.auth.models import User
+
+from django.contrib.humanize.templatetags.humanize import naturalday
+from django.core.urlresolvers import reverse
+
 from django.db.models import get_model
 
 from taggit.managers import TaggableManager
@@ -25,6 +31,37 @@ class Forum(Entry):
     last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None)
     posts_index = models.IntegerField(null=True, blank=True)
 
+
+    def aaData(self):
+        """
+        aaData formats for datatables
+        """
+
+        title = u"<a href=\"{0}\" >{1}</a>".format( self.get_absolute_url(), self.title )
+        tags = [u"<span class=\"ui-tag\"><a href=\"{0}\">{1}</a></span>".format( reverse( 'list_forum', args = [ tag.name ]), unicode(tag.name).title()  ) for tag in self.tags.all()]
+        created = u"{0} {1} av <a href=\"{2}\">{3}</a>".format(naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.get_profile().get_absolute_url(), self.created_by.username)
+
+        data =  {
+                'title': title,
+                'tags' : u" ".join( tags ),
+                'created': created,
+                'index' : self.id,
+                'posts_index': self.posts_index,
+
+                }
+
+
+        if self.last_comment:
+            last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.last_comment.get_absolute_url(), naturalday(self.last_comment.added), self.last_comment.added.strftime("%H:%M"), self.last_comment.created_by.username)
+            data['last_comment'] = last_comment
+            data['last_comment_index'] = self.last_comment.id
+        else:
+            data['last_comment'] = " "
+            data['last_comment_index'] = " "
+           
+        return data
+        
+        
     def get_posts_index(self):
     
         if not self.posts_index:

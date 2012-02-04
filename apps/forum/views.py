@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
+
+
+import json
+from django.http import HttpResponse
+
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
-from apps.core.utils import render, validate_internal_tags
+from apps.core.utils import render, validate_internal_tags, get_datatables_records
 from models import *
 from forms import *
 
@@ -14,6 +19,35 @@ from apps.notifications.models import Notification
 
 ''' New forum '''
 
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def list_forum_json(request, tags=None):
+
+    if request.is_ajax():
+
+        #initial querySet
+        if tags:
+            tags_array = tags.split(",")
+            querySet = Forum.active.filter(tags__name__in=tags_array)
+        else:          
+            querySet = Forum.active.all()
+
+        #columnIndexNameMap is required for correct sorting behavior
+        columnIndexNameMap = { 
+                                0: 'title',
+                                1 : 'tags',
+                                2: 'date_created',
+                                3: 'id',
+                                4: 'posts_index',
+                                5: 'last_comment__id',
+                                6: 'last_comment__id',
+                            }
+
+        #call to generic function from utils
+        return get_datatables_records(request, querySet, columnIndexNameMap)
+
+    raise Http404 
 
 
 @never_cache
@@ -72,7 +106,7 @@ def read_forum(request, id):
     vars['hilighted'] = hilighted
     
     # Get unreplied
-    unreplied = [ note.instance_id for note in notes if note.status == 4]
+    unreplied = [ note.instance_id for note in notes if note.status <= 4]
     vars['unreplied'] = unreplied
     
     #Set status on hilightes to unreplied

@@ -8,6 +8,7 @@ from apps.notifications.models import *
 #from apps.articles.models import Article
 from apps.guestbook.models import Guestbooks
 from apps.forum.models import ForumComment
+from apps.articles.models import ArticleComment
 
 
 @receiver(post_save, sender=Guestbooks)
@@ -54,6 +55,44 @@ def forum_reciver(sender, **kwargs):
             notification = Notification(
                 type = 2, #forumcomment
                 message = u'Svar i tråden "{0}"'.format( instance.post.title ),
+                status = 1, #NEW
+                receiver = receiver,
+                sender = instance.created_by,
+                sender_name = instance.created_by.username,
+                instance_type = instance.__class__.__name__,
+                instance_id = instance.id,
+                instance_url = instance.get_absolute_url(),
+                )
+                
+            notification.save()    
+
+
+@receiver(post_save, sender=ArticleComment)
+def article_reciver(sender, **kwargs):
+    instance = kwargs['instance']
+    
+    if instance.parent:
+        receivers = [instance.parent.created_by]
+    else:
+        receivers = [instance.post.created_by]     
+
+    # Need to notify all siblings theres a new post
+    if instance.is_child_node():
+        try:
+            siblings = instance.get_siblings(include_self=False)
+            siblings_receivers = [sibling.created_by for sibling in siblings]
+            receivers += siblings_receivers
+        except:
+            pass
+    
+    # Reduce list for recivers, so no one get duplicate notifications
+    receivers = sorted(set(receivers))
+    
+    for receiver in receivers:
+        if receiver != instance.created_by:
+            notification = Notification(
+                type = 3, #articleomment
+                message = u'Kommentar i artiklen "{0}"'.format( instance.post.title ),
                 status = 1, #NEW
                 receiver = receiver,
                 sender = instance.created_by,

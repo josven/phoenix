@@ -1,5 +1,36 @@
 jQuery(document).ready(function() {
     
+    
+    $('#table_threads').dataTable({
+        "bServerSide": true,
+        "bJQueryUI": true,
+        "aaSorting": [[5,'desc']],
+        "bAutoWidth": false,
+        "oLanguage": {
+            "sLengthMenu": "Visar _MENU_ trådar per sida",
+            "sZeroRecords": "Hittade ingeting =(",
+            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
+            "sSearch": "Sök bland trådtitlar"
+        },
+        "sAjaxSource": window.location.pathname + "json/",
+        "aoColumns": [
+                        { "mDataProp": "title", "bSortable": false},
+                        { "mDataProp": "tags" , "bSortable": false, "bSearchable" : false},
+                        { "mDataProp": "created", "iDataSort": 3 , "bSearchable" : false},
+                        { "mDataProp": "index", "bVisible": false, "bSearchable" : false},
+                        { "mDataProp": "posts_index" , "bSortable": false, "bSearchable" : false},
+                        { "mDataProp": "last_comment", "iDataSort": 6 , "bSearchable" : false},
+                        { "mDataProp": "last_comment_index", "bVisible": false , "bSearchable" : false},
+                        
+                ],
+        "fnDrawCallback": function() {
+            $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
+        }
+    });    
+
+
     $( "#tabs" ).tabs();
 
     $('.forumtree .accordion').accordion({
@@ -113,105 +144,31 @@ jQuery(document).ready(function() {
         item.find('p.ui-helper-hidden').hide();
         return false;
     });
-    
-    
-    // Apply datatables
-    $('#table_latest_replies').dataTable({
-        "bAutoWidth": false,
-        "aaSorting": [[5,'desc']],
-        "bJQueryUI": true,
-        "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ trådar per sida",
-            "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
-            "sSearch": "Filter"
-        },
-        "iDisplayLength": 10,
-        "aoColumns": [ 
-			{"sWidth": "25%"},
-			{"sWidth": "25%"},
-			{"iDataSort": 3, "sWidth": "22.5%" },
-			{ "bVisible":    false },
-			{"sWidth": "2.5%"},
-			{"iDataSort": 6, "sWidth": "22.5%" },
-			{ "bVisible":    false },
-		]
-    });
-    
-    $('#table_latest_threads').dataTable({
-        "bAutoWidth": false,
-        "aaSorting": [[3,'desc']],
-        "bJQueryUI": true,
-        "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ trådar per sida",
-            "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
-            "sSearch": "Filter"
-        },
-        "iDisplayLength": 10,
-        "aoColumns": [ 
-			{"sWidth": "25%"},
-			{"sWidth": "25%"},
-			{"iDataSort": 3, "sWidth": "22.5%" },
-			{ "bVisible":    false },
-			{"sWidth": "2.5%"},
-			{"iDataSort": 6, "sWidth": "22.5%" },
-			{ "bVisible":    false },
-		]
-    });     
 
     $('#notification_table').dataTable({
         "bAutoWidth": false,
-        "aaSorting": [[6,'desc']],
+        "aaSorting": [[5,'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ notifieringar per sida",
             "sZeroRecords": "Inga notifieringar",
             "sInfo": "Visar _START_ till _END_ av _TOTAL_ notifieringar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
+            "sInfoEmpty": "Visar 0 till 0 av 0 notifieringar",
             "sInfoFiltered": "(filtrerat från _MAX_ antal notifieringar)",
             "sSearch": "Filter"
         },
         "iDisplayLength": 30,
         "aoColumns": [ 
-			{"sWidth": "40%"},
-			{"sWidth": "10%"},
+			{"sWidth": "50%"},
 			{"sWidth": "10%"},
 			{"sWidth": "15%"},
-			{"sWidth": "15%", "iDataSort": 6},
-            {"sWidth": "10%"},
+			{"sWidth": "20%"},
+			{"sWidth": "5%", "iDataSort": 5},
 			{ "bVisible":    false }
 		],
         "sDom": '<"H"l<"form_wrapper">fr>t<"F"ip>'
     });    
     
     $('input.button-mark').button();    
-    
-    // OLD FORUM
-    $('#table_threads').dataTable({
-        "bAutoWidth": false,
-        "aaSorting": [[5,'desc']],
-        "bJQueryUI": true,
-        "oLanguage": {
-            "sLengthMenu": "Visar _MENU_ trådar per sida",
-            "sZeroRecords": "Hittade ingeting =(",
-            "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
-            "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
-            "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
-            "sSearch": "Filter"
-        },
-        "iDisplayLength": 10,
-        "aoColumns": [ 
-			null,
-			null,
-			null,
-			null,
-			null,
-			{ "bVisible":    false },
-		]
-    });
+
 });

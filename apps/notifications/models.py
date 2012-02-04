@@ -14,8 +14,9 @@ STATUS_CHOICES = (
 )
 
 NOTIFICATION_TYPES = (
-    (1, u'Gästboksinlägg'),
-    (2, u'Forumsvar'),
+    (1, 'Gästboksinlägg'),
+    (2, 'Forumsvar'),
+    (3, 'Artikelkommentar'),
 )
 
 class Notification(models.Model):

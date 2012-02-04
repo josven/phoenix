@@ -6,6 +6,8 @@ from apps.notifications.views import get_notifications
  
 NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
+    (2, 'Forumsvar'),
+    (3, 'Artikelkommentar'),
 )
 
 class AnnonuceNotifications(object):
@@ -37,6 +39,17 @@ class AnnonuceNotifications(object):
                         
                         if forum_annoncements > 1:
                             messages.add_message(request, messages.INFO, "{0} nya svar i forumet".format( forum_annoncements ) )
+                   
+                                                             
+                    # Get article annoncements
+                    article_annoncements = annoncements.get('ar', None)
+                    if article_annoncements:
+                        
+                        if article_annoncements == 1:
+                            messages.add_message(request, messages.INFO, "Ny kommentar på en artikel")
+                        
+                        if article_annoncements > 1:
+                            messages.add_message(request, messages.INFO, "{0} nya artikelkommentarer".format( article_annoncements ) )
                    
                                                              
                 # Put indicators on 

@@ -15,31 +15,76 @@
 </ul>
 {% endblock app_navigation %}
 
-{% block content %}
-{% for article in articles %}
-{% if forloop.first %}
-<table id="table_articles">
-	<thead>
-		<tr>
-			<th>Titel</th>
-			<th>Skapad av</th>
-            <th>Kategorier</th>
-            <th>Skapad</th>
-            <th>Sortering</th>
-		</tr>
-	</thead>
-	<tbody>
-{% endif%}
-		<tr class="ui-widget-content">
-			<td><a href="{% url read_article article.id %}">{{ article.title }}</a></td>
-			<td><a href="{{ article.created_by.get_profile.get_absolute_url }}">{{ article.created_by }}</a></td>
-			<td>{% for tag in article.tags.all %}<span class="ui-tag"><a href="{% url search_article tag %}">{{ tag|title }}</a></span>{% endfor %}</td>
-            <td>{{ article.date_created|naturalday  }} {{ article.date_created|time:"TIME_FORMAT"  }}</td>
-            <td>{{ article.id }}</td>
-        </tr>
-{% if forloop.last %}
-	</tbody>
-</table>
-{% endif %}
-{% endfor %}
+{% block content %}   
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Artiklar</a></li>
+        {% if notes %}<li><a href="#tabs-2">Notifieringar ({{ notes|length }})</a></li>{% endif %}
+    </ul>
+    
+    <div id="tabs-1">         
+        <table id="table_articles"  class="articles_table">
+            <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Skapad</th>
+                    <th>Kategorier</th>
+                    <th>Kommentarer</th>
+                    <th>ID (sortering)</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <td>Läser in artiklar...</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+            </tbody>
+        </table>
+    </div>
+
+
+    {% if notes %}
+    <div id="tabs-2">
+        {% for notification in notes %}
+        {% if forloop.first %}
+        <table id="notification_table" class="articles_table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th>Status</th>
+                    <th>Tid</th>
+                    <th>Från</th>
+                    <th>Ta bort</th>
+                    <th>ID (Sortering)</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% endif %}
+                <tr class="ui-widget-content">
+                    <td><a href="{{ notification.instance_url }}">{{ notification.message }}</a></td>
+                    <td>{{ notification.get_status }}</td>
+                    <td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
+                    <td><a href="{{ notification.sender.get_profile.get_absolute_url }}">{{ notification.sender }}</a></td>
+                    <td>
+                        <form action="{% url delete_notification %}" method="post" >
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" >
+                        <input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" />
+                        </form>
+                    </td>
+                    <td>{{ notification.id }}</td>
+                </tr>
+        {% if forloop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% empty %}
+        <h2>Inga notifieringar</h2>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 {% endblock content %}

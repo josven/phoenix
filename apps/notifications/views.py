@@ -13,6 +13,7 @@ from apps.core.utils import render
 NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
     (2, 'Forumsvar'),
+    (3, 'Artikelkommentar'),
 )
 
 @never_cache
@@ -73,6 +74,9 @@ def get_notifications(request):
 
     count_new_forum = 0
     count_indicator_forum = 0
+
+    count_new_article = 0
+    count_indicator_article = 0
         
     if notifications:
         
@@ -96,9 +100,19 @@ def get_notifications(request):
             
             # Get forum indicator       
             if ( notification.instance_type == 'ForumComment' ) & ( int( float( notification.status ) ) < 4 ):
-                count_indicator_forum += 1
+                count_indicator_forum += 1  
+                              
+            # Get new article annuoucements            
+            if ( notification.instance_type == 'ArticleComment' ) & ( int( float( notification.status ) ) == 1 ):
+                count_new_article += 1
+                notification.status = 2
+                notification.save()
+            
+            # Get forum indicator       
+            if ( notification.instance_type == 'ArticleComment' ) & ( int( float( notification.status ) ) < 4 ):
+                count_indicator_article += 1
         
-    d = { 'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum }, 'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum } }
+    d = { 'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum , 'ar' : count_new_article }, 'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum, 'ar' : count_indicator_article } }
      
     return d
 

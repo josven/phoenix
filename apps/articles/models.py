@@ -4,11 +4,16 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.contrib.humanize.templatetags.humanize import naturalday
+from django.core.urlresolvers import reverse
+
 from taggit.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
 
 from apps.core.models import Entry
-    
+
+from apps.core.signals import *
+
 class Article(Entry):
     """
     Articles
@@ -25,6 +30,34 @@ class Article(Entry):
     def __unicode__(self):
         return u'%s' % self.title
 
+    def aaData(self):
+        """
+        aaData formats for datatables
+        """
+
+        title = u"<a href=\"{0}\" >{1}</a>".format( self.get_absolute_url(), self.title )
+        tags = [u"<span class=\"ui-tag\"><a href=\"{0}\">{1}</a></span>".format( reverse( 'search_article', args = [ tag.name ]), unicode(tag.name).title()  ) for tag in self.tags.all()]
+        created = u"{0} {1} av <a href=\"{2}\">{3}</a>".format(naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.get_profile().get_absolute_url(), self.created_by.username)
+        
+        if self.allow_comments:
+            allow_comments = self.get_posts_index()
+        else:
+            allow_comments = "-"
+
+        data =  {
+                'title': title,
+                'created': created,
+                'tags' : u" ".join( tags ),
+                'allow_comments': allow_comments,
+                'id': self.id,
+                }
+           
+        return data
+    
+    def get_posts_index(self):
+            
+        return ArticleComment.objects.filter(post=self).count()
+
 class ArticleComment(MPTTModel):
     """ Threaded comments for blog posts """
     post = models.ForeignKey(Article)
@@ -40,7 +73,10 @@ class ArticleComment(MPTTModel):
     class MPTTMeta:
         # comments on one level will be ordered by date of creation
         order_insertion_by=['added']
-        
+
+    def get_absolute_url(self):
+        return "/articles/read/{0}/#comment-{1}".format( self.post.id, self.id )    
+
 class defaultArticleCategories(models.Model):
     """
     Default categories for articles

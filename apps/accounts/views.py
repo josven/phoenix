@@ -3,7 +3,11 @@ from forms import *
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
 
+@never_cache
+@login_required(login_url='/auth/login/')
 def update_account(request):
     """
     Update account settings
