@@ -8,32 +8,9 @@ from django.contrib.auth.decorators import login_required
 from forms import RegisterForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from models import BetaReg
+from apps.profiles.models import Profile
 
 from apps.core.utils import render
-
-@require_POST
-def register_beta(request):
-    """
-    Register a beta email address!
-
-    """
-    
-    if not request.is_ajax():
-        raise Http404
-
-    ip = '0.0.0.0'
-    for ipf in ('HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'):
-        if ipf in request.META:
-            ip = request.META[ipf]
-            break
-
-    email = request.POST['email']
-
-    if BetaReg.objects.filter(email=email).exists():
-        return HttpResponse('false')
-
-    BetaReg.objects.create(email=email, ip=ip)
-    return HttpResponse('true')
 
 def auth_login(request):
     """
@@ -111,6 +88,7 @@ def auth_register(request):
                 messages.add_message(request, messages.INFO, "Användare skapad.")
                 user = authenticate(username=username, password=password)
                 login(request, user)
+                profile, created = Profile.objects.select_related().get_or_create(user=user)
                 
                 return HttpResponseRedirect(reverse('start'))
                 
