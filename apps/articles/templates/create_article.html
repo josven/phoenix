@@ -24,9 +24,14 @@
         <p>
         {{ form.body }}
         </p>
-                
+        
+        <p>           
         {{ form.allow_comments }}<label for="id_allow_comments">Tillåt kommentarer</label>
-     
-        <input type="submit" value="Skapa" />
+        </p>
+
+        <div class="buttonset">
+            <input type="submit" value="Skapa" />
+            <input type="button" data-preview="body" value="Förhandsgranska" />
+        </div>
     </form>
 {% endblock content %}

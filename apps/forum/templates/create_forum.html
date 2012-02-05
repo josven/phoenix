@@ -23,6 +23,10 @@
         <p>
         {{ form.body }}
         </p>
-        <input type="submit" value="Skapa" />
+        
+        <div class="buttonset">
+            <input type="submit" value="Skapa" />
+            <input type="button" data-preview="body" value="Förhandsgranska" />
+        </div>
     </form>
 {% endblock content %}

@@ -12,7 +12,7 @@
 
 }
 
-#form-create-thread  input {
+#form-create-thread  input[type=text] {
     margin: 10px 0;
     padding: 1%;
     font-size:130%;
@@ -30,10 +30,6 @@
        -moz-border-radius: 5px; 
             border-radius: 5px;      
      -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;    
-}
-
-#form-create-thread  input[type=submit] {
-    width:100%
 }
 
 #form-create-thread  textarea {

@@ -4,6 +4,31 @@
 
 var testvar;
                     
+var preview_textarea = function(form, preview) {
+        var data = form.serialize()+"&preview=" + preview;
+
+        $.ajax( {
+            type: "POST",
+            url: '/utils/preview/',
+            data: data,
+            statusCode: {
+                200: function( data ) {
+                    console.log( data );
+                    
+                    var preview_modal = $('<div>'+data+'</div>');
+
+                    preview_modal.dialog({
+                        width: 800,
+                        modal: true,
+                        position: ['center',100],
+                        title: 'Textförhandsgranskning',
+                    });
+
+                }
+            }  
+        });  
+}
+
 var formatImageDialogs = function() {
     $('.entry-content img, .ui-text-panel img')
         .attr('height','80')
@@ -249,6 +274,16 @@ $(document).ready(function() {
 					.buttonset();
     
 
+    /*
+    * Preview button for textareas
+    *
+    */
+    $('input:[data-preview]').click( function () {
+        var form = $(this).parentsUntil('form').parent();
+        var preview = $(this).data('preview');
+        preview_textarea(form, preview);
+    });
+
     // Show messages with jGrowl
     var messages = $('.jGrowlmessages li, .errorlist li');
     messages.hide();
@@ -278,5 +313,21 @@ $(document).ready(function() {
    $('ul.username-hover-menu').mouseleave( function () { 
         $(this).fadeOut("fast");
    });
+
+   // Auto resize text areas 
+   $('textarea').autoResize({
+        // On resize:
+        onResize : function() {
+            $(this).css({opacity:0.8});
+        },
+        // After resize:
+        animateCallback : function() {
+            $(this).css({opacity:1});
+        },
+        // Quite slow animation:
+        animateDuration : 300,
+        // More extra space:
+        extraSpace : 40
+    });
 
 });

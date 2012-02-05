@@ -23,6 +23,11 @@ jQuery(document).ready(function() {
                     "Svara": function() {
                         dialog.find('form').submit();
                     },
+                    "Förhandsgranska": function() {
+                        var form = dialog.find('form');
+                        var preview = "comment";
+                        preview_textarea(form, preview);
+                    },
                     Cancel: function() {
                         $( this ).dialog( "close" );
                     }
@@ -36,7 +41,23 @@ jQuery(document).ready(function() {
         dialog.find('textarea').val('');
         dialog.find('p.ui-helper-hidden').hide();
         
-    entry.addClass('ui-state-active');
+        entry.addClass('ui-state-active');
+        
+        dialog.find('textarea').autoResize({
+            // On resize:
+            onResize : function() {
+                $(this).css({opacity:0.8});
+            },
+            // After resize:
+            animateCallback : function() {
+                $(this).css({opacity:1});
+            },
+            // Quite slow animation:
+            animateDuration : 300,
+            // More extra space:
+            extraSpace : 40
+        });
+
         return false;
     });
     

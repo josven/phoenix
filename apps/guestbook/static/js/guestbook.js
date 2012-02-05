@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
             content = entry.find('.entry-content').clone();
         
         var dialog = content.dialog({
-
+            width: 600,
             title: "Svara " + $(this).data('replyTo'),
             buttons: {
                     "Svara": function() {
@@ -28,6 +28,11 @@ jQuery(document).ready(function() {
                         });
 
                     },
+                    "Förhandsgranska": function() {
+                        var form = dialog.find('form');
+                        var preview = "text";
+                        preview_textarea(form, preview);
+                    },
                     Cancel: function() {
                         dialog.dialog( "close" );
                     }
@@ -36,6 +41,21 @@ jQuery(document).ready(function() {
         
         dialog.find('.ui-helper-hidden').show();
         
+        dialog.find('textarea').autoResize({
+            // On resize:
+            onResize : function() {
+                $(this).css({opacity:0.8});
+            },
+            // After resize:
+            animateCallback : function() {
+                $(this).css({opacity:1});
+            },
+            // Quite slow animation:
+            animateDuration : 300,
+            // More extra space:
+            extraSpace : 40
+        });
+
         return false;
     });
 

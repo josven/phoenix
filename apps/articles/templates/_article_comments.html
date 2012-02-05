@@ -10,7 +10,12 @@
     {{ field }}
     {% endfor %}
     <input type="hidden" name="parent_id" value="">
-    <input type="submit" value="Kommentera">
+    
+    <div class="buttonset">
+        <input type="submit" value="Kommentera">
+        <input type="button" data-preview="comment" value="Förhandsgranska" />
+    </div>
+
 </form>
 
 <ul class="flat-list entrylist">
@@ -79,7 +84,10 @@
                     {% csrf_token %}
                     <textarea name="comment"></textarea>
                     <input type="hidden" name="parent_id" value="{{ node.id}}">
-                    <input type="submit" value="Svara">
+                    <div class="buttonset">
+                        <input type="submit" value="Svara">
+                        <input type="button" data-preview="comment" value="Förhandsgranska" />
+                    </div>
                 </form>
             </div>
         </li>

@@ -140,11 +140,8 @@ html[xmlns] .dataTables_wrapper { display: block; }
 * html .dataTables_wrapper { height: 1%; }
 
 /* Create article */
-#form-create-article {
 
-}
-
-#form-create-article  input {
+#form-create-article  input[type=text] {
     margin: 10px 0;
     padding: 1%;
     font-size:130%;
@@ -164,9 +161,6 @@ html[xmlns] .dataTables_wrapper { display: block; }
      -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;    
 }
 
-#form-create-article  input[type=submit] {
-    width:100%
-}
 
 #form-create-article  textarea {
     margin: 10px 0;
