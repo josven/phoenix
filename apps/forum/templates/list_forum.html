@@ -6,7 +6,7 @@
     <ul>
         <li><a class="js-sort-latest-threads" href="#tabs-1">Senaste trådar</a></li>
         <li><a class="js-sort-latest-replies" href="#tabs-1">Senaste Svar</a></li>
-        {% if notes %}<li><a href="#tabs-2">Notifieringar ({{ notes|length }})</a></li>{% endif %}
+        {% if notes %}<li><a href="#tabs-2">Notifieringar <span id="tab-counter-notes">({{ notes|length }})</span></a></li>{% endif %}
     </ul>
 
     <div id="tabs-1">
@@ -56,7 +56,7 @@
                     <td>{{ notification.get_status }}</td>
                     <td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
                     <td><a href="{{ notification.sender.get_profile.get_absolute_url }}">{{ notification.sender }}</a></td>
-                    <td><form action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" ><input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" /></form></td>
+                    <td><form class="ajax-delete-note" action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" ><input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" /></form></td>
                     <td>{{ notification.id }}</td>
                 </tr>
         {% if forloop.last %}

@@ -20,7 +20,7 @@
 <div id="tabs">
     <ul>
         <li><a href="#tabs-1">Artiklar</a></li>
-        {% if notes %}<li><a href="#tabs-2">Notifieringar ({{ notes|length }})</a></li>{% endif %}
+        {% if notes %}<li><a href="#tabs-2">Notifieringar <span id="tab-counter-notes">({{ notes|length }})</span></a></li>{% endif %}
     </ul>
     
     <div id="tabs-1">         
@@ -68,7 +68,7 @@
                     <td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
                     <td><a href="{{ notification.sender.get_profile.get_absolute_url }}">{{ notification.sender }}</a></td>
                     <td>
-                        <form action="{% url delete_notification %}" method="post" >
+                        <form  class="ajax-delete-note" action="{% url delete_notification %}" method="post" >
                         {% csrf_token %}
                         <input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" >
                         <input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" />

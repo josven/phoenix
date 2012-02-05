@@ -36,8 +36,11 @@ def delete_notification(request):
         elif instance_id and type:
             notification = Notification.objects.get(receiver=request.user, instance_id=instance_id, type=type)        
             if notification:
-                notification.delete()      
-
+                notification.delete()
+                
+                if request.is_ajax():
+                    return HttpResponse(status=200)  
+        
     return HttpResponseRedirect(request.META["HTTP_REFERER"]) 
 
 @never_cache

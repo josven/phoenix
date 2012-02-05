@@ -116,7 +116,6 @@ var update_indicators = function(data) {
 
 
 $(document).ready(function() {
-
     /*
     * Break out site from frames
     *
@@ -124,6 +123,34 @@ $(document).ready(function() {
     if (top.location != self.location) {
         top.location = self.location;
     }
+
+    /*
+    * Ajaxforms
+    *
+    */
+    $('.ajax-delete-note').submit( function (event) {
+        event.preventDefault();
+        
+        form = $(this);
+
+        $.ajax( {
+            type: "POST",
+            url: form.attr( 'action' ),
+            data: form.serialize(),
+            statusCode: {
+                200: function() {
+                    var anSelected = form.parents('tr');
+                    $('#notification_table').dataTable( ).fnDeleteRow( anSelected[0] );
+
+                    var number_of_notes = $('.ajax-delete-note').length;
+                    $('#tab-counter-notes').html("(" + number_of_notes + ")");
+                }
+            }  
+        });
+        
+        return false;
+    });
+
 
     /*
     * Updates
