@@ -230,7 +230,14 @@ $(document).ready(function() {
     });
     
     // User jQuery datepicker
-    $(".datePicker").datepicker({dateFormat: 'yy-mm-dd', defaultDate:'-25y',  changeYear: true, changeMonth: true });
+    $(".datePicker").datepicker({
+            yearRange: "-100:+0",
+            dateFormat: 'yy-mm-dd',
+            defaultDate:'-25y',
+            changeYear: true,
+            changeMonth: true
+            
+        });
 
 
    // Hover username menu
