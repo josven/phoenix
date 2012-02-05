@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
@@ -99,7 +100,7 @@ def guestbook(request,userid,start=None, id=None):
             messages.add_message(request, messages.INFO, 'Nu blev det något fel')
 
     if request.is_ajax():
-        template = "_guestbook.html"
+        return HttpResponse(status=200)
     else:
         template = "guestbook.html"
 

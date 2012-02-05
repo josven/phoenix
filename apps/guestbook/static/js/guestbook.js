@@ -1,19 +1,35 @@
 jQuery(document).ready(function() {
 
+    
     $('.js-reply').click( function (event) {
         event.preventDefault();
         
         var entry = $(this).parentsUntil('ul').last(),
             content = entry.find('.entry-content').clone();
         
-        dialog = content.dialog({
+        var dialog = content.dialog({
+
             title: "Svara " + $(this).data('replyTo'),
             buttons: {
                     "Svara": function() {
-                        dialog.find('form').submit();
+                        form = dialog.find('form');
+
+                        $.ajax( {
+                            type: "POST",
+                            url: form.attr( 'action' ),
+                            data: form.serialize(),
+                            statusCode: {
+                                200: function() {
+                                    entry.removeClass('ui-state-active');
+                                    entry.find('.delete-notification-form').remove();
+                                    dialog.dialog( "close" );
+                                }
+                            }  
+                        });
+
                     },
                     Cancel: function() {
-                        $( this ).dialog( "close" );
+                        dialog.dialog( "close" );
                     }
             }
         });
