@@ -80,12 +80,10 @@ var update_notifications = function(data) {
 var update_indicators = function(data) {
 
     var window_indicator = 0;
-    console.log(window_indicator);
     // Set guestbook indicator
     if ( data.i.gb != 0 ) {
         $('#gb-indicator').html("(" + data.i.gb + ")");    
         window_indicator += data.i.gb;
-        console.log(window_indicator);
     } else {
         $('#gb-indicator').html("");
     }
@@ -94,9 +92,6 @@ var update_indicators = function(data) {
     if ( data.i.fo != 0 ) {
         $('#fo-indicator').html("(" + data.i.fo + ")");
         window_indicator += data.i.fo;
-
-        console.log(data.i.fo);
-        console.log(window_indicator);
     } else {
         $('#fo-indicator').html("");
     }    
@@ -105,7 +100,6 @@ var update_indicators = function(data) {
     if ( data.i.ar != 0 ) {
         $('#ar-indicator').html("(" + data.i.ar + ")");
         window_indicator += data.i.ar; 
-        console.log(window_indicator);
     } else {
         $('#ar-indicator').html("");    
     }
@@ -113,20 +107,16 @@ var update_indicators = function(data) {
     // Window title indicator
     if ( window_indicator != 0 ) {
         $('title').html('('+ window_indicator +') phx');
-        console.log(window_indicator);
     } else {
         $('title').html('PHX');
     }
 }
 
-var update_chat = function(data) {
-    
-    
 
-}
+
 
 $(document).ready(function() {
-     
+
     /*
     * Break out site from frames
     *
@@ -141,10 +131,7 @@ $(document).ready(function() {
     */ 
                     
    // Auto updater
-   var auto_update = setInterval(
-    
-    function ()
-    {
+   var auto_update = setInterval( function () {
         $.ajax({
             data: get_data,
             contentType: "application/json; charset=utf-8",
@@ -156,8 +143,8 @@ $(document).ready(function() {
             error: function() {
                 $.jGrowl("Något fel har inträffat");
             }
-        });
-        
+        });  
+          
     }, 30000); // refresh every 30000 milliseconds
 
     
@@ -221,7 +208,6 @@ $(document).ready(function() {
 
     $( "#account_button" )
 			.button()
-            
 			.next()
 				.button( {
 					text: false,
@@ -234,10 +220,8 @@ $(document).ready(function() {
 				})
 				.parent()
 					.buttonset();
-            
-       
-    });
     
+
     // Show messages with jGrowl
     var messages = $('.jGrowlmessages li, .errorlist li');
     messages.hide();
@@ -254,18 +238,11 @@ $(document).ready(function() {
         link = $(this);
         widget = link.parent('.ui-widget-header');
         menu = widget.next('ul.username-hover-menu');
-        console.log(menu);
-        
         menu.fadeIn("fast");
    });
    
-   $('ul.username-hover-menu').mouseleave( function () {
-        
+   $('ul.username-hover-menu').mouseleave( function () { 
         $(this).fadeOut("fast");
    });
 
-
-
-
-
-
+});
