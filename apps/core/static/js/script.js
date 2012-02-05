@@ -90,18 +90,18 @@ var update_indicators = function(data) {
         $('#gb-indicator').html("");
     }
     
-    // Set guestbook indicator
+    // Set forum indicator
     if ( data.i.fo != 0 ) {
-        $('#fc-indicator').html("(" + data.i.fo + ")");
+        $('#fo-indicator').html("(" + data.i.fo + ")");
         window_indicator += data.i.fo;
 
         console.log(data.i.fo);
         console.log(window_indicator);
     } else {
-        $('#fc-indicator').html("");
+        $('#fo-indicator').html("");
     }    
 
-    // Set guestbook indicator
+    // Set article indicator
     if ( data.i.ar != 0 ) {
         $('#ar-indicator').html("(" + data.i.ar + ")");
         window_indicator += data.i.ar; 
