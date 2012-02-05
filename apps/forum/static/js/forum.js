@@ -45,7 +45,8 @@ jQuery(document).ready(function() {
 
     $('.forumtree .accordion').accordion({
         collapsible: true,
-        active: false,            
+        active: false,
+        autoHeight: false,         
     });
     
         
