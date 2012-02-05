@@ -53,7 +53,7 @@
         </h4>
         
         <div id="profile-description">
-            {{ profile.description|urlize|textile }}
+        {{ profile.description|urlize|textile|default:"Tom presentation =(" }}
         </div>
     </li>
 </ul>

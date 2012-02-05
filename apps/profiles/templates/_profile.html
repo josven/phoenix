@@ -1,7 +1,7 @@
 {% load markup %}
 {% load thumbnail %}
 <div id="profile-description">
-    {{ profile.description|urlize|textile }}
+        {{ profile.description|urlize|textile|default:"Tom presentation =(" }}
 </div>
 {% if request.user == user %}
 <div class="button-wrapper">

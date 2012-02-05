@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
                             var button = $( this ),
                                 url = button.attr( 'href' ),
                                 field = $( "#"+button.attr( 'rel' ) ),
-                                initalHeight = field.height();
+                                initalHeight = field.height() + 100;
                                 
                             // load form
                             field.load(  url , function () {
