@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Skapa ny tråd</h1>
-    <form id="form-create-thread" action="{% url create_thread %}" method="post">
+    <form id="form-create-thread" action="{% url create_forum %}" method="post">
         {% csrf_token %}
         
         <h3>Du kan välja upp till 5 kategorier, minst en en huvudtagg</h3>

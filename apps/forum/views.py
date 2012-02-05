@@ -143,12 +143,12 @@ def create_forum(request, tags=None):
             # Check if a default tag is present
             if len(default_tags) == 0:
                 messages.add_message(request, messages.INFO, 'Du måste välja minst en huvudkategori!')
-                return render(request, 'create_thread.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
+                return render(request, 'create_forum.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
 
             # Check maximum allowed tags
             if len( all_tags ) > 5:
                 messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
-                return render(request, 'create_thread.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
+                return render(request, 'create_forum.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
 
             # Validate INTERNAL tags
             all_tags = validate_internal_tags(request, all_tags) 

@@ -292,7 +292,6 @@ def comment_article(request,article_id):
             # in the instance array for notification remowal
             instance_id = request.POST.get('unreplied', None)
             
-            print instance_id
 
             if instance_id:
                 instance_ids += [instance_id]
