@@ -54,7 +54,11 @@
         
         <div id="profile-description">
         {% if  profile.description %}
-            {{ profile.description|urlize|textile|default:"Tom presentation =(" }}
+            
+            
+            {{ profile.description|my_oembed:"320x240"|urlize|textile|default:"Tom presentation =(" }}
+            
+
             {% else %}
             Tom presentation =(
         {% endif %}

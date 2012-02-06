@@ -23,3 +23,32 @@ def age(bday, d=None):
     return (d.year - bday.year) - int((d.month, d.day) < (bday.month, bday.day))
 
 register.filter('age', age)
+
+
+
+
+from django.template.defaultfilters import stringfilter
+from oembed.core import replace
+
+@stringfilter
+def my_oembed(input, args):
+    args = args.split()
+    if len(args) > 1:
+        raise template.TemplateSyntaxError("Oembed tag takes only one (option" \
+            "al) argument: WIDTHxHEIGHT, where WIDTH and HEIGHT are positive " \
+            "integers.")
+    if len(args) == 1:
+        width, height = args[0].lower().split('x')
+        if not width and height:
+            raise template.TemplateSyntaxError("Oembed's optional WIDTHxHEIGH" \
+                "T argument requires WIDTH and HEIGHT to be positive integers.")
+    else:
+        width, height = None, None
+    kwargs = {}
+    if width and height:
+        kwargs['max_width'] = width
+        kwargs['max_height'] = height
+        
+    return replace(input, **kwargs)
+
+register.filter('my_oembed', my_oembed)

@@ -1,2 +1,4 @@
 {% load markup %}
-{{ preview|urlize|textile }}
+{% load filters %}
+
+{{ preview|my_oembed:"320x240"|urlize|textile }}

@@ -2,6 +2,7 @@
 {% load entry_tags %}
 {% load markup %}
 {% load thumbnail %}
+{% load filters %}
 
 {% block content %}
 <ul class="flat-list entrylist">
@@ -11,7 +12,7 @@
         {% article_header article %}
         
         <div class="article-body">
-            {{ article.body|urlize|textile }}
+            {{ article.body|my_oembed:"320x240"|urlize|textile }}
         </div>
     </li>
     {% endfor %}

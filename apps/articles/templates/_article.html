@@ -1,6 +1,7 @@
 {% load markup %}    
 {% load humanize %}
+{% load filters %}
 <h4 class="ui-widget-header entry-head">{{ article.title }} av <a class="link-user" href="{% url read_profile article.created_by.id %}">{{ article.created_by }}</a> den {{ article.date_created|naturalday  }} {{ article.date_created|time:"TIME_FORMAT"  }} {% with tags=article.tags.all %}{% for tag in tags %}<span class="ui-tag"><a href="{% url search_article tag %}" >{{ tag|title }}</a></span>{% endfor %}{% endwith %} </h4>
 <div class="article-body">
-{{ article.body|urlize|textile }}
+{{ article.body|my_oembed:"320x240"|urlize|textile }}
 </div>

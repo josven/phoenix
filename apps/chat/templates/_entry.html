@@ -2,6 +2,7 @@
 {% load entry_tags %}
 {% load markup %}
 {% load humanize %}
+{% load filters %}
 
 <li data-id="{{ entry.id }}" class="{% if entry.hajlajt %}ui-state-active{% endif %} entry ui-widget ui-widget-content">
     
@@ -35,8 +36,8 @@
     {% endif %}
     
     <div class="entry-content clearfix">
-        {{ entry.text|urlize|textile  }}
-        {{ entry.body|urlize|textile  }}
+        {{ entry.text|my_oembed:"320x240"|urlize|textile  }}
+        {{ entry.body|my_oembed:"320x240"|urlize|textile  }}
         
         {% if form.text %}
         <form class="ui-helper-hidden" method="post" action="{% url guestbook entry.created_by.id %}">

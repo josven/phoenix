@@ -3,6 +3,7 @@
 {% load humanize %}
 {% load thumbnail %}
 {% load entry_tags %}
+{% load filters %}
 
 <form id="comment-forum-form" method="POST" action="{% url comment_forum forum.id %}">
     {% csrf_token %}
@@ -54,7 +55,7 @@
     
     <div class="entry-content clearfix">
 
-        {{ node.comment|urlize|textile  }}
+        {{ node.comment|my_oembed:"320x240"|urlize|textile  }}
     
         <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
             {% csrf_token %}
