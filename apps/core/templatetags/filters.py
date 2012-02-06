@@ -2,7 +2,8 @@ import datetime
 
 from django import template
 from django.utils.translation import ugettext, ungettext
-
+from django.template.defaultfilters import stringfilter
+from oembed.core import replace
 
 register = template.Library()
 
@@ -27,8 +28,7 @@ register.filter('age', age)
 
 
 
-from django.template.defaultfilters import stringfilter
-from oembed.core import replace
+
 
 @stringfilter
 def my_oembed(input, args):

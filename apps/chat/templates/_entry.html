@@ -36,9 +36,15 @@
     {% endif %}
     
     <div class="entry-content clearfix">
+    
+        {% if entry.text %}
         {{ entry.text|my_oembed:"320x240"|urlize|textile  }}
+        {% endif %}
+
+        {% if entry.body %}
         {{ entry.body|my_oembed:"320x240"|urlize|textile  }}
-        
+        {% endif %}
+
         {% if form.text %}
         <form class="ui-helper-hidden" method="post" action="{% url guestbook entry.created_by.id %}">
         {% csrf_token %}
