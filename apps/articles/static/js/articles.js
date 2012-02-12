@@ -1,12 +1,6 @@
 jQuery(document).ready(function() {
 
     $('#id_allow_comments').button();
-
-    $('.accordion').accordion({
-			collapsible: true,
-            active: false,            
-		});
-    
         
     $('.js-reply').click( function (event) {
         event.preventDefault();

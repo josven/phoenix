@@ -1,10 +1,10 @@
 {% extends "articles.html" %}
+{% load entry_tags %}
 
 {% block content %}
-
-<ul class="flat-list entrylist">    
-    <li class="ui-widget ui-widget-content acticle_post">
-        {% include "_article.html" %}
+<ul class="flat-list">    
+    <li class="ui-widget ui-widget-content">
+        {% render_entry article request %}
     </li>
 </ul>
 

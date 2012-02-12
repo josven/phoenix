@@ -252,6 +252,17 @@ $(document).ready(function() {
     $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
     
     
+    /*
+    * jQuery UI accordions
+    *
+    */
+    
+    $('.accordion').accordion({
+        collapsible: true,
+        active: false,
+        autoHeight: false,         
+    });
+    
     // Apply jQuery UI buttons
     $( "input:submit, a.ui-button, button").button();
     $( ".buttonset" ).buttonset();
@@ -316,18 +327,8 @@ $(document).ready(function() {
 
    // Auto resize text areas 
    $('textarea').autoResize({
-        // On resize:
-        onResize : function() {
-            $(this).css({opacity:0.8});
-        },
-        // After resize:
-        animateCallback : function() {
-            $(this).css({opacity:1});
-        },
         // Quite slow animation:
         animateDuration : 300,
-        // More extra space:
-        extraSpace : 40
     });
 
 });

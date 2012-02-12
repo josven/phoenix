@@ -1,3 +1,5 @@
+{% load entry_tags %}
+
 {% if not request.user == profile.user %}
 <form action="" method="post">
     {% csrf_token %}
@@ -13,9 +15,11 @@
 <hr />
 {% endif %}
 
-<ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
+<ul class="flat-list">
 {% for entry in posts %}
-{% include "_entry.html" %}
+    <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">
+    {% render_entry entry request %}
+    </li>
 {% if forloop.last %}
 </ul>
 

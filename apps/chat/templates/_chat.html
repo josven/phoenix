@@ -1,3 +1,7 @@
+{% load entry_tags %}
+
 {% for entry in posts %}
-{% include "_entry.html" %}
+<li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">
+    {% render_entry entry request %}
+</li>
 {% endfor %}

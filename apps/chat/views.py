@@ -36,49 +36,34 @@ def camchat(request):
 @never_cache
 @login_required(login_url='/auth/login/')
 def chat(request):
-
     vars = {
         "isFirstPage":True
     }
     
-    if request.method == 'POST':
-    
-        form = PostForm(request.POST)
-    
-        if form.is_valid():
-            if len( form.clean()['text'] ) > 4:
-                form.save()
-                
-                # Send back a new form
-                form = PostForm()
-                
-                if not request.is_ajax():
-                    messages.add_message(request, messages.INFO, 'Meddelande skickat')
-            else:
-                if not request.is_ajax():
-                    messages.add_message(request, messages.ERROR, 'Meddelande måste vara fem tecken eller mer')
-    else:
-        form = PostForm()
-
-    if request.is_ajax() and request.method == 'GET':
-        posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
+    if request.is_ajax():
+        if request.method == 'POST':
+            form = PostForm(request.POST)
+            if form.is_valid():
+                if len( form.clean()['text'] ) > 4:
+                    form.save()
+                    return HttpResponse(status=200) # OK!
+            return HttpResponse(status=404) #CHANGE THIS
         
-        client_post = int(float( request.GET.get('s', '0') ) )
-        current_post = int(float( posts[0].id ) )
-
-        number_of_posts = current_post - client_post
-        
-        if current_post - client_post != 0 :
-            vars['posts'] = posts[0:number_of_posts]
-            return render(request,'_chat.html', vars)
+        if request.method == 'GET':
+            posts = Post.active.order_by('-date_created')[:LIST_ITEM_LIMIT]
+            client_post = int(float( request.GET.get('s', '0') ) )
+            current_post = int(float( posts[0].id ) )
+            number_of_posts = current_post - client_post
             
-        json_data = json.dumps({"status":302})
-        return HttpResponse(json_data, mimetype="application/json")
-        
-    posts = Post.objects.order_by('-date_created')[:LIST_ITEM_LIMIT]
+            if number_of_posts != 0:
+                vars['posts'] = posts[0:number_of_posts]
+                return render(request,'_chat.html', vars)
+                
+            return HttpResponse(status=302) # Not changed                
     
-    vars['form'] = form
-    vars['posts'] = posts
+    vars['form'] = PostForm()
+    vars['posts'] = Post.active.order_by('-date_created')[:LIST_ITEM_LIMIT]
+
     return render(request,'chat.html', vars)
     
 @never_cache

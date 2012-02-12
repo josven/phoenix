@@ -335,31 +335,56 @@ td { vertical-align: top; }
    Entrys
    ========================================================================== */
 
-.entry {
-    position: relative;
-}   
-
-.entry .entry-header {
-    margin: 0;
-    padding: .5em;
+.entry-head {
+    margin:0;
+    padding:.5em;
 }
 
-.entry .entry-profile {
-    width:75px;
-    height:75px;
-    margin-left: 0;
-    margin-bottom:-.5em;
+.entry-head .button-wrapper {
+    font-size:60%;
 }
 
-.entry .entry-content {
-    padding: .5em .5em;
+.entry-head .button-wrapper .delete-notification-form {
+    display: inline;
+}
+
+.entry-profile {
+    width:85px;
+    float:left;
+    display:block;
+    margin-bottom: -10px;
+}
+
+.entry-content {
+    padding: 0px;
+    margin-left:85px;
+    min-height: 75px;
+}
+
+.ui-dialog .entry-content {
+    margin-left:0px;
 }
    
 .entry .entry-content img { 
     vertical-align: top;
     display: inline;
 }
-   
+
+/* entrys */
+/*
+.entrylist li {
+    margin-bottom: 1em;
+    position: relative;
+}
+
+
+
+.entry-head form {
+    display:inline;
+    font-size:100%;
+}
+
+
 .entry .entry-content p,
 .entry .entry-content h1,
 .entry .entry-content h2,
@@ -375,19 +400,14 @@ td { vertical-align: top; }
     border-radius: 5px;
     cursor: pointer;
 }
-
+*/
 
 /* =============================================================================
    Tags
    ========================================================================== */
 
 .ui-tag { 
-    font-size:80%;
-}
-
-.ui-tag a { 
-    font-size: 90%;
-    margin: 0.2em;
+    font-size:60%;
 }
 
 
@@ -517,26 +537,6 @@ nav#primary_navigation ul li hr {
     text-align:left;
 }
 
-/* entrys */
-
-.entrylist li {
-    margin-bottom: 1em;
-    position: relative;
-}
-
-.entry-head {
-    margin:0;
-    padding:.5em;
-}
-
-.entry-head form {
-    display:inline;
-    font-size:100%;
-}
-
-.entry-head .ui-button {
-    font-size:60%;
-}
 
 /* Hover username menu */
 .username-hover-menu {

@@ -5,6 +5,7 @@ from django.db.models import get_model
 from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import dispatcher
+from django.core.urlresolvers import reverse
 
 from apps.core.signals import *
 
@@ -20,3 +21,7 @@ class Guestbooks(Entry):
 
     def get_absolute_url(self):
         return "/user/{0}/guestbook/entry/{1}".format( self.user_id.id, self.id )
+        
+    @property
+    def get_reply_url(self):
+        return reverse('guestbook', args=[self.created_by.id])

@@ -1,20 +1,12 @@
 {% extends "base.html" %}
 {% load entry_tags %}
-{% load markup %}
-{% load thumbnail %}
-{% load filters %}
 
 {% block content %}
-<ul class="flat-list entrylist">
-    {% for article in articles %}
-    <li class="ui-widget ui-widget-content acticle_post">
-        
-        {% article_header article %}
-        
-        <div class="article-body">
-            {{ article.body|my_oembed:"320x240"|urlize|textile }}
-        </div>
+<ul class="flat-list">
+{% for article in articles %}
+    <li class="ui-widget ui-widget-content">
+        {% render_entry article request %}
     </li>
-    {% endfor %}
+{% endfor %}
 </ul>
 {% endblock content %}

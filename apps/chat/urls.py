@@ -4,6 +4,9 @@ from django.conf import urls
 urlpatterns = patterns('',
     url(r'^$', 'apps.chat.views.chat', name='chat'),
     
+    # Post
+    url(r'^post/$', 'apps.chat.views.chat', name='chat_post'),
+    
     # Return a single post
     url(r'^(?P<id>\d*)\.(?P<type>\w*)$', 'apps.chat.views.chatpost', name='chatpost'),    
     

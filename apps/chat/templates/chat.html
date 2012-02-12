@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load entry_tags %}
 
 {% block content %}
+
 {% if form %}
-<form id="chat_form" action="{% url chat %}" method="post">
+<form id="chat_form" action="{% url chat_post %}" method="post">
     {% csrf_token %}
 
     {{ form.text }}
@@ -12,11 +14,14 @@
 </form>
 
 <br />
-
 {% endif %}
-<ul id="chatlist" class="flat-list entrylist" data-role="listview" data-inset="true">
+
+<ul id="chatlist" class="flat-list entrylist">
 {% for entry in posts %}
-{% include "_entry.html" %}
+    <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">    
+        {% render_entry entry request %}
+    </li>
 {% endfor %}
 </ul>
+
 {% endblock content %}

@@ -23,7 +23,7 @@ class Article(Entry):
     body = models.TextField(max_length=5120)
     tags = TaggableManager()
     allow_comments = models.NullBooleanField(default=False)
-    
+        
     def get_absolute_url(self):
         return "/articles/read/%s/" % self.id
         
@@ -75,7 +75,11 @@ class ArticleComment(MPTTModel):
         order_insertion_by=['added']
 
     def get_absolute_url(self):
-        return "/articles/read/{0}/#comment-{1}".format( self.post.id, self.id )    
+        return "/articles/read/{0}/#comment-{1}".format( self.post.id, self.id )
+        
+    @property
+    def get_reply_url(self):
+        return reverse('comment_article', args=[self.post.id])
 
 class defaultArticleCategories(models.Model):
     """

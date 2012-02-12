@@ -42,12 +42,6 @@ jQuery(document).ready(function() {
     $('.js-sort-latest-replies').click( function () {
         table_threads.fnSort( [ [5,'desc'] ] );
     });
-
-    $('.forumtree .accordion').accordion({
-        collapsible: true,
-        active: false,
-        autoHeight: false,         
-    });
     
         
     $('.forumtree .js-reply').click( function (event) {

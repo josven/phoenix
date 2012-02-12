@@ -2,8 +2,11 @@ import datetime
 
 from django import template
 from django.utils.translation import ugettext, ungettext
+from django.utils.html import urlize
+
 from django.template.defaultfilters import stringfilter
-from oembed.core import replace
+from oembed.core import replace as oembed_replace
+from django.contrib.markup.templatetags.markup import textile
 
 register = template.Library()
 
@@ -18,18 +21,14 @@ def minutessince(date):
 
     return 0
 
+@register.filter(name='age')
 def age(bday, d=None):
     if d is None:
         d = datetime.date.today()
     return (d.year - bday.year) - int((d.month, d.day) < (bday.month, bday.day))
 
-register.filter('age', age)
 
-
-
-
-
-
+@register.filter(name='my_oembed')
 @stringfilter
 def my_oembed(input, args):
     args = args.split()
@@ -49,6 +48,23 @@ def my_oembed(input, args):
         kwargs['max_width'] = width
         kwargs['max_height'] = height
         
-    return replace(input, **kwargs)
+    return oembed_replace(input, **kwargs)
 
-register.filter('my_oembed', my_oembed)
+
+@register.filter(name='user_filter')
+@stringfilter
+def user_filter(string, args=None):
+    
+    # Apply oEmbed
+    oembed_kwargs = {}
+    oembed_kwargs['max_width'] = 320
+    oembed_kwargs['max_height'] = 240
+    string = oembed_replace(string, **oembed_kwargs)
+    
+    # Apply Urlize
+    string = urlize(string, nofollow=True, autoescape=True)
+    
+    # Apply Textile
+    string = textile(string)
+    
+    return string

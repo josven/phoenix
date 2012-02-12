@@ -2,9 +2,109 @@
 
 from django import template
 from django.core.urlresolvers import reverse
+
+
+
+
+
 from apps.core.utils import find_request
 
 register = template.Library()
+
+
+
+
+
+
+
+from django.contrib.humanize.templatetags.humanize import naturalday
+from apps.core.templatetags.filters import user_filter
+
+@register.inclusion_tag('entry_template.html')
+def render_entry(entry, request=None):
+  
+    vars = {
+        'id':entry.id,
+        'author':entry.created_by,
+        'reply_url':getattr(entry,'get_reply_url', None)
+        }
+
+    # Get notifications
+    notifications = getattr(request,'notifications',None)
+    if notifications:
+        # Find notification on entry
+        for note in notifications:          
+            if note.instance_type == entry.__class__.__name__ and note.instance_id == entry.id:
+                vars['note'] = note
+
+    # Get date
+    date_names = ['date_created', 'added']
+    date_value = _get_first_valid_value(entry, date_names)
+    vars['date'] = u"{0} {1}".format( naturalday( date_value[1]), date_value[1].strftime("%H:%M") )
+        
+    # Get title
+    title_names = ['title']
+    title_value = _get_first_valid_value(entry, title_names)
+    if title_value:
+        vars['title'] = title_value[1]
+    
+    # Get tags 
+    tags_attr = getattr(entry, 'tags', None)
+    if tags_attr:
+        vars['tags'] =  tags_attr.all()
+    
+    # Find content
+    content_names = ['body', 'comment','text']
+    content_value = _get_first_valid_value(entry, content_names)
+    vars['content'] = content_value[1]
+    vars['reply_textarea'] = content_value[0]
+    
+    # Reply button if comment
+    if getattr(entry, 'comment', None):
+        vars['reply_button'] = True    
+
+    # Reply button if chatpost
+    if entry.__class__.__name__ == "Post":
+        vars['reply_button'] = True
+    
+    # Reply button for guestbook
+    if entry.__class__.__name__ == "Guestbooks" and request.user != vars['author']:
+        vars['reply_button'] = True
+    return vars
+
+@register.inclusion_tag('userlink_template.html')
+def render_userlink(user):
+    vars = {
+        'username':user.username,
+        'id':user.id
+        }
+        
+    return vars   
+    
+@register.inclusion_tag('tag_template.html')
+def render_tag(tag):
+    vars = {
+        'tag':tag,
+        }
+        
+    return vars
+
+def _get_first_valid_value(obj, keys):
+    
+    values = dict((name, getattr(obj, name, None)) for name in keys)
+
+    for item in values.items():      
+        if item[1]:      
+            return item
+    
+    return None
+
+
+
+
+
+
+
 
 @register.simple_tag
 def entry_head(entry):

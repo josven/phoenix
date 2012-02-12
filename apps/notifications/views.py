@@ -50,6 +50,8 @@ def updates(request, format):
     if request.is_ajax():
         if request.user.is_authenticated():
             data = get_notifications(request)
+            data.pop('notifications')
+            data.pop('test')
             
             if format == 'xml':
                 mimetype = 'application/xml; charset=utf8'
@@ -71,6 +73,14 @@ def get_notifications(request):
     d = {}
     user = request.user
     notifications = Notification.objects.filter(receiver=user)
+    
+    
+    #Tests
+    testdict = {}
+    for note in notifications.values():
+        testdict[ note['instance_type'] ] = {}
+        testdict[ note['instance_type'] ][ note['status'] ] = {}
+        testdict[ note['instance_type'] ][ note['status'] ][ note['instance_id'] ] = note
     
     count_new_guestbook = 0
     count_indicator_guestbook = 0
@@ -115,7 +125,12 @@ def get_notifications(request):
             if ( notification.instance_type == 'ArticleComment' ) & ( int( float( notification.status ) ) < 4 ):
                 count_indicator_article += 1
         
-    d = { 'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum , 'ar' : count_new_article }, 'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum, 'ar' : count_indicator_article } }
+    d = {
+        'notifications':notifications,
+        'test':testdict,
+        'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum , 'ar' : count_new_article },
+        'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum, 'ar' : count_indicator_article } 
+        }
      
     return d
 

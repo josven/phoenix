@@ -18,59 +18,17 @@
 
 </form>
 
-<ul class="flat-list entrylist forumtree">
+<ul class="flat-list entrylist">
 {% recursetree comments %}
+
 <li class="{% if node.id in hilighted %}ui-state-active{% endif %} entry ui-widget ui-widget-content" id="comment-{{ node.id }}">
-    <h4 class="ui-widget-header entry-head">
-        <a class="link-user" href="{% url read_profile node.created_by.id %}">{{ node.created_by }}</a> - {{ node.added|naturalday  }} {{ node.added|time:"TIME_FORMAT"  }}
-        <div class="button-wrapper">
-            {% if node.id in unreplied or node.id in hilighted %}
-            <form action="{% url delete_notification %}" method="post" >
-                {% csrf_token %}
-                <input type="hidden" value="2" id="t{{ node.id }}" name="type" >
-                <input type="hidden" value="{{ node.id }}" id="i{{ node.id }}" name="instance_id" >
-                
-                {% if node.id in unreplied %}
-                <input type="hidden" name="unreplied" value="{{ node.id }}">
-                {% endif %}
-
-                <input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" />
-            </form>
-            {% endif %}
-            <a href="#" data-reply-to="{{ node.created_by }}" class="js-reply">Svara bara till {{ node.created_by }} och avvik ifrån konversationen i tråden</a>
-        </div>
-    </h4>
-
-    <ul class="username-hover-menu ui-helper-hidden ui-widget ui-widget-content">
-        <li><a href="{% url read_profile node.created_by.id %}">Profil</a></li>
-        <li><a href="{% url guestbook node.created_by.id %}">Gästbok</a></li>
-    </ul>   
     
-    <div class="entry-profile clearfix">
-        {% thumbnail node.created_by.get_profile.photo "75x75" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-        {% endthumbnail %}   
-    </div>
-
-    
-    <div class="entry-content clearfix">
-
-        {{ node.comment|my_oembed:"320x240"|urlize|textile  }}
-    
-        <form class="ui-helper-hidden" method="POST" action="{% url comment_forum forum.id %}">
-            {% csrf_token %}
-            <textarea name="comment"></textarea>
-            {% if node.id in unreplied %}
-            <input type="hidden" name="unreplied" value="{{ node.id }}">
-            {% endif %}
-            <input type="hidden" name="parent_id" value="{{ node.id}}">
-        </form>
-    </div>
-
+    {% render_entry node request %}
     
     {# recursion! children of a given comment #}
     {% if not node.is_leaf_node %}
         <ul class="flat-list child-ul entrylist forumbranch">
+        
         {{ children }}
         
         
@@ -79,7 +37,7 @@
                 <a href="#">Delta i konversationen, och svara alla i den här tråden.</a>
             </h4> 
                           
-            <div class="entry-content clearfix">
+            <div class="clearfix">
                 <form method="POST" action="{% url comment_forum forum.id %}">
                     {% csrf_token %}
                     <textarea name="comment"></textarea>

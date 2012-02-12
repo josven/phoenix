@@ -15,7 +15,7 @@ class AnnonuceNotifications(object):
         if not request.is_ajax():
             if request.user.is_authenticated():
                 data = get_notifications(request)
-        
+                
                 #Get annoncements
                 annoncements = data.get('a', None)
                 if annoncements:
@@ -54,3 +54,4 @@ class AnnonuceNotifications(object):
                                                              
                 # Put indicators on 
                 request.__class__.indicators = data.get('i',None)
+                request.__class__.notifications = data.get('notifications',None)

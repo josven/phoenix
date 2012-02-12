@@ -1,21 +1,27 @@
 
 var updateChat = function() {
-   $.ajax({
-      url: window.location.pathname,
-      data: {'s':$("li:[data-id]").first().data('id')},
-      success: function(data) {
-        if( data["status"] != 302) {
-            var amount = $('#chatlist li.entry').length;
-            $(data).hide().prependTo("#chatlist").fadeIn("slow");
-            $('#chatlist li.entry:gt(49)').fadeOut().remove();
-            formatJsReplyButton();
-            formatImageDialogs();
-            bindReplyButton();
-            hilightUserName();
-            $('#chat_form textarea, #chat_form input').prop('disabled', false);
-            $('#chat_form input').removeClass('ui-state-hover');
-      }}
-    });
+    
+
+        $.ajax({
+            url: window.location.pathname,
+            data: {'s':$("li:[data-id]").first().data('id')},   
+            statusCode: {
+                200: function(data) {
+                    var amount = $('#chatlist li.entry').length;
+                    $(data).hide().prependTo("#chatlist").slideDown("slow");
+                    $('#chatlist li.entry:gt(49)').fadeOut().remove();
+                    
+                    formatJsReplyButton();
+                    formatImageDialogs();
+                    hilightUserName();
+                    
+                    $('#chat_form textarea, #chat_form input').prop('disabled', false);
+                    $('#chat_form input').removeClass('ui-state-hover');
+                    processing = false;
+                }
+            }
+        });
+
 }
 
 // Reply link event
@@ -58,29 +64,40 @@ jQuery(document).ready(function() {
     
    // Hi(A)ja(x)ck form
    $('#chat_form').submit( function(event) {
-        if( $('#autoupdate').is(':checked') ) {
-            event.preventDefault();
-            var formData = $("#chat_form").serialize();
-            $.ajax({
-                type: "POST",
-                url: window.location.pathname,
-                cache: false,
-                data: formData,
-                beforeSend: function( ) {
-                    $('#chat_form textarea, #chat_form input').prop('disabled', true);
-                },
-                success: function () {
+        event.preventDefault();
+ 
+        var form = $(this),
+            formData = form.serialize();
+        
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            cache: false,
+            data: formData,
+            beforeSend: function( ) {
+                $('#chat_form textarea, #chat_form input').prop('disabled', true);
+                clearInterval(auto_refresh);
+            },
+            statusCode: {
+                200: function(data) {
                     $('#chat_form textarea').val('');
-                    $.jGrowl('Medelande skickat!');
                     updateChat();
-                },
-                error: function () {
-                    $.jGrowl('Något blev fel!');
-                    $('#chat_form textarea, #chat_form input').prop('disabled', false);
+                    auto_refresh = setInterval(
+                        function ()
+                        {
+                           if ( $('#autoupdate').is(':checked') ) {
+                                updateChat();
+                            }
+                        }, 10000); // refresh every 10000 milliseconds
                 }
-            });
-            return false;
-        }
+            },
+            error: function (data) {
+                console.log(data);
+                $('#chat_form textarea, #chat_form input').prop('disabled', false);
+            }
+        });
+        return false;
+        
    });
         
    // Auto update

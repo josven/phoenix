@@ -1,0 +1,49 @@
+{% load markup %}    
+{% load humanize %}
+{% load filters %}
+
+{% load thumbnail %}
+{% load entry_tags %}
+
+
+<h4 class="ui-widget-header entry-head {% if note and note.status < 4 %}ui-state-active{% endif %}"> {% if title %} {{ title }} av {% endif %}{% render_userlink author %} den {{ date }}
+    
+    {% for tag in tags %}
+    {% render_tag tag %}
+    {% endfor %}
+    
+    <div class="button-wrapper">
+        {% if note %}
+            <form class="delete-notification-form" action="{% url delete_notification %}" method="post" >
+                {% csrf_token %}
+                <input type="hidden" value="{{ note.id }}" id="n{{ note.id }}" name="notification_id" >
+                <input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" />
+            </form>
+        {% endif %}
+            
+        {% if reply_button %}
+        <a href="#" data-reply-to="{{ author }}" class="js-reply">Svara</a>
+        {% endif %}
+    </div>
+        
+</h4>
+
+{% if author.get_profile.photo %}
+<div class="entry-profile">    
+    {% thumbnail author.get_profile.photo "75x75" crop="center" as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+    {% endthumbnail %}
+</div>
+{% endif %}
+
+<div class="entry-content clearfix">
+    {{ content|user_filter }}
+    <form class="ui-helper-hidden" method="POST" action="{{ reply_url }}">
+        {% csrf_token %}
+        {% if note.status %}
+        <input type="hidden" name="unreplied" value="{{ id }}">
+        {% endif %}
+        <textarea name="{{ reply_textarea }}"></textarea>
+        <input type="hidden" name="parent_id" value="{{ id }}">
+    </form>
+</div>
