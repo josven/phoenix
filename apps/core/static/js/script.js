@@ -145,9 +145,7 @@ $(document).ready(function() {
     * Break out site from frames
     *
     */
-    if (top.location != self.location) {
-        top.location = self.location;
-    }
+    if (top != self) { top.location.replace(self.location.href); }
 
     /*
     * Ajaxforms
@@ -192,8 +190,9 @@ $(document).ready(function() {
             success: function(data){
                 process_updates( data );
             },
-            error: function() {
-                $.jGrowl("Något fel har inträffat");
+            error: function(data) {
+                console.log("Något fel har inträffat");
+                console.log(data);
             }
         });  
           

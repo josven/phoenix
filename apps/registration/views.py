@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from forms import RegisterForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from models import BetaReg
@@ -12,6 +13,7 @@ from apps.profiles.models import Profile
 
 from apps.core.utils import render
 
+@never_cache
 def auth_login(request):
     """
     Log in a user
