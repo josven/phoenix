@@ -44,7 +44,7 @@ jQuery(document).ready(function() {
     });
     
         
-    $('.forumtree .js-reply').click( function (event) {
+    $('.js-reply').click( function (event) {
         event.preventDefault();
         
         var entry = $(this).parentsUntil('ul').last(),

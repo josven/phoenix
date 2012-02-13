@@ -96,6 +96,9 @@ class ForumComment(MPTTModel):
     def get_absolute_url(self):
         return "/forum/read/{0}/#comment-{1}".format( self.post.id, self.id )
         
+    @property
+    def get_reply_url(self):
+        return reverse('comment_forum', args=[self.post.id])
         
 ''' END NEW FORUM '''   
 

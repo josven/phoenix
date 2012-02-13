@@ -61,7 +61,7 @@ def render_entry(entry, request=None):
     
     # Reply button if comment
     if getattr(entry, 'comment', None):
-        vars['reply_button'] = True    
+        vars['reply_button'] = True
 
     # Reply button if chatpost
     if entry.__class__.__name__ == "Post":

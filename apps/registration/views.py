@@ -34,7 +34,6 @@ def auth_login(request):
             if user.is_active:
                 login(request, user)
                 request.session.set_expiry(0)
-                messages.add_message(request, messages.INFO, "Du loggade just in.")
 
                 return HttpResponseRedirect(reverse('start'))
                 
@@ -51,7 +50,6 @@ def auth_logout(request):
     Log out a user
     
     """
-    messages.add_message(request, messages.INFO, "Du har just loggat ut")
     logout(request)
     return render(request, 'login.html')
 
