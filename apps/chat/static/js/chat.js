@@ -14,6 +14,7 @@ var updateChat = function() {
                     formatJsReplyButton();
                     formatImageDialogs();
                     hilightUserName();
+                    bindReplyButton();
                     
                     $('#chat_form textarea, #chat_form input').prop('disabled', false);
                     $('#chat_form input').removeClass('ui-state-hover');

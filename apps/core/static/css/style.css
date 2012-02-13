@@ -367,6 +367,8 @@ td { vertical-align: top; }
    
 .entry .entry-content img { 
     vertical-align: top;
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    cursor: pointer;
     display: inline;
 }
 
@@ -393,12 +395,6 @@ td { vertical-align: top; }
     word-wrap: break-word;
     margin-top: 0;
     padding-left: 80px;
-}
-
-.entry .entry-content img { 
-    border: 7px solid rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-    cursor: pointer;
 }
 */
 
