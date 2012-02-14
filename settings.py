@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'tracking', # https://github.com/ramusus/django-tracking/commit/ab3c43107b89f54539b2f3e6a7b68a99f8d83971
     'sorl.thumbnail',
     'oembed',
+    'reversion', #https://github.com/etianen/django-reversion
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',

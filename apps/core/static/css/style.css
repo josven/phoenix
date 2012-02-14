@@ -361,6 +361,13 @@ td { vertical-align: top; }
     min-height: 75px;
 }
 
+.entry-content div.content textarea {
+    border:none;
+    width:100%;
+    margin:0;
+    padding:0;
+}
+
 .ui-dialog .entry-content {
     margin-left:0px;
 }

@@ -70,6 +70,16 @@ def render_entry(entry, request=None):
     # Reply button for guestbook
     if entry.__class__.__name__ == "Guestbooks" and request.user != vars['author']:
         vars['reply_button'] = True
+    
+    # if is_editable
+    vars['is_editable'] = getattr(entry, 'is_editable', None)
+    
+    # get history
+    vars['history'] = getattr(entry, 'history', None)
+    
+    # get update_url
+    vars['update_url'] = reverse('update_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
+    
     return vars
 
 @register.inclusion_tag('userlink_template.html')

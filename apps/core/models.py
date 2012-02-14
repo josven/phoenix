@@ -168,17 +168,7 @@ on "simple" fields, advanced fields like ManyToManyField cannot be tracked.
         # Call the real save() method, NOT the delete()
         super(Entry, self).save(*args, **kwargs)
 
-    def get_history(self):
-        history_name = self.__class__.__name__ + "History"
-        history_model = get_model(self._meta.app_label, history_name)
-
-        if history_model:
-            return history_model.objects.filter(origin=self)
-        else:
-            error = "History not enabled: No model named %s" % history_name
-            raise ImproperlyConfigured(error)
-
-
+    
 class EntryHistory(models.Model):
     created_by = models.ForeignKey(User, related_name="created_%(class)s_history", blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)

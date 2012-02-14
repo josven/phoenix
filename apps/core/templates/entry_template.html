@@ -13,12 +13,23 @@
     {% endfor %}
     
     <div class="button-wrapper">
+        
+        {% if history %}
+        <button>Historik</button>
+        {% endif %}       
+        
+        {% if update_url %}
+        {% if is_editable %}
+        <a href="{{ update_url }}" class="js-entry-edit" rel="content-{{ id }}">Ändra</a>
+        {% endif %}
+        {% endif %}
+        
         {% if note %}
-            <form class="delete-notification-form" action="{% url delete_notification %}" method="post" >
-                {% csrf_token %}
-                <input type="hidden" value="{{ note.id }}" id="n{{ note.id }}" name="notification_id" >
-                <input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" />
-            </form>
+        <form class="delete-notification-form" action="{% url delete_notification %}" method="post" >
+            {% csrf_token %}
+            <input type="hidden" value="{{ note.id }}" id="n{{ note.id }}" name="notification_id" >
+            <input class="button-mark" value="Obesvarat" type="submit" id="note-delete-{{ note.id }}" />
+        </form>
         {% endif %}
             
         {% if reply_button %}
@@ -37,7 +48,9 @@
 {% endif %}
 
 <div class="entry-content clearfix">
-    {{ content|user_filter }}
+    <div id="content-{{ id }}" class="content">
+        {{ content|user_filter }}
+    </div>
     <form class="ui-helper-hidden" method="POST" action="{{ reply_url }}">
         {% csrf_token %}
         {% if note.status %}

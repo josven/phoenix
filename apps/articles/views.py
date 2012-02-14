@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from models import *
 from forms import *
+
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.cache import never_cache
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+
 from apps.core.utils import render, validate_internal_tags, get_datatables_records
 from django.core.urlresolvers import reverse
 from apps.notifications.models import Notification
@@ -113,7 +116,6 @@ def update_article(request,id):
     
     """
     vars = {}
-    
     return render(request,'article.html', vars)
     
 @never_cache

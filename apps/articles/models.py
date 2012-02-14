@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import reversion
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -9,6 +10,8 @@ from django.core.urlresolvers import reverse
 
 from taggit.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
+
+import datetime
 
 from apps.core.models import Entry
 
@@ -24,6 +27,17 @@ class Article(Entry):
     tags = TaggableManager()
     allow_comments = models.NullBooleanField(default=False)
         
+    @property
+    def editable_field(self):
+        return "body"
+
+    @property
+    def is_editable(self):
+        """
+        Limit is_editable to one day
+        """
+        return datetime.datetime.now() - self.date_created < datetime.timedelta(days=1)
+
     def get_absolute_url(self):
         return "/articles/read/%s/" % self.id
         
@@ -54,10 +68,13 @@ class Article(Entry):
            
         return data
     
-    def get_posts_index(self):
-            
+    def get_posts_index(self):   
         return ArticleComment.objects.filter(post=self).count()
-
+    
+    @property
+    def history(self):
+        return reversion.Version.objects.get_for_object(self)
+        
 class ArticleComment(MPTTModel):
     """ Threaded comments for blog posts """
     post = models.ForeignKey(Article)

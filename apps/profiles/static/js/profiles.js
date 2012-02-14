@@ -1,5 +1,4 @@
 jQuery(document).ready(function() {
-    
     // quick edit button
     $('.js-quick-edit').button({
                             icons: {
@@ -21,7 +20,7 @@ jQuery(document).ready(function() {
                             });
 
                             // change to save button
-                            button.replaceWith( '  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">Formateringshj√§lp</a><a href="'+ url +'" class="js-quick-save" rel="profile-description">Spara</a>');
+                            button.replaceWith( '  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">Formateringshj‰lp</a><a href="'+ url +'" class="js-quick-save" rel="profile-description">Spara</a>');
                             $( '.js-quick-save' ).button({
                                 icons: {
                                     primary: "ui-icon-pencil"
@@ -40,5 +39,4 @@ jQuery(document).ready(function() {
                                 .buttonset();                            
                             return false;
                         });
-
 });
