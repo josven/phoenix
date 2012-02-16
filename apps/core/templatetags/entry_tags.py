@@ -2,23 +2,25 @@
 
 from django import template
 from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.contrib.humanize.templatetags.humanize import naturalday
 
+from pagination.templatetags.pagination_tags import paginate
 
-
-
-
+from apps.core.templatetags.filters import user_filter
 from apps.core.utils import find_request
 
 register = template.Library()
 
 
+DEFAULT_PAGINATION = getattr(settings, 'PAGINATION_DEFAULT_PAGINATION', 20)
+DEFAULT_WINDOW = getattr(settings, 'PAGINATION_DEFAULT_WINDOW', 4)
+DEFAULT_ORPHANS = getattr(settings, 'PAGINATION_DEFAULT_ORPHANS', 0)
+INVALID_PAGE_RAISES_404 = getattr(settings,'PAGINATION_INVALID_PAGE_RAISES_404', False)
+CLEAN_URL = getattr(settings, 'PAGINATION_CLEAN_URL', False)
 
-
-
-
-
-from django.contrib.humanize.templatetags.humanize import naturalday
-from apps.core.templatetags.filters import user_filter
+def my_paginate(context, window=DEFAULT_WINDOW, hashtag=''):
+    return paginate(context, window, hashtag)
 
 @register.inclusion_tag('entry_template.html')
 def render_entry(entry, request=None):
@@ -67,9 +69,15 @@ def render_entry(entry, request=None):
     if entry.__class__.__name__ == "Post":
         vars['reply_button'] = True
     
-    # Reply button for guestbook
+    # Button for guestbook
     if entry.__class__.__name__ == "Guestbooks" and request.user != vars['author']:
+        # Replybutton
         vars['reply_button'] = True
+        
+        # Get conversation button for guestbook
+        if request.user == vars['author'] or request.user == getattr(entry, 'user_id', 0):
+            vars['conversation_button'] = True
+            vars['conversation_reciver'] = getattr(entry, 'user_id', 0)
     
     # if is_editable
     if getattr(entry,'ajax_editable_fields',False) and vars['author'] == request.user:
@@ -83,10 +91,9 @@ def render_entry(entry, request=None):
         vars['delete_next_url'] = getattr(entry, 'delete_next_url', None)
         
     # if history
-    
     if getattr(entry,'last_changed_by',False) and getattr(entry,'allow_history', False):
         vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
-    
+        
     return vars
 
 @register.inclusion_tag('userlink_template.html')
@@ -224,3 +231,8 @@ def do_assign(parser, token):
         raise template.TemplateSyntaxError("'%s' tag takes two arguments" % bits[0])
     value = parser.compile_filter(bits[2])
     return AssignNode(bits[1], value)
+    
+    
+
+
+register.inclusion_tag('pagination.html', takes_context=True)(my_paginate)

@@ -1,0 +1,12 @@
+{% load entry_tags %}
+{% load pagination_tags %}
+{% autopaginate entries %}
+
+<ul class="flat-list">
+{% for entry in entries %}
+    <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">
+    {% render_entry entry request %}
+    </li>
+{% endfor %}
+</ul>
+{% paginate %}

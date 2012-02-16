@@ -1,6 +1,45 @@
 {% extends "profile.html" %}
 {% load entry_tags %}
-{% load thumbnail %}
+{% load pagination_tags %}
+
+
 {% block content %}
-{% include "_guestbook.html" %}
+{% autopaginate entries %}
+
+{% if not request.user == profile.user %}
+
+<h2>{{ page_title }}</h2>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.text }}
+
+    <br />
+    <div class="buttonset">
+        <input type="submit" value="Skicka" />
+        <input type="button" data-preview="text" value="Förhandsgranska" />
+    </div>
+</form>
+
+<br />
+
+{% endif %}
+
+
+<ul class="flat-list">
+{% for entry in entries %}
+    <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">
+    
+    {% render_entry entry request %}
+    
+
+    {% empty %}
+    <li class="entry ui-widget ui-widget-content">
+        <h2>Tom gästbok =(</h2>
+    </li>
+{% endfor %}
+</ul>
+
+{% my_paginate %}
 {% endblock content %}

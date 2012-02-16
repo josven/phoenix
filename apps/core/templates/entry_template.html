@@ -14,6 +14,10 @@
     
     <div class="button-wrapper buttonset">
        
+        {% if conversation_button %}
+        <a href="{% url guestbook_conversation author.id conversation_reciver.id %}" class="js-entry-conversation">&nbsp;</a>
+        {% endif %}    
+        
         {% if history_url %}
         <a href="{{ history_url }}" class="js-entry-history">&nbsp;Historik</a>
         {% endif %}          

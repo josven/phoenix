@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import get_model
+from django.db.models import get_model, Q
 from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import dispatcher
@@ -22,6 +22,13 @@ class Guestbooks(Entry):
     def get_absolute_url(self):
         return "/user/{0}/guestbook/entry/{1}".format( self.user_id.id, self.id )
         
-    @property
-    def get_reply_url(self):
-        return reverse('guestbook', args=[self.created_by.id])
+    def conversation(self):
+        A = self.created_by
+        B = self.user_id
+        
+        entrys_from_A_to_B = Q(created_by = A) & Q(user_id = B)
+        entrys_from_B_to_A = Q(created_by = B) & Q(user_id = A)
+        
+        entrys = Guestbooks.active.filter(entrys_from_A_to_B | entrys_from_B_to_A)
+        
+        return entrys

@@ -284,6 +284,41 @@ $(document).ready(function() {
                            
                             return false;
                         });
+    /*
+    * Convaseation entry button for guestbooks
+    *
+    */
+    $('.js-entry-conversation').button({
+                            icons: {
+                                primary: "ui-icon-transferthick-e-w"
+                            }
+                        });
+                        /*
+                        .click( function ( event ) {
+                            event.preventDefault();
+                            alert('bajs');
+                            
+                            var button = $( this ),
+                                url = button.attr( 'href' );
+                                
+                            // load form
+                            var dialog = $('<div></div')
+                                .load( url )
+                                .dialog({
+                                    modal: true,
+                                    title: "Visa konversation",
+                                    width: $(window).width() - 50,
+                                    height: $(window).height() - 150,
+                                    buttons: {
+                                        "Stäng": function() {
+                                            $( this ).dialog( "close" );
+                                        }
+                                    }
+                                });
+                           
+                            return false;
+                        });
+                        */
                         
     /*
     * Ajaxforms
@@ -455,4 +490,10 @@ $(document).ready(function() {
         animateDuration : 300,
     });
 
+    // Apply jQuery UI on pagination
+    $('.pagination').buttonset();
+    $('.pagination .disabled').button({ disabled: true });
+    $('.pagination .current').button().addClass('ui-state-active');
+    $('.pagination .elips').button();
+    
 });

@@ -78,6 +78,7 @@ MIDDLEWARE_CLASSES = (
     'reversion.middleware.RevisionMiddleware',
     'tracking.middleware.VisitorTrackingMiddleware',
     'phoenix.apps.notifications.middleware.AnnonuceNotifications',
+    'pagination.middleware.PaginationMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -107,6 +108,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'oembed',
     'reversion', #https://github.com/etianen/django-reversion
+    'pagination', #https://github.com/wuudward/django-pagination
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',
