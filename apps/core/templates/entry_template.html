@@ -12,15 +12,19 @@
     {% render_tag tag %}
     {% endfor %}
     
-    <div class="button-wrapper">
-        
-        {% if history %}
-        <button>Historik</button>
-        {% endif %}       
+    <div class="button-wrapper buttonset">
+       
+        {% if history_url %}
+        <a href="{{ history_url }}" class="js-entry-history">&nbsp;Historik</a>
+        {% endif %}          
+
+        {% if is_deleteble %}
+        <a href="{{ delete_url }}" data-next-url="{{ delete_next_url }}" class="js-entry-delete">&nbsp;Radera</a>
+        {% endif %}    
         
         {% if update_url %}
         {% if is_editable %}
-        <a href="{{ update_url }}" class="js-entry-edit" rel="content-{{ id }}">Ändra</a>
+        <a href="{{ update_url }}" class="js-entry-edit" rel="content-{{ id }}">&nbsp;Ändra</a>
         {% endif %}
         {% endif %}
         

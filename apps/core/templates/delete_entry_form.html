@@ -1,4 +1,5 @@
 <form id="user-form-settings" action="{{ action }}" method="post" enctype="multipart/form-data">
+<p>{{ message }} test</p>
 {% csrf_token %}
 {{ form.as_p }}
 </form>

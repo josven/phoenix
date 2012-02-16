@@ -1,6 +1,12 @@
 from django.contrib import admin
 from models import *
+import reversion
 
-admin.site.register(Article)
+class ArticleAdmin(reversion.VersionAdmin):
+
+    pass
+    
+admin.site.register(Article, ArticleAdmin)
+
 admin.site.register(defaultArticleCategories)
 admin.site.register(ModeratorArticleCategories)

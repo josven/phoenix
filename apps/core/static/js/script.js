@@ -166,11 +166,15 @@ $(document).ready(function() {
                                 
                             // load form
                             field.load(  url , function () {
-                                field.find('textarea').css( 'height' , initalHeight );
+                                field.find('textarea').css( 'height' , initalHeight )
+                                                      .autoResize({
+                                                            // Quite slow animation:
+                                                            animateDuration : 300,
+                                                        });
                             });
 
                             // change to save button
-                            button.replaceWith( '  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">Formateringshjälp</a><a href="'+ url +'" class="js-entry-save" rel="profile-description">Spara</a>');
+                            button.replaceWith( '  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">&nbsp;</a><a href="'+ url +'" class="js-entry-save" rel="profile-description">Spara</a>');
                             $( '.js-entry-save' ).button({
                                 icons: {
                                     primary: "ui-icon-pencil"
@@ -198,6 +202,86 @@ $(document).ready(function() {
                                                     }
                             }).parent()
                                 .buttonset();                            
+                            return false;
+                        });
+                        
+   /*
+    * Delete entry button
+    *
+    */
+    $('.js-entry-delete').button({
+                            icons: {
+                                primary: "ui-icon-trash"
+                            }
+                        })
+                        .click( function ( event ) {
+                            event.preventDefault();
+                            
+                            var button = $( this ),
+                                url = button.attr( 'href' );
+                                next_url = button.attr( 'data-next-url' );
+                                
+                            // load form
+                            var dialog = $('<div></div')
+                                .load( url )
+                                .dialog({
+                                    modal: true,
+                                    title: "Radera?",
+                                    buttons: {
+                                        "Radera": function() {
+                                            $.ajax( {
+                                                type: "POST",
+                                                url: url,
+                                                data: $( this ).find('form').serialize(),
+                                                statusCode: {
+                                                    200: function(data) {
+                                                        location.href = next_url;
+                                                    },
+                                                    428: function(data) {
+                                                        console.log( dialog );
+                                                        dialog.append('<p style="font-style:bold;">Du måste välja om du ska fortsätta</p>');
+                                                    }
+                                                }
+                                            });
+                                        },
+                                        "Avbryt": function() {
+                                            $( this ).dialog( "close" );
+                                        }
+                                    }
+                                });
+                           
+                            return false;
+                        });                        
+   /*
+    * History entry button
+    *
+    */
+    $('.js-entry-history').button({
+                            icons: {
+                                primary: "ui-icon-folder-open"
+                            }
+                        })
+                        .click( function ( event ) {
+                            event.preventDefault();
+                            
+                            var button = $( this ),
+                                url = button.attr( 'href' );
+                                
+                            // load form
+                            var dialog = $('<div></div')
+                                .load( url )
+                                .dialog({
+                                    modal: true,
+                                    title: "Historik",
+                                    width: $(window).width() - 50,
+                                    height: $(window).height() - 150,
+                                    buttons: {
+                                        "Stäng": function() {
+                                            $( this ).dialog( "close" );
+                                        }
+                                    }
+                                });
+                           
                             return false;
                         });
                         
@@ -364,19 +448,6 @@ $(document).ready(function() {
             changeMonth: true
             
         });
-
-
-   // Hover username menu
-   $('.link-user').mouseenter( function () {
-        link = $(this);
-        widget = link.parent('.ui-widget-header');
-        menu = widget.next('ul.username-hover-menu');
-        menu.fadeIn("fast");
-   });
-   
-   $('ul.username-hover-menu').mouseleave( function () { 
-        $(this).fadeOut("fast");
-   });
 
    // Auto resize text areas 
    $('textarea').autoResize({

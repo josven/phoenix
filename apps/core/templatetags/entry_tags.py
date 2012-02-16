@@ -72,13 +72,20 @@ def render_entry(entry, request=None):
         vars['reply_button'] = True
     
     # if is_editable
-    vars['is_editable'] = getattr(entry, 'is_editable', None)
+    if entry.ajax_editable_fields and vars['author'] == request.user:
+        vars['is_editable'] = getattr(entry, 'is_editable', None)
+        vars['update_url'] = reverse('update_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
+
+    # if deleteble
+    if vars['author'] == request.user:
+        vars['is_deleteble'] = getattr(entry, 'is_deleteble', None)
+        vars['delete_url'] = reverse('delete_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
+        vars['delete_next_url'] = getattr(entry, 'delete_next_url', None)
+        
+    # if history
     
-    # get history
-    vars['history'] = getattr(entry, 'history', None)
-    
-    # get update_url
-    vars['update_url'] = reverse('update_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
+    if entry.last_changed_by and entry.allow_history:
+        vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
     
     return vars
 

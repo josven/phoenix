@@ -1,0 +1,7 @@
+{% load filters %}
+{% for entry in history %}
+<h4>{{ entry.date }}</h4>
+<br/>
+{{ entry.content|user_filter }}
+<hr>
+{% endfor %}

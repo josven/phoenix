@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-import reversion
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -22,21 +21,37 @@ class Article(Entry):
     Articles
 
     """
-    title = models.CharField(max_length=128)
-    body = models.TextField(max_length=5120)
-    tags = TaggableManager()
-    allow_comments = models.NullBooleanField(default=False)
+    title = models.CharField(max_length=128, verbose_name="Rubrik")
+    body = models.TextField(max_length=5120, verbose_name="Text")
+    tags = TaggableManager(verbose_name="Kategorier")
+    allow_comments = models.NullBooleanField(default=False,verbose_name="Tillåt kommentarer")
         
     @property
-    def editable_field(self):
-        return "body"
+    def ajax_editable_fields(self):
+        return ["body", "allow_comments"]
 
+    @property
+    def is_deleteble(self):
+        return True
+        
+    @property
+    def delete_next_url(self):
+        return reverse('read_article')
+        
     @property
     def is_editable(self):
         """
         Limit is_editable to one day
         """
         return datetime.datetime.now() - self.date_created < datetime.timedelta(days=1)
+           
+    @property
+    def allow_history(self):
+        return True    
+        
+    @property
+    def fields_history(self):
+        return ["body"]
 
     def get_absolute_url(self):
         return "/articles/read/%s/" % self.id
@@ -70,10 +85,6 @@ class Article(Entry):
     
     def get_posts_index(self):   
         return ArticleComment.objects.filter(post=self).count()
-    
-    @property
-    def history(self):
-        return reversion.Version.objects.get_for_object(self)
         
 class ArticleComment(MPTTModel):
     """ Threaded comments for blog posts """
@@ -124,3 +135,6 @@ class ModeratorArticleCategories(models.Model):
         text = self.tags.all()[0]
 
         return u'%s' % (text)
+        
+        
+        
