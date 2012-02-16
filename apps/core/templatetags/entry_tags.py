@@ -84,7 +84,7 @@ def render_entry(entry, request=None):
         
     # if history
     
-    if getattr(entry,'last_changed_by',False) and getattr(entry,'entry.allow_history', False):
+    if getattr(entry,'last_changed_by',False) and getattr(entry,'allow_history', False):
         vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
     
     return vars
