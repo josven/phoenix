@@ -293,32 +293,6 @@ $(document).ready(function() {
                                 primary: "ui-icon-transferthick-e-w"
                             }
                         });
-                        /*
-                        .click( function ( event ) {
-                            event.preventDefault();
-                            alert('bajs');
-                            
-                            var button = $( this ),
-                                url = button.attr( 'href' );
-                                
-                            // load form
-                            var dialog = $('<div></div')
-                                .load( url )
-                                .dialog({
-                                    modal: true,
-                                    title: "Visa konversation",
-                                    width: $(window).width() - 50,
-                                    height: $(window).height() - 150,
-                                    buttons: {
-                                        "Stäng": function() {
-                                            $( this ).dialog( "close" );
-                                        }
-                                    }
-                                });
-                           
-                            return false;
-                        });
-                        */
                         
     /*
     * Ajaxforms
