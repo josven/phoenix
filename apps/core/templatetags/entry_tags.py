@@ -73,6 +73,7 @@ def render_entry(entry, request=None):
     if entry.__class__.__name__ == "Guestbooks" and request.user != vars['author']:
         # Replybutton
         vars['reply_button'] = True
+        vars['reply_url'] = reverse('guestbook', args=[vars['author'].id])
         
         # Get conversation button for guestbook
         if request.user == vars['author'] or request.user == getattr(entry, 'user_id', 0):
