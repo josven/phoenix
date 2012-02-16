@@ -72,7 +72,7 @@ def render_entry(entry, request=None):
         vars['reply_button'] = True
     
     # if is_editable
-    if entry.ajax_editable_fields and vars['author'] == request.user:
+    if getattr(entry,'ajax_editable_fields',False) and vars['author'] == request.user:
         vars['is_editable'] = getattr(entry, 'is_editable', None)
         vars['update_url'] = reverse('update_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
 
@@ -84,7 +84,7 @@ def render_entry(entry, request=None):
         
     # if history
     
-    if entry.last_changed_by and entry.allow_history:
+    if getattr(entry,'last_changed_by',False) and getattr(entry,'entry.allow_history', False):
         vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
     
     return vars
