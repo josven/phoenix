@@ -135,6 +135,3 @@ class ModeratorArticleCategories(models.Model):
         text = self.tags.all()[0]
 
         return u'%s' % (text)
-        
-        
-        
