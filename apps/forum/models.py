@@ -38,7 +38,7 @@ class Forum(Entry):
 
     @property
     def is_deleteble(self):
-        return True
+        return False
         
     @property
     def delete_next_url(self):
