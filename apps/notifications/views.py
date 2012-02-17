@@ -102,7 +102,7 @@ def get_notifications(request):
                 notification.save()
             
             # Get guestbook indicator       
-            if ( notification.instance_type == "Guestbooks" ) & ( int( float( notification.status ) ) < 4 ):
+            if ( notification.instance_type == "Guestbooks" ) & ( int( float( notification.status ) ) < 3 ):
                 count_indicator_guestbook += 1    
                 
             # Get new forum annuoucements            
@@ -112,7 +112,7 @@ def get_notifications(request):
                 notification.save()
             
             # Get forum indicator       
-            if ( notification.instance_type == 'ForumComment' ) & ( int( float( notification.status ) ) < 4 ):
+            if ( notification.instance_type == 'ForumComment' ) & ( int( float( notification.status ) ) < 3 ):
                 count_indicator_forum += 1  
                               
             # Get new article annuoucements            
@@ -121,8 +121,8 @@ def get_notifications(request):
                 notification.status = 2
                 notification.save()
             
-            # Get forum indicator       
-            if ( notification.instance_type == 'ArticleComment' ) & ( int( float( notification.status ) ) < 4 ):
+            # Get articlecomment indicator       
+            if ( notification.instance_type == 'ArticleComment' ) & ( int( float( notification.status ) ) < 3 ):
                 count_indicator_article += 1
         
     d = {

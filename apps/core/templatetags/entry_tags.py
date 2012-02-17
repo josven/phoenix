@@ -34,10 +34,24 @@ def render_entry(entry, request=None):
     # Get notifications
     notifications = getattr(request,'notifications',None)
     if notifications:
+
         # Find notification on entry
-        for note in notifications:          
+        for note in notifications:
+            
             if note.instance_type == entry.__class__.__name__ and note.instance_id == entry.id:
                 vars['note'] = note
+                
+                status = 4
+                
+                # If note is new or annunced, set it to hilight.
+                # Othervise put it 4 (unreplied).
+                
+                if note.status < 3:
+                    status = 3
+                
+                note.status = status
+                note.save()
+ 
 
     # Get date
     date_names = ['date_created', 'added']

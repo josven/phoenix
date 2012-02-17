@@ -36,7 +36,7 @@ def list_forum_json(request, tags=None):
         #columnIndexNameMap is required for correct sorting behavior
         columnIndexNameMap = { 
                                 0: 'title',
-                                1 : 'tags',
+                                1: 'tags',
                                 2: 'date_created',
                                 3: 'id',
                                 4: 'posts_index',
@@ -81,29 +81,7 @@ def read_forum(request, id):
         }
         
     vars['forum'] = Forum.objects.get(id=id)
-    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
-  
-    '''
-    Notifications
-    '''
-    # List of ID:s to filter
-    object_id_list = [ post.id for post in vars['comments'] ]    
-    notes = Notification.objects.filter(receiver=request.user, instance_type="ForumComment", instance_id__in = object_id_list)
-    
-    #Get hilighted
-    hilighted = [ note.instance_id for note in notes if note.status < 3]  
-    vars['hilighted'] = hilighted
-    
-    # Get unreplied
-    unreplied = [ note.instance_id for note in notes if note.status <= 4]
-    vars['unreplied'] = unreplied
-    
-    #Set status on hilightes to unreplied
-    for note in notes:
-        if note.instance_id in hilighted:
-            note.status = 4
-            note.save()   
-       
+    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])   
     return render(request, 'read_forum.html', vars )
 
 

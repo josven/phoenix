@@ -143,26 +143,7 @@ def read_article(request,user_id=None, id=None):
     vars['article'] = Article.objects.get(id=id)
 
     if vars['article'].allow_comments:
-
         vars['comments'] = ArticleComment.objects.filter(post=vars['article'])
-
-        # List of ID:s to filter
-        object_id_list = [ post.id for post in vars['comments'] ]    
-        notes = Notification.objects.filter(receiver=request.user, instance_type="ArticleComment", instance_id__in = object_id_list)
-        
-        #Get hilighted
-        hilighted = [ note.instance_id for note in notes if note.status < 3]  
-        vars['hilighted'] = hilighted
-        
-        # Get unreplied
-        unreplied = [ note.instance_id for note in notes if note.status <= 4]
-        vars['unreplied'] = unreplied
-        
-        #Set status on hilightes to unreplied
-        for note in notes:
-            if note.instance_id in hilighted:
-                note.status = 4
-                note.save()   
 
     if user_id:
         template = "user_article.html"
