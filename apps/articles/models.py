@@ -110,27 +110,26 @@ class ArticleComment(MPTTModel):
     @property
     def is_deleteble(self):
         
-        deleteble = True
+        deleteble = False
         
-        # has no childs
-        if self.is_leaf_node():
+        if self.is_root_node():
+            deleteble = True
+        
+        if not self.is_leaf_node():
+            deleteble = False
             
-            
-            # Get siblings
+        if not self.is_root_node():
             siblings = self.get_siblings(include_self=True).reverse()
             siblings_count = len (siblings)
             
-            # If not alone?
+           # If not alone?
             if siblings_count > 1:
-                deleteble = False
-            
+                deleteble = False 
+
             #If last? 
             if siblings[0] == self:
                 deleteble = True
 
-        else:
-            deleteble = False
-            
         return deleteble
         
     @property
