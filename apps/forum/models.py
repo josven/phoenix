@@ -31,7 +31,32 @@ class Forum(Entry):
     last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None)
     posts_index = models.IntegerField(null=True, blank=True)
 
+        
+    @property
+    def ajax_editable_fields(self):
+        return ["body"]
 
+    @property
+    def is_deleteble(self):
+        return True
+        
+    @property
+    def delete_next_url(self):
+        return reverse('read_forum', args=[self.id])
+        
+    @property
+    def is_editable(self):
+        return True
+           
+    @property
+    def allow_history(self):
+        return True    
+        
+    @property
+    def fields_history(self):
+        return ["body"]
+
+        
     def aaData(self):
         """
         aaData formats for datatables
@@ -84,6 +109,7 @@ class ForumComment(MPTTModel):
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)
     comment = models.TextField()
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
     tags = TaggableManager()
     
     # a link to comment that is being replied, if one exists
@@ -92,6 +118,54 @@ class ForumComment(MPTTModel):
     class MPTTMeta:
         # comments on one level will be ordered by date of creation
         order_insertion_by=['added']
+
+    @property
+    def ajax_editable_fields(self):
+        return ["comment"]
+
+    @property
+    def is_deleteble(self):
+        
+        deleteble = False
+        
+        if self.is_root_node():
+            deleteble = True
+        
+        if not self.is_leaf_node():
+            deleteble = False
+            
+        if not self.is_root_node():
+            siblings = self.get_siblings(include_self=True).reverse()
+            siblings_count = len (siblings)
+            
+           # If not alone?
+            if siblings_count > 1:
+                deleteble = False 
+
+            #If last? 
+            if siblings[0] == self:
+                deleteble = True
+
+        return deleteble
+        
+    @property
+    def delete_next_url(self):
+        return reverse('read_article', args=[self.post.id])
+        
+    @property
+    def is_editable(self):
+        """
+        Limit is_editable to one day
+        """
+        return datetime.datetime.now() - self.added < datetime.timedelta(days=1)
+           
+    @property
+    def allow_history(self):
+        return True    
+        
+    @property
+    def fields_history(self):
+        return ["comment"]
         
     def get_absolute_url(self):
         return "/forum/read/{0}/#comment-{1}".format( self.post.id, self.id )
