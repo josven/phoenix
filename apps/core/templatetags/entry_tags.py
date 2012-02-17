@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 from django import template
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -105,9 +105,15 @@ def render_entry(entry, request=None):
         vars['delete_url'] = reverse('delete_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
         vars['delete_next_url'] = getattr(entry, 'delete_next_url', None)
         
-    # if history
-    if getattr(entry,'date_last_changed',False) and getattr(entry,'allow_history', False):
-        vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
+    # if history allowed
+    if getattr(entry,'allow_history', None):
+        
+        # if the entry have attribute date_last_changed
+        if getattr(entry,'date_last_changed',None):       
+            
+            #If the change is within the timespan of 1 sec
+            if getattr(entry,'date_last_changed') - date_value[1] > datetime.timedelta(seconds=1):
+                vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
         
     return vars
 
