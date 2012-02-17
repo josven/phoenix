@@ -32,7 +32,7 @@ class Entry(models.Model):
     last_changed_by = models.ForeignKey(User, related_name="changed_%(class)s_entries", blank=True, null=True)
     deleted_by = models.ForeignKey(User, related_name="deleted_%(class)s_entries", blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
+    #date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_deleted = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     objects = models.Manager()

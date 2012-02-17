@@ -93,6 +93,7 @@ class ArticleComment(MPTTModel):
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)
     comment = models.TextField()
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
     tags = TaggableManager()
     
     # a link to comment that is being replied, if one exists
@@ -101,6 +102,33 @@ class ArticleComment(MPTTModel):
     class MPTTMeta:
         # comments on one level will be ordered by date of creation
         order_insertion_by=['added']
+        
+    @property
+    def ajax_editable_fields(self):
+        return ["comment"]
+
+    @property
+    def is_deleteble(self):
+        return self.get_descendant_count() == 0
+        
+    @property
+    def delete_next_url(self):
+        return reverse('read_article', args=[self.post.id])
+        
+    @property
+    def is_editable(self):
+        """
+        Limit is_editable to one day
+        """
+        return datetime.datetime.now() - self.added < datetime.timedelta(days=1)
+           
+    @property
+    def allow_history(self):
+        return True    
+        
+    @property
+    def fields_history(self):
+        return ["comment"]
 
     def get_absolute_url(self):
         return "/articles/read/{0}/#comment-{1}".format( self.post.id, self.id )
