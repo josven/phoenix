@@ -114,7 +114,7 @@ def render_entry(entry, request=None):
             #If the change is within the timespan of 1 sec
             if getattr(entry,'date_last_changed') - date_value[1] > datetime.timedelta(seconds=1):
                 vars['history_url'] = reverse('history_entry', args=[entry._meta.app_label, entry.__class__.__name__, entry.id])
-        
+    
     return vars
 
 @register.inclusion_tag('userlink_template.html')

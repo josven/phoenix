@@ -109,7 +109,29 @@ class ArticleComment(MPTTModel):
 
     @property
     def is_deleteble(self):
-        return self.get_descendant_count() == 0
+        
+        deleteble = True
+        
+        # has no childs
+        if self.is_leaf_node():
+            
+            
+            # Get siblings
+            siblings = self.get_siblings(include_self=True).reverse()
+            siblings_count = len (siblings)
+            
+            # If not alone?
+            if siblings_count > 1:
+                deleteble = False
+            
+            #If last? 
+            if siblings[0] == self:
+                deleteble = True
+
+        else:
+            deleteble = False
+            
+        return deleteble
         
     @property
     def delete_next_url(self):
