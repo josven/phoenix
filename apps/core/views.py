@@ -123,7 +123,6 @@ def history_entry(request, app_label, class_name, id):
     if instance.allow_history and instance.fields_history:
         versions = Version.objects.get_for_object(instance)
         history_diff = []
-        
         for version in versions:
             for field in instance.fields_history:
                 history = version.field_dict.get(field, None)
