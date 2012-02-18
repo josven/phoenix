@@ -59,6 +59,7 @@ def guestbook(request,userid):
             'form' : GuestbookForm(),
             'entries' : entries,
             'profile' : user.get_profile(),
+            'user' : user,
             }
     
     if request.user.id == int( float( userid ) ):
