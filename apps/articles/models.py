@@ -59,6 +59,10 @@ class Article(Entry):
     def __unicode__(self):
         return u'%s' % self.title
 
+    @property
+    def verbose_name(self):
+        return u'artikel'
+        
     def aaData(self):
         """
         aaData formats for datatables

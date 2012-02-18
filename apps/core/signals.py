@@ -9,7 +9,34 @@ from apps.notifications.models import *
 from apps.guestbook.models import Guestbooks
 from apps.forum.models import ForumComment
 from apps.articles.models import ArticleComment
+from apps.profiles.models import Profile
 
+from taggit.models import TaggedItem
+
+
+@receiver(post_save, sender=TaggedItem)
+def taggedItem_reciver(sender, **kwargs):
+    instance = kwargs['instance']
+    content_object = instance.content_object    
+    shall_pass = ['Article']
+    
+    # Check if this is not a subscription tag
+    if instance.content_object.__class__.__name__ in shall_pass:
+        receivers = Profile.objects.filter(subscriptions__name__in=[instance.tag.name])
+        for receiver in receivers:
+            notification = Notification(
+                type = 4, #Taggbevakning
+                message = u'Tagg:"{2}" på en {0} ifrån {1}!'.format( content_object.verbose_name ,content_object.created_by.username, instance.tag.name ),
+                status = 1, #NEW
+                receiver = receiver.user,
+                sender = content_object.created_by,
+                sender_name = content_object.created_by.username,
+                instance_type = content_object.__class__.__name__,
+                instance_id = content_object.id,
+                instance_url = content_object.get_absolute_url(),
+            )
+
+            notification.save()
 
 @receiver(post_save, sender=Guestbooks)
 def guestbook_reciver(sender, **kwargs):

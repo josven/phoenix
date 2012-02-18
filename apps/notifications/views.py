@@ -14,6 +14,7 @@ NOTIFICATION_TYPES = (
     (1, 'Gästboksinlägg'),
     (2, 'Forumsvar'),
     (3, 'Artikelkommentar'),
+    (4, 'Taggbevakning'),
 )
 
 @never_cache
