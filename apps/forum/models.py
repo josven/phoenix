@@ -150,7 +150,7 @@ class ForumComment(MPTTModel):
         
     @property
     def delete_next_url(self):
-        return reverse('read_article', args=[self.post.id])
+        return reverse('read_forum', args=[self.post.id])
         
     @property
     def is_editable(self):
