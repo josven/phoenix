@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
+from taggit.managers import TaggableManager
 
 GENDER_CHOICES = (
     ('O', 'Odefinerat'),
@@ -27,6 +28,7 @@ class Profile(models.Model):
     birthdate = models.DateField(blank=True, null=True, verbose_name="Födelsedatum")
     description = models.TextField(blank=True, null=True, verbose_name="Beskrivning")
     location = models.CharField(max_length=50, blank=True, null=True, verbose_name="Ort")
+    subscriptions = TaggableManager(verbose_name="Bevakningar")
 
     photo = ImageField(upload_to=get_image_path, null=True, blank=True, verbose_name="Bildfil (max 2MB)")
 
