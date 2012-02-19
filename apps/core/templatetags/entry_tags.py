@@ -139,7 +139,7 @@ def render_userlink(user):
     return vars   
     
 @register.inclusion_tag('tag_template.html')
-def render_tag(tag, usertags, tag_search_prefix=['FRONTPAGE']):
+def render_tag(tag, usertags=['FRONTPAGE'], tag_search_prefix):
         
     vars = {
         'tag_search_prefix':tag_search_prefix,
