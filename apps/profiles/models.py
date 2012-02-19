@@ -23,7 +23,7 @@ class Profile(models.Model):
         return os.path.join('avatars', str(instance.id), filename)
 
     user = models.OneToOneField(User)
-    #date_username_last_changed = models.DateTimeField(blank=True, null=True)
+    date_username_last_changed = models.DateTimeField(blank=True, null=True)
     name = models.CharField(max_length=150, blank=True, null=True, verbose_name="Namn")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name="Kön", default="O")
     birthdate = models.DateField(blank=True, null=True, verbose_name="Födelsedatum")
