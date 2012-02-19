@@ -78,9 +78,9 @@ def render_entry(entry, request=None):
     
     # Get usertags
     usertags = getattr(request, 'usertags', None)
-    if usertags:
-        vars['usertags'] = [tag.name for tag in usertags]
-    
+    vars['usertags'] = [tag.name for tag in usertags]
+
+        
     # Find content
     content_names = ['body', 'comment','text']
     content_value = _get_first_valid_value(entry, content_names)
@@ -141,9 +141,6 @@ def render_userlink(user):
 @register.inclusion_tag('tag_template.html')
 def render_tag(tag, usertags, tag_search_prefix):
     
-    if not usertags:
-        usertags = ['FRONTPAGE']
-
     vars = {
         'tag_search_prefix':tag_search_prefix,
         'usertags':usertags,
