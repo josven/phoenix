@@ -66,8 +66,10 @@ def update_account(request):
                         messages.add_message(request, messages.INFO, "Du kan inte ändra användarnamn just nu.")
                 
                 if cond_username_avail and cond_time_passed:
-                    profile.save()
+                    user.username = username
+                    user.save()
                     profile.date_username_last_changed = datetime.now()
+                    profile.save()
                     messages.add_message(request, messages.INFO, "Användarnamn ändrat.")
                     
             vars['username_change_form'] = username_change_form
