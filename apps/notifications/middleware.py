@@ -55,3 +55,6 @@ class AnnonuceNotifications(object):
                 # Put indicators on 
                 request.__class__.indicators = data.get('i',None)
                 request.__class__.notifications = data.get('notifications',None)
+                
+                #Put on usertags
+                request.__class__.usertags = request.user.get_profile().subscriptions.all()

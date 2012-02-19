@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     # Create
     url(r'^articles/create/$', 'apps.articles.views.create_article', name='create_article'),    
     url(r'^articles/tag/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.articles.views.search_article', name='search_article'),
-    
+
     #Ajax APIs
     url(r'^articles/(?P<id>\d*)/body/form/$', 'apps.articles.views.ajax_article_body_form', name='ajax_article_body_form'),
 

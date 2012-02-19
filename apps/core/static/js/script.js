@@ -363,6 +363,7 @@ $(document).ready(function() {
     */
     
     // HACK until we have real widgets based on CheckboxSelectMultiple for tags 
+    /*
     $('input[type=checkbox].ui-tag-reformat').parent('label').each( function() {
         var label = $(this),
             input = label.find('input'),
@@ -380,11 +381,12 @@ $(document).ready(function() {
         // Remove class on input
         input.removeClass('ui-tag');
     });
+    */
     
     // Checkboxtags are toggleble tag buttons. Used when new entry are created.
     $('.ui-tag-edit input[type=checkbox]').button( {icons: {primary:'ui-icon-pencil'}});
     
-    $('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}});
+    //$('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}});
 
     
     
@@ -394,9 +396,48 @@ $(document).ready(function() {
     */
     formatImageDialogs();
     
-    // Linktags, these tags are links, simply put.
-    $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
-    
+    // Linktags, with toggable subcribe buttons.
+    $.each( $('.ui-tag-link'), function () {
+        
+        var tag = $(this),
+            toggle = tag.find('.ui-tag-link-toggle'),
+            toggle_icon = toggle.attr('data-icon'),
+            toggle_form = tag.find('.ui-tag-link-form'),
+            toggle_url = toggle_form.attr('action');
+            
+        toggle.button({ 
+            icons: {primary: toggle_icon },
+            text: false,
+        })
+        .click(function(event) {
+            event.preventDefault();
+            
+            $.ajax( {
+                type: "POST",
+                url: toggle_url,
+                data: toggle_form.serialize(),
+                statusCode: {
+                    200: function(data) {
+                        $.jGrowl(data.message);
+                        if ( data.tag_status == 1 ) {
+                            $('.ui-tag-link-toggle[rel="'+toggle.attr('rel')+'"]').button("option", "icons", { primary: 'ui-icon-star' });
+                            
+                            
+                        } else if(data.tag_status == 0) {
+                            $('.ui-tag-link-toggle[rel="'+toggle.attr('rel')+'"]').button("option", "icons", { primary: 'ui-icon-tag' });
+                        }
+                        
+                    }
+                }
+            
+            });
+            
+        return false;    
+        
+		}).next().button().parent().buttonset();
+        
+    });
+
     
     /*
     * jQuery UI accordions
