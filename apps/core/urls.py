@@ -6,4 +6,5 @@ urlpatterns = patterns('',
     url(r'^utils/update-entry/(?P<app_label>\w*)/(?P<class_name>\w*)/(?P<id>\d*)/$', 'apps.core.views.update_entry', name='update_entry'),
     url(r'^utils/delete-entry/(?P<app_label>\w*)/(?P<class_name>\w*)/(?P<id>\d*)/$', 'apps.core.views.delete_entry', name='delete_entry'),
     url(r'^utils/history-entry/(?P<app_label>\w*)/(?P<class_name>\w*)/(?P<id>\d*)/$', 'apps.core.views.history_entry', name='history_entry'),
+    url(r'^utils/subscribe-tag/$', 'apps.core.views.subscribe_tag', name='subscribe_tag'),
 )

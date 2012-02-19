@@ -20,12 +20,12 @@ urlpatterns = patterns('',
     
     #json for datatables
     url(r'^list/json/$', 'apps.forum.views.list_forum_json', name='list_forum_json'),
-    url(r'^list/(?P<tags>(.+)(,\s*.+)*)/json/$', 'apps.forum.views.list_forum_json', name='list_forum_json'),    
+    url(r'^tag/(?P<tags>(.+)(,\s*.+)*)/json/$', 'apps.forum.views.list_forum_json', name='list_forum_json'),    
     
     
     
     url(r'^list/$', 'apps.forum.views.list_forum', name='list_forum'),
-    url(r'^list/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.list_forum', name='list_forum'),
+    url(r'^tag/(?P<tags>(.+)(,\s*.+)*)/$', 'apps.forum.views.list_forum', name='list_forum'),
     
     url(r'^read/(?P<id>\d*)/$', 'apps.forum.views.read_forum', name='read_forum'),
     

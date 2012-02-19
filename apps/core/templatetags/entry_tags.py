@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
+import inspect
+
 from django import template
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -9,6 +11,7 @@ from pagination.templatetags.pagination_tags import paginate
 
 from apps.core.templatetags.filters import user_filter
 from apps.core.utils import find_request
+from apps.core.forms import subscribe_tag_form
 
 register = template.Library()
 
@@ -69,6 +72,15 @@ def render_entry(entry, request=None):
     if tags_attr:
         vars['tags'] =  tags_attr.all()
     
+    # Tag search
+    vars['tag_search_prefix'] = u"/{0}/tag/".format(entry.__class__.__module__.split('.')[1])
+
+    
+    # Get usertags
+    usertags = getattr(request, 'usertags', None)
+    if usertags:
+        vars['usertags'] = [tag.name for tag in usertags]
+    
     # Find content
     content_names = ['body', 'comment','text']
     content_value = _get_first_valid_value(entry, content_names)
@@ -127,9 +139,13 @@ def render_userlink(user):
     return vars   
     
 @register.inclusion_tag('tag_template.html')
-def render_tag(tag):
+def render_tag(tag, usertags, tag_search_prefix):
+        
     vars = {
+        'tag_search_prefix':tag_search_prefix,
+        'usertags':usertags,
         'tag':tag,
+        'subscribe_tag_form':subscribe_tag_form(initial={'tag':tag})
         }
         
     return vars

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.forms import ModelForm, Form, BooleanField
-     
+from django.forms import ModelForm, Form, BooleanField, CharField
+
 def update_entry_form(include_fields, form_model, *args, **kwargs):
     class TempForm(ModelForm):
         class Meta:
@@ -15,3 +15,6 @@ def update_entry_form(include_fields, form_model, *args, **kwargs):
     
 class delete_entry_form(Form):
     confirm = BooleanField(required=True, label="Vill du fortsätta?")
+    
+class subscribe_tag_form(Form):
+    tag = CharField()

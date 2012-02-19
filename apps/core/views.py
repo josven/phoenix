@@ -1,13 +1,45 @@
 # -*- coding: utf-8 -*-
+from django.utils import simplejson
 from django.db.models import get_model
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from apps.core.utils import render
-from forms import update_entry_form, delete_entry_form
+from forms import update_entry_form, delete_entry_form, subscribe_tag_form
 
 from reversion.models import Version
 
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def subscribe_tag(request):
+    if request.method == 'POST':
+        if request.is_ajax():
+            form = subscribe_tag_form(request.POST)
+            
+            if form.is_valid():
+                
+                #Get user
+                user = request.user
+                profile = request.user.get_profile()
+                new_tag = unicode(form.cleaned_data['tag'])
+                usertags =  [tag.name for tag in profile.subscriptions.all()]
+                if new_tag in usertags:
+                    profile.subscriptions.remove(new_tag)
+                    data = {
+                            'tag_status':0,
+                            'message': u'Tog bort bevakning för <strong>\"{0}\"</stong>'.format(new_tag)
+                            }
+                else:
+                    profile.subscriptions.add(new_tag)
+                    data = {
+                            'tag_status':1,
+                            'message': u'Du bevakar nu <strong>\"{0}\"</stong>'.format(new_tag)
+                            }             
+                
+                return HttpResponse(simplejson.dumps(data), content_type="application/json")
+    
+    return HttpResponse(status=404)
 
 @never_cache
 @login_required(login_url='/auth/login/')
