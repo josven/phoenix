@@ -2,9 +2,31 @@
 
 {% block content %}
 <h2>Kontoinställningar</h2>
-<form action="" method="post" id="user-form-settings" class="form-settings">
+<h3>Användarnamn</h3>
+{% if time_username_change_message %}
+<h4>{{ time_username_change_message }}</h4>
+{% else %}
+<h4>OBS! Du kan bara byta användarnamn per två månader.</h4>
+
+<form action="" method="post" class="form-settings">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Byt lösenord">
+
+    {{ username_change_form.as_p }}
+
+    <input type="submit" name="username_change_form" value="Ändra">
 </form>
+
+
+{% endif %}
+<br/>
+
+<h3>Lösenord</h3>
+<form action="" method="post" class="form-settings">
+    {% csrf_token %}
+
+    {{ password_change_form.as_p }}
+
+    <input type="submit" name="password_change_form" value="Ändra">
+</form>
+    
 {% endblock content %}

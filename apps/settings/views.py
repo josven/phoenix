@@ -19,7 +19,10 @@ def read_settings(request, appname=None):
         return update_profile(request)    
     
     if appname == "accounts":
-        from django.contrib.auth import views as auth_views
-        return auth_views.password_change(request, template_name='update_account.html')
+        #from django.contrib.auth import views as auth_views
+        #return auth_views.password_change(request, template_name='update_account.html')
+        from apps.accounts.views import update_account
+        return update_account(request)
+        
         
     return render(request, 'settings.html', vars)
