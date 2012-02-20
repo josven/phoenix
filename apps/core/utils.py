@@ -1,8 +1,23 @@
 ﻿import sys, inspect
+from datetime import date
+
 from django.db import models
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
 from tracking.models import Visitor
+
+def calculate_age(born=None):
+    if born:
+        today = date.today()
+        try: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = born.replace(year=today.year)
+        except ValueError:
+            birthday = born.replace(year=today.year, day=born.day-1)
+        if birthday > today:
+            return today.year - born.year - 1
+        else:
+            return today.year - born.year
+    return ""
 
 def find_request():
     """
@@ -162,6 +177,7 @@ def get_datatables_records(request, querySet, columnIndexNameMap, jsonTemplatePa
                 response = HttpResponse(jstonString, mimetype="application/javascript")
         else:
                 aaData = [ entry.aaData() for entry in querySet ]
+                    
                 '''
                 aaData = []
                 a = querySet.values() 
