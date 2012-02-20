@@ -44,19 +44,15 @@ class Users(User):
         """
         aaData formats for datatables
         """
+        
+        last_login = u'{0} {1}'.format( naturalday( self.last_login ), self.last_login.strftime("%H:%M") )
+        date_joined = u'{0} {1}'.format( naturalday( self.date_joined ), self.date_joined.strftime("%H:%M") )
 
-        
-
-        
-        
-        
-        
-        #naturalday(
         data =  {
                 'photo': self.photo,
                 'username' : self.userlink,
-                'last_login' : naturalday(self.last_login),
-                'date_joined' : naturalday(self.date_joined),
+                'last_login' : last_login,
+                'date_joined' : date_joined,
                 'gender' : self.gender,
                 'location' : self.location,
                 'age' : self.age,
