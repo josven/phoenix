@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
             "sInfo": "Visar _START_ till _END_ av _TOTAL_ användare",
             "sInfoEmpty": "Visar 0 till 0 av 0 användare",
             "sInfoFiltered": "(filtrerat från _MAX_ antal användare)",
-            "sSearch": "Du bland användarnamn och plats"
+            "sSearch": "Sök bland användarnamn och plats"
         },
         "sAjaxSource": window.location.pathname + "json/",
         "aoColumns": [
@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
                         { "mDataProp": "username"},
                         { "mDataProp": "last_login","bSearchable" : false},
                         { "mDataProp": "date_joined","bSearchable" : false},
-                        { "mDataProp": "gender", "bSortable": false, "bSearchable" : false},
+                        { "mDataProp": "gender", "bSortable": false},
                         { "mDataProp": "location"},
                         { "mDataProp": "age", "bSearchable" : false},
                         
