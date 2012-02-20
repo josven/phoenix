@@ -10,9 +10,46 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import naturalday
 
-from apps.core.utils import render
-from forms import *
+from apps.core.utils import render, get_datatables_records
 
+from forms import *
+from models import Users
+
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def list_accounts(request):
+    
+    vars = {}
+    
+    return render(request,'list_accounts.html', vars)
+
+
+@never_cache
+@login_required(login_url='/auth/login/')
+def list_accounts_json(request):
+
+    if request.is_ajax():
+
+        #initial querySet 
+        querySet = Users.objects.all()
+
+        #columnIndexNameMap is required for correct sorting behavior
+        columnIndexNameMap = { 
+                                0: 'profile__photo',
+                                1: 'username',
+                                2: 'last_login',
+                                3: 'date_joined',
+                                4: 'profile__gender',
+                                5: 'profile__location',
+                                6: 'profile__birthdate',
+                            }
+
+        #call to generic function from utils
+        return get_datatables_records(request, querySet, columnIndexNameMap)
+
+    raise Http404 
+    
 @never_cache
 @login_required(login_url='/auth/login/')
 def update_account(request):
