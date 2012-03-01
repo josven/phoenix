@@ -25,11 +25,13 @@ class Forum(Entry):
     Forum thread
 
     """
+        
     title = models.CharField(max_length=128)
     body = models.TextField(max_length=5120)
     tags = TaggableManager()
-    last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None)
+    last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None, on_delete=models.SET_NULL)
     posts_index = models.IntegerField(null=True, blank=True)
+
 
         
     @property
@@ -104,7 +106,7 @@ class Forum(Entry):
         return u'%s' % self.title
  
 class ForumComment(MPTTModel):
-    post = models.ForeignKey(Forum)
+    post = models.ForeignKey(Forum,blank=True, null=True, on_delete=models.SET_NULL)
     author = models.CharField(max_length=60)
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)
     comment = models.TextField()

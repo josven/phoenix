@@ -130,7 +130,7 @@ def delete_entry(request, app_label, class_name, id):
         form = delete_entry_form( request.POST )
         
         if form.is_valid():
-            instance.delete()
+            instance.delete()            
             return HttpResponse(status=200)
         
         return HttpResponse(status=428)

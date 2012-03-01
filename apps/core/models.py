@@ -72,7 +72,7 @@ class Entry(models.Model):
                 request = find_request()
                 if request and request.user.is_authenticated():
                     self.last_changed_by = request.user
-
+        '''
             # Check if there is a history model, and if so handle history
             history_name = self.__class__.__name__ + "History"
             history_model = get_model(self._meta.app_label, history_name)
@@ -138,7 +138,8 @@ TypeError encountered on field when creating history. History can only be used
 on "simple" fields, advanced fields like ManyToManyField cannot be tracked.
                                     """
                             raise ImproperlyConfigured(error)
-
+        
+        
         # Call the real save() method.
         # Setting hierarchy calls save twice as it needs the pk to set the
         # hierarchy. If the save originated from a objects.create force_insert 
@@ -149,7 +150,10 @@ on "simple" fields, advanced fields like ManyToManyField cannot be tracked.
             super(Entry, self).save(*args, **kwargs)
         else:
             super(Entry, self).save(*args, **kwargs)
-
+        '''
+        super(Entry, self).save(*args, **kwargs)
+    
+    '''
     def delete(self, *args, **kwargs):
         """
         Custom delete for Entry. 
@@ -167,7 +171,7 @@ on "simple" fields, advanced fields like ManyToManyField cannot be tracked.
 
         # Call the real save() method, NOT the delete()
         super(Entry, self).save(*args, **kwargs)
-
+    '''
     
 class EntryHistory(models.Model):
     created_by = models.ForeignKey(User, related_name="created_%(class)s_history", blank=True, null=True)
