@@ -81,7 +81,7 @@ def read_forum(request, id):
         }
         
     vars['forum'] = Forum.objects.get(id=id)
-    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])   
+    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
     return render(request, 'read_forum.html', vars )
 
 

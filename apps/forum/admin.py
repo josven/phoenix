@@ -7,8 +7,8 @@ class ForumAdmin(reversion.VersionAdmin):
     pass
     
 class ForumCommentAdmin(reversion.VersionAdmin):
-    
-    pass
+    list_display = ('post', 'created_by', 'comment', 'added', 'date_last_changed',)
+    list_filter = ('tags__name',)
 
 admin.site.register(Forum, ForumAdmin)
 admin.site.register(ForumComment, ForumCommentAdmin)
