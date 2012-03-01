@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from urllib import quote
@@ -32,6 +34,10 @@ class Forum(Entry):
     last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None, on_delete=models.SET_NULL)
     posts_index = models.IntegerField(null=True, blank=True)
 
+    class Meta:
+        permissions = (
+            ("access_mod_forum", "Access to mod forum"),
+        )
 
         
     @property
@@ -246,6 +252,19 @@ class ForumPostHistory(ThreadedEntryHistory):
 
 
 class defaultCategories(models.Model):
+    """
+    Default categories for the forum
+    using tags
+    """
+    tags = TaggableManager()
+
+    def __unicode__(self):
+
+        text = self.tags.all()[0]
+
+        return u'%s' % (text)
+
+class ModeratorForumCategories(models.Model):
     """
     Default categories for the forum
     using tags

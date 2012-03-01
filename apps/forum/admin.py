@@ -13,10 +13,11 @@ class ForumCommentAdmin(reversion.VersionAdmin):
 admin.site.register(Forum, ForumAdmin)
 admin.site.register(ForumComment, ForumCommentAdmin)
 admin.site.register(defaultCategories)
+admin.site.register(ModeratorForumCategories)
 
 
 # OLD
-admin.site.register(Thread)
-admin.site.register(ThreadHistory)
-admin.site.register(ForumPost)
-admin.site.register(ForumPostHistory)
+#admin.site.register(Thread)
+#admin.site.register(ThreadHistory)
+#admin.site.register(ForumPost)
+#admin.site.register(ForumPostHistory)

@@ -32,7 +32,10 @@ def list_forum_json(request, tags=None):
             querySet = Forum.active.filter(tags__name__in=tags_array)
         else:          
             querySet = Forum.active.all()
-
+        
+        if not request.user.has_perm('forum.access_mod_forum'):
+            querySet = querySet.exclude(tags__name="MOD")
+        
         #columnIndexNameMap is required for correct sorting behavior
         columnIndexNameMap = { 
                                 0: 'title',
@@ -58,15 +61,20 @@ def list_forum(request, tags=None):
     List of forum threads.
     
     """
+
     vars = {
         "categories":defaultCategories.objects.all(),
         "notes" : Notification.objects.filter(receiver=request.user, instance_type="ForumComment"),
         }
-            
+    
+    if request.user.has_perm('forum.access_mod_forum'):
+        mod_tag = ModeratorForumCategories.objects.filter(tags__name__in=["MOD"])
+        vars["categories"] = list( vars["categories"] ) + list( mod_tag )
+        
     if tags:
         tags_array = tags.split(",")
         vars['tags'] = tags
-    
+
     return render(request, 'list_forum.html', vars )
 
 
@@ -79,9 +87,15 @@ def read_forum(request, id):
         'categories': defaultCategories.objects.all(),
         'ArticleBodyForm': ForumCommentForm(),
         }
-        
+            
     vars['forum'] = Forum.objects.get(id=id)
+
+    if "MOD" in [tag.name for tag in vars['forum'].tags.all()]:
+        if not request.user.has_perm('forum.access_mod_forum'):
+            raise Http404
+
     vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
+    
     return render(request, 'read_forum.html', vars )
 
 
