@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from models import Profile
 
 from sorl.thumbnail import ImageField
-from phoenix.exapps.taggit.forms import *
+from taggit.forms import *
 
 class ProfileForm(ModelForm):
 

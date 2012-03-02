@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
-from phoenix.exapps.taggit.managers import TaggableManager
+from taggit.managers import TaggableManager
 
 GENDER_CHOICES = (
     ('O', 'Odefinerat'),

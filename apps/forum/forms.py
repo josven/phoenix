@@ -4,7 +4,7 @@ from django.forms import ModelForm, Textarea
 from django.forms.fields import MultipleChoiceField
 from django.forms.widgets import CheckboxSelectMultiple
 
-from phoenix.exapps.taggit.forms import *
+from taggit.forms import *
 from models import *
                             
 DEFAULT_CATEGORIES = ( (tag, unicode( tag ).title() ) for tag in defaultCategories.objects.all() )

@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
 
-from phoenix.exapps.taggit.managers import TaggableManager
+from taggit.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
 
 import datetime
