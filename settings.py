@@ -101,7 +101,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.markup',
-    'taggit',
+    'phoenix.exapps.taggit',
     'south',
     'mptt',
     'tracking', # https://github.com/ramusus/django-tracking/commit/ab3c43107b89f54539b2f3e6a7b68a99f8d83971

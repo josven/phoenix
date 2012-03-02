@@ -11,7 +11,7 @@ from apps.forum.models import ForumComment
 from apps.articles.models import ArticleComment
 from apps.profiles.models import Profile
 
-from taggit.models import TaggedItem
+from phoenix.exapps.taggit.models import TaggedItem
 
 
 @receiver(post_save, sender=TaggedItem)

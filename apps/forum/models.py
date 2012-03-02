@@ -12,7 +12,7 @@ from django.core.urlresolvers import reverse
 
 from django.db.models import get_model
 
-from taggit.managers import TaggableManager
+from phoenix.exapps.taggit.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
 
 from apps.core.models import ThreadedEntry, ThreadedEntryHistory, Entry, EntryHistory
