@@ -34,7 +34,8 @@ class ArticleForm(ModelForm):
     class Meta:
         model = Article
         fields = ('title','body','tags','allow_comments',)
-        widgets = {'body': Textarea(attrs={'cols': 80, 'rows': 5, 'placeholder': "Minst fem tecken."}),
+        widgets = {'title': forms.TextInput(attrs={'placeholder': "Ange en titel"}),
+		'body': Textarea(attrs={'cols': 80, 'rows': 5, 'placeholder': "Minst fem tecken."}),
                    'allow_comments':CheckboxInput()}
         
  

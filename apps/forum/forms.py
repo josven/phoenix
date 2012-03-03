@@ -34,7 +34,8 @@ class ForumForm(ModelForm):
     class Meta:
         model = Forum
         fields = ('title','body','tags',)
-        widgets = {'body': Textarea(attrs={'cols': 80, 'rows': 5, 'placeholder': "Minst fem tecken."})}
+        widgets = {'title': forms.TextInput(attrs={'placeholder': "Ange en titel"}), 
+		'body': Textarea(attrs={'cols': 80, 'rows': 5, 'placeholder': "Minst fem tecken."})}
 
 class ForumCommentForm(ModelForm):
 
