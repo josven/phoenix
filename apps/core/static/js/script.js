@@ -131,7 +131,7 @@ var update_indicators = function(data) {
     
     // Window title indicator
     if ( window_indicator != 0 ) {
-        $('title').html('('+ window_indicator +') phx');
+        $('title').html('('+ window_indicator +') PHX');
     } else {
         $('title').html('PHX');
     }
