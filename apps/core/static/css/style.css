@@ -34,7 +34,7 @@ html { height: 100%; font-size: 100%; overflow-y: scroll; -webkit-text-size-adju
 
 body { margin: 0; font-size: 13px; line-height: 1.231; }
 
-body, button, input, select, textarea { font-family: sans-serif; color: white; }
+body, button, input, select, textarea { font-family: sans-serif; color: #222; }
 
 /* 
  * Remove text-shadow in selection highlight: h5bp.com/i
@@ -379,7 +379,8 @@ td { vertical-align: top; }
     display: inline;
 }
 
-.entry-content div.content textarea {
+.entry  input,
+.entry  textarea {
     color: #333;
 }
 /* entrys */
