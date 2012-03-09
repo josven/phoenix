@@ -379,6 +379,9 @@ td { vertical-align: top; }
     display: inline;
 }
 
+.entry-content div.content textarea {
+    color: #333;
+}
 /* entrys */
 /*
 .entrylist li {

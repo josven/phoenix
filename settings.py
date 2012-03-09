@@ -106,7 +106,7 @@ INSTALLED_APPS = (
     'mptt',
     'tracking', # https://github.com/ramusus/django-tracking/commit/ab3c43107b89f54539b2f3e6a7b68a99f8d83971
     'sorl.thumbnail',
-    'oembed',
+    'oembed', #https://github.com/ixc/django-oembed
     'reversion', #https://github.com/etianen/django-reversion
     'pagination', #https://github.com/wuudward/django-pagination
     'phoenix.apps.core',
