@@ -1,4 +1,4 @@
---no-index -f http://dist.plone.org/thirdparty/ -U PIL
+PIL
 -e git+git://github.com/ramusus/django-tracking.git#egg=django-tracking
 -e git+git://github.com/django-mptt/django-mptt.git#egg=django-mptt
 -e git+git://github.com/ixc/django-oembed.git#egg=django-oembed
