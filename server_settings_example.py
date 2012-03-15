@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Modify this file and rename it server_settings.py
 
 ADMINS = (
