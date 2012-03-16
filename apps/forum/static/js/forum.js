@@ -1,10 +1,9 @@
 jQuery(document).ready(function() {
-    
-    
+
     var table_threads = $('#table_threads').dataTable({
         "bServerSide": true,
         "bJQueryUI": true,
-        "aaSorting": [[3,'desc']],
+        "aaSorting": [[3, 'desc']],
         "bAutoWidth": false,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ trådar per sida",
@@ -12,168 +11,188 @@ jQuery(document).ready(function() {
             "sInfo": "Visar _START_ till _END_ av _TOTAL_ trådar",
             "sInfoEmpty": "Visar 0 till 0 av 0 trådar",
             "sInfoFiltered": "(filtrerat från _MAX_ antal trådar)",
-            "sSearch": "Sök bland trådtitlar"
+            "sSearch": "Sök bland trådartitlar"
         },
         "sAjaxSource": window.location.pathname + "json/",
-        "aoColumns": [
-                        { "mDataProp": "title", "bSortable": false},
-                        { "mDataProp": "tags" , "bSortable": false, "bSearchable" : false},
-                        { "mDataProp": "created", "iDataSort": 3 , "bSearchable" : false},
-                        { "mDataProp": "index", "bVisible": false, "bSearchable" : false},
-                        { "mDataProp": "posts_index" , "bSortable": false, "bSearchable" : false},
-                        { "mDataProp": "last_comment", "iDataSort": 6 , "bSearchable" : false},
-                        { "mDataProp": "last_comment_index", "bVisible": false , "bSearchable" : false},
-                        
-                ],
+        "aoColumns": [{
+            "mDataProp": "title",
+            "bSortable": false
+        }, {
+            "mDataProp": "tags",
+            "bSortable": false,
+            "bSearchable": false
+        }, {
+            "mDataProp": "created",
+            "iDataSort": 3,
+            "bSearchable": false
+        }, {
+            "mDataProp": "index",
+            "bVisible": false,
+            "bSearchable": false
+        }, {
+            "mDataProp": "posts_index",
+            "bSortable": false,
+            "bSearchable": false
+        }, {
+            "mDataProp": "last_comment",
+            "iDataSort": 6,
+            "bSearchable": false
+        }, {
+            "mDataProp": "last_comment_index",
+            "bVisible": false,
+            "bSearchable": false
+        }],
         "fnDrawCallback": function() {
-            $('.ui-tag a').button( { icons: {primary:'ui-icon-tag'}} );
+            console.log('fnDrawCallback');
+
+            $('.ui-tag a').button({
+                icons: {
+                    primary: 'ui-icon-tag'
+                }
+            });
         }
-    });    
+    });
 
-
-    $( "#tabs" ).tabs();
+    $("#tabs").tabs();
 
     // Soring tabs
-    $('.js-sort-latest-threads').click( function () {
-        table_threads.fnSort( [ [3,'desc'] ] );
+    $('.js-sort-latest-threads').click(function() {
+        table_threads.fnSort([[3, 'desc']]);
 
     });
-    
-    $('.js-sort-latest-replies').click( function () {
-        table_threads.fnSort( [ [5,'desc'] ] );
+
+    $('.js-sort-latest-replies').click(function() {
+        table_threads.fnSort([[5, 'desc']]);
     });
-    
-        
-    $('.js-reply').click( function (event) {
+
+    $('.js-reply').click(function(event) {
         event.preventDefault();
-        
+
         var entry = $(this).parentsUntil('ul').last(),
-            content = entry.find('.entry-content').first().clone();
-        
+        content = entry.find('.entry-content').first().clone();
+
         entry.addClass('ui-state-active');
-        
+
         dialog = content.dialog({
             width: "500",
             title: "Svara " + $(this).data('replyTo'),
             buttons: {
-                    "Svara": function() {
-                        dialog.find('form').submit();
-                    },
-                    "Förhandsgranska": function() {
-                        var form = dialog.find('form');
-                        var preview = "comment";
-                        preview_textarea(form, preview);
-                    },
-                    Cancel: function() {
-                        $( this ).dialog( "close" );
-                    }
+                "Svara": function() {
+                    dialog.find('form').submit();
+                },
+                "FР вЂ›Р’В¶rhandsgranska": function() {
+                    var form = dialog.find('form');
+                    var preview = "comment";
+                    preview_textarea(form, preview);
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
             },
-            close: function(event, ui) { 
+            close: function(event, ui) {
                 entry.removeClass('ui-state-active');
-            },
+            }
         });
-        
+
         dialog.find('form.ui-helper-hidden').show();
         dialog.find('textarea').val('');
         dialog.find('p.ui-helper-hidden').hide();
-        
+
         entry.addClass('ui-state-active');
-        
+
         dialog.find('textarea').autoResize({
             // On resize:
-            onResize : function() {
-                $(this).css({opacity:0.8});
+            onResize: function() {
+                $(this).css({
+                    opacity: 0.8
+                });
             },
             // After resize:
-            animateCallback : function() {
-                $(this).css({opacity:1});
+            animateCallback: function() {
+                $(this).css({
+                    opacity: 1
+                });
             },
             // Quite slow animation:
-            animateDuration : 300,
+            animateDuration: 300,
             // More extra space:
-            extraSpace : 40
+            extraSpace: 40
         });
 
         return false;
     });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     /* OLD STUFF */
     // Really ugly hack, until the forum are fully fixed =(
     // This removes replys that gets outside the main thread
     $('.thead_wrapper .subthread').first().siblings().remove();
-    
+
     //Fix all the orphan-forms
-    $('.orphan-form').each( function () {
+    $('.orphan-form').each(function() {
         var parent_id = $(this).parents('ul').first().children('li.entry').last().find('#id_parent_id').val();
-        console.log( parent_id );
-        console.log( $(this).find('#id_parent_id').attr('value') );
-        $(this).find('#id_parent_id').attr('value',parent_id); 
-        
+        console.log(parent_id);
+        console.log($(this).find('#id_parent_id').attr('value'));
+        $(this).find('#id_parent_id').attr('value', parent_id);
+
     });
-    
-    $('.oldforum .js-reply').click( function (event) {
+
+    $('.oldforum .js-reply').click(function(event) {
         event.preventDefault();
-        
+
         var entry = $(this).parentsUntil('ul').last(),
-            content = entry.find('.entry-content').first().clone();
-        
+        content = entry.find('.entry-content').first().clone();
+
         entry.addClass('ui-state-active');
-        
+
         dialog = content.dialog({
             width: "500",
             title: "Svara " + $(this).data('replyTo'),
             buttons: {
-                    "Svara": function() {
-                        dialog.find('form').submit();
-                    },
-                    Cancel: function() {
-                        $( this ).dialog( "close" );
-                    }
+                "Svara": function() {
+                    dialog.find('form').submit();
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
             },
-            close: function(event, ui) { 
+            close: function(event, ui) {
                 entry.removeClass('ui-state-active');
-            },
+            }
         });
-        
-        dialog.find('input.save_method').attr('value','reply');
+
+        dialog.find('input.save_method').attr('value', 'reply');
         dialog.find('div.ui-helper-hidden').show();
         dialog.find('textarea').val('');
         dialog.find('p.ui-helper-hidden').hide();
-        
-    entry.addClass('ui-state-active');
+
+        entry.addClass('ui-state-active');
         return false;
     });
-    
+
     // Activate/deavivate reply
-    $('.full_width_reply textarea').focus( function () {
+    $('.full_width_reply textarea').focus(function() {
         var item = $(this).parentsUntil('.subthread').last();
-        $(this).animate({height: '200',});
+        $(this).animate({
+            height: '200'
+        });
         item.find('p.ui-helper-hidden').show();
     });
-        
-    $('.js-collapse').click( function (event) {
+
+    $('.js-collapse').click(function(event) {
         event.preventDefault();
-        var item = $(this).parentsUntil('.subthread').last();   
-        console.log( item );
-        
-        item.find('textarea').animate({height: '25',});        
+        var item = $(this).parentsUntil('.subthread').last();
+        console.log(item);
+
+        item.find('textarea').animate({
+            height: '25'
+        });
         item.find('p.ui-helper-hidden').hide();
         return false;
     });
 
     $('#notification_table').dataTable({
         "bAutoWidth": false,
-        "aaSorting": [[5,'desc']],
+        "aaSorting": [[5, 'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ notifieringar per sida",
@@ -184,17 +203,23 @@ jQuery(document).ready(function() {
             "sSearch": "Filter"
         },
         "iDisplayLength": 30,
-        "aoColumns": [ 
-			{"sWidth": "50%"},
-			{"sWidth": "10%"},
-			{"sWidth": "15%"},
-			{"sWidth": "20%"},
-			{"sWidth": "5%", "iDataSort": 5},
-			{ "bVisible":    false }
-		],
+        "aoColumns": [{
+            "sWidth": "50%"
+        }, {
+            "sWidth": "10%"
+        }, {
+            "sWidth": "15%"
+        }, {
+            "sWidth": "20%"
+        }, {
+            "sWidth": "5%",
+            "iDataSort": 5
+        }, {
+            "bVisible": false
+        }],
         "sDom": '<"H"l<"form_wrapper">fr>t<"F"ip>'
-    });    
-    
-    $('input.button-mark').button();    
+    });
+
+    $('input.button-mark').button();
 
 });

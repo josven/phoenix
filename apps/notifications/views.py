@@ -54,18 +54,12 @@ def updates(request, format):
             data.pop('notifications')
             data.pop('test')
             
-            if format == 'xml':
-                mimetype = 'application/xml; charset=utf8'
-                
-            if format == 'json':
-                mimetype = 'application/javascript; charset=utf8'
-            
             json_data = simplejson.dumps( data )
  
-        return HttpResponse(json_data,mimetype)
+        return HttpResponse(json_data, content_type='application/json; charset=UTF-8')
    
     else:
-    
+
         return HttpResponse(status=400)       
     
 

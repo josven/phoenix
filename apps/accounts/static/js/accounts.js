@@ -1,9 +1,9 @@
 jQuery(document).ready(function() {
-        
+
     var table_users = $('#user_list').dataTable({
         "bServerSide": true,
         "bJQueryUI": true,
-        "aaSorting": [[2,'desc']],
+        "aaSorting": [[2, 'desc']],
         "bAutoWidth": false,
         "sDom": '<"H"l <"table_loading"> fr>t<"F"ip>',
         "oLanguage": {
@@ -15,16 +15,27 @@ jQuery(document).ready(function() {
             "sSearch": "Sök bland användarnamn och plats"
         },
         "sAjaxSource": window.location.pathname + "json/",
-        "aoColumns": [
-                        { "mDataProp": "photo", "bSortable": false,"bSearchable" : false},
-                        { "mDataProp": "username"},
-                        { "mDataProp": "last_login","bSearchable" : false},
-                        { "mDataProp": "date_joined","bSearchable" : false},
-                        { "mDataProp": "gender", "bSortable": false},
-                        { "mDataProp": "location"},
-                        { "mDataProp": "age", "bSearchable" : false},
-                        
-                ],
+        "aoColumns": [{
+            "mDataProp": "photo",
+            "bSortable": false,
+            "bSearchable": false
+        }, {
+            "mDataProp": "username"
+        }, {
+            "mDataProp": "last_login",
+            "bSearchable": false
+        }, {
+            "mDataProp": "date_joined",
+            "bSearchable": false
+        }, {
+            "mDataProp": "gender",
+            "bSortable": false
+        }, {
+            "mDataProp": "location"
+        }, {
+            "mDataProp": "age",
+            "bSearchable": false
+        }],
         "fnDrawCallback": function() {
             $('.table_loading').html("");
         },
@@ -32,13 +43,13 @@ jQuery(document).ready(function() {
             $('.table_loading').html("Laddar...");
         }
     });
-    
-    $('th:[role=columnheader]:eq(4)').each( function (i) {
-		this.innerHTML = '<select name="gender" id="id_gender"><option value="">Alla</option><option value="O">Odefinerat</option><option value="M">Man</option><option value="K">Kvinna</option><option value="T">Transperson</option></select>';
-		$('select', this).change( function () {
-			//alert('lol');
-            table_users.fnFilter( $(this).val(), 4 );
-		});
+
+    $('th:[role=columnheader]:eq(4)').each(function(i) {
+        this.innerHTML = '<select name="gender" id="id_gender"><option value="">Alla</option><option value="O">Odefinerat</option><option value="M">Man</option><option value="K">Kvinna</option><option value="T">Transperson</option></select>';
+        $('select', this).change(function() {
+            //alert('lol');
+            table_users.fnFilter($(this).val(), 4);
+        });
     });
-    
+
 });

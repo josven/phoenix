@@ -1,0 +1,11 @@
+PIL
+-e git+git://github.com/ramusus/django-tracking.git#egg=django-tracking
+-e git+git://github.com/django-mptt/django-mptt.git#egg=django-mptt
+-e git+git://github.com/ixc/django-oembed.git#egg=django-oembed
+-e git+git://github.com/etianen/django-reversion.git#egg=django-reversion
+-e git+git://github.com/ericflo/django-pagination.git#egg=django-pagination
+Django==1.3.1
+South==0.7.3
+sorl-thumbnail==11.12
+python-memcached==1.48
+django-taggit==0.9.3

@@ -1,3 +1,12 @@
 *.pyc
+*.log
+*.pot
+*.pyc
 server_settings.py
 migrations/*
+migrations/
+bin
+lib
+src
+local
+include
