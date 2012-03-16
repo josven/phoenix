@@ -15,7 +15,17 @@
 </ul>
 
 <ul>
-    <li><input type="submit" value="Logga in" />&nbsp;<a id="register_button" data-modal-form="true" title="Registrera ny användare" class="ui-button" href="{% url register %}">Ny användare</a></li>
+    <li>
+        <input type="submit" value="Logga in" />&nbsp;<a id="register_button" data-modal-form="true" title="Registrera ny användare" class="ui-button" href="{% url register %}">Ny användare</a>
+    </li>
+    <li>
+        &nbsp;
+    </li>
+    <li>
+        <input class="ui-toggle-button" type="checkbox" id="keepsession" name="keepsession" />
+        <label for="keepsession">Håll mig inloggad</label>
+    </li>
+            
 </ul>
 </form>
 {% endif %}
