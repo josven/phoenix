@@ -372,6 +372,9 @@ $(document).ready(function() {
             primary: 'ui-icon-pencil'
         }
     });
+    
+    // Checkbox togglebutton
+    $('input[type=checkbox].ui-toggle-button').button();
 
     //$('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}});
     /*

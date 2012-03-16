@@ -1,4 +1,6 @@
-﻿from django.views.decorators.http import require_POST
+﻿from datetime import timedelta
+
+from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -34,8 +36,13 @@ def auth_login(request):
             '''
             
             if user.is_active:
+                
                 login(request, user)
-                request.session.set_expiry(0)
+                
+                if request.POST.get('keepsession', None):
+                    request.session.set_expiry(timedelta(days=365))
+                else:
+                    request.session.set_expiry(0)
 
                 return HttpResponseRedirect(reverse('start'))
                 
