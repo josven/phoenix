@@ -3,6 +3,7 @@ jQuery(document).ready(function() {
     var table_threads = $('#table_threads').dataTable({
         "bServerSide": true,
         "bJQueryUI": true,
+        "iDisplayLength": 30,
         "aaSorting": [[3, 'desc']],
         "bAutoWidth": false,
         "oLanguage": {
@@ -80,7 +81,7 @@ jQuery(document).ready(function() {
                 "Svara": function() {
                     dialog.find('form').submit();
                 },
-                "FР вЂ›Р’В¶rhandsgranska": function() {
+                "Förhandsgranska": function() {
                     var form = dialog.find('form');
                     var preview = "comment";
                     preview_textarea(form, preview);
