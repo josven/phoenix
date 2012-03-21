@@ -8,6 +8,8 @@ from django.views.decorators.cache import never_cache
 from django.http import Http404, HttpResponse
 from django.conf import settings
 
+import site_settings
+
 from apps.core.utils import render
 
 """
@@ -19,11 +21,6 @@ from apps.core.utils import render
 
 """
 
-"""
-    Constants
-"""
-LIST_ITEM_LIMIT = 30
-
 @never_cache
 @login_required(login_url='/auth/login/')
 def camchat(request):
@@ -33,7 +30,7 @@ def camchat(request):
     messages.add_message(request, messages.INFO, 'Lösenord är:fisk')    
     return render(request,'tinychat.html', vars)
     
-@never_cache
+
 @login_required(login_url='/auth/login/')
 def chat(request):
     vars = {
@@ -48,9 +45,22 @@ def chat(request):
                     form.save()
                     return HttpResponse(status=200) # OK!
             return HttpResponse(status=404) #CHANGE THIS
-        
+
+    vars['form'] = PostForm()
+    vars['posts'] = Post.active.order_by('-date_created')[:site_settings.CHAT_LIST_ITEM_LIMIT]
+
+    return render(request,'chat.html', vars)
+
+@never_cache   
+@login_required(login_url='/auth/login/')
+def get_chat(request):
+    
+    vars = {}
+    
+    if request.is_ajax():     
         if request.method == 'GET':
-            posts = Post.active.order_by('-date_created')[:LIST_ITEM_LIMIT]
+            
+            posts = Post.active.order_by('-date_created')[:site_settings.CHAT_LIST_ITEM_LIMIT]
             client_post = int(float( request.GET.get('s', '0') ) )
             current_post = int(float( posts[0].id ) )
             number_of_posts = current_post - client_post
@@ -59,13 +69,15 @@ def chat(request):
                 vars['posts'] = posts[0:number_of_posts]
                 return render(request,'_chat.html', vars)
                 
-            return HttpResponse(status=302) # Not changed                
+            return HttpResponse(status=302) # Not changed
     
-    vars['form'] = PostForm()
-    vars['posts'] = Post.active.order_by('-date_created')[:LIST_ITEM_LIMIT]
+    # Only allow ajax get
+    return HttpResponse(status=404)
+    
 
-    return render(request,'chat.html', vars)
-    
+'''
+OLD
+
 @never_cache
 @login_required(login_url='/auth/login/')
 def chatpost(request,id,type):
@@ -133,7 +145,7 @@ def chatposts(request,id1,id2,type):
             vars['isFirstPage'] = True
         else:
            # Trim query to match orginal request
-           posts = posts[1:LIST_ITEM_LIMIT+1]
+           posts = posts[1:site_settings.CHAT_LIST_ITEM_LIMIT+1]
     except:
         # "no match"
         raise Http404
@@ -150,3 +162,4 @@ def chatposts(request,id1,id2,type):
     else:
         # "wrong method"
         raise Http404
+'''
