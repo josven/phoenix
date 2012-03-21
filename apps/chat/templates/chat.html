@@ -2,34 +2,20 @@
 {% load entry_tags %}
 
 {% block content %}
-
-{% if form %}
 <form id="chat_form" action="{% url chat_post %}" method="post">
     {% csrf_token %}
 
     {{ form.text }}
     <br />
     <input type="submit" value="Skicka" /><input type="checkbox" id="autoupdate" /><label for="autoupdate">Automatik</label>
-
 </form>
 
 <br />
-{% endif %}
 
-<ul id="chatlist" class="flat-list entrylist">
-    {% comment %}
-    {% for entry in posts %}
-    <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">    
-        {% render_entry entry request %}
-    </li>
-    {% endfor %}
-    {% endcomment %}
-    
+<ul id="chatlist" class="flat-list entrylist">    
     <li class="loading-message entry ui-widget ui-widget-content">
         <h4 class="ui-widget-header entry-head" >Laddar chat...</h4>
     </li>
-    
-    
 </ul>
 
 {% endblock content %}
