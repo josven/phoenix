@@ -121,6 +121,7 @@ jQuery(document).ready(function() {
     $('#table_articles').dataTable({
         "bServerSide": true,
         "bJQueryUI": true,
+        "iDisplayLength": 30,
         "aaSorting": [[4, 'desc']],
         "bAutoWidth": false,
         "oLanguage": {
