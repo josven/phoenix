@@ -1,16 +1,16 @@
 var updateChat = function() {
 
     $.ajax({
-        url: window.location.pathname,
+        url: window.location.pathname + "get/",
         data: {
             's': $("li:[data-id]").first().data('id')
             },
         statusCode: {
             200: function(data) {
+                $('#chatlist .loading-message').fadeOut().remove();
                 var amount = $('#chatlist li.entry').length;
                 $(data).hide().prependTo("#chatlist").slideDown("slow");
                 $('#chatlist li.entry:gt(49)').fadeOut().remove();
-
                 formatJsReplyButton();
                 formatImageDialogs();
                 hilightUserName();
@@ -51,13 +51,14 @@ var hilightUserName = function() {
 };
 
 jQuery(document).ready(function() {
-
+    
     // tinychat
     $('.tinychat_embed').css({
         'height': '85%',
         'margin-top': '3%'
     });
-
+    
+    updateChat();
     bindReplyButton();
     hilightUserName();
 

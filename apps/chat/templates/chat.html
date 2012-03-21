@@ -17,11 +17,19 @@
 {% endif %}
 
 <ul id="chatlist" class="flat-list entrylist">
-{% for entry in posts %}
+    {% comment %}
+    {% for entry in posts %}
     <li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">    
         {% render_entry entry request %}
     </li>
-{% endfor %}
+    {% endfor %}
+    {% endcomment %}
+    
+    <li class="loading-message entry ui-widget ui-widget-content">
+        <h4 class="ui-widget-header entry-head" >Laddar chat...</h4>
+    </li>
+    
+    
 </ul>
 
 {% endblock content %}
