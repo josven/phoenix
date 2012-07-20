@@ -1,18 +1,33 @@
-﻿{% extends "settings.html" %}
+{% extends "settings.html" %}
 
 {% block content %}
-    <h2>Profil</h2>
-    <form id="user-form-settings" class="form-settings" action="{% url update_profile %}" method="post" enctype="multipart/form-data">
+<div class="ui-widget">
+    <h2 class="ui-widget-header ui-helper-reset">Profil</h2>
+    <form class="ui-widget-content" id="user-form-settings" action="{% url update_profile %}" method="post" enctype="multipart/form-data">
+
         {% csrf_token %}
         {{ form.as_p }}
         
-        <input type="submit" name="profile-form" value="Spara" />
-    </form>    
-    
-    <h2>Bevakningar</h2>
-    <form id="user-form-settings" class="form-settings" action="{% url update_profile %}" method="post" enctype="multipart/form-data">
+        <div class="ui-widget-toolbar">
+            <input type="submit" name="profile-form" value="Spara" />
+        </div>
+
+    </form> 
+</div>
+
+<br />
+
+<div class="ui-widget">
+    <h2 class="ui-widget-header ui-helper-reset">Bevakningar</h2>
+    <form class="ui-widget-content" id="user-form-settings" action="{% url update_profile %}" method="post" enctype="multipart/form-data">
+
         {% csrf_token %}
-        {{ SubscriptionsForm }}      
-        <input type="submit" name="profile-subscriptions-form" value="Spara" />
-    </form>
+        {{ SubscriptionsForm.as_p }} 
+        
+        <div class="ui-widget-toolbar">
+            <input type="submit" name="profile-subscriptions-form" value="Spara" />
+        </div>
+
+    </form> 
+</div>
 {% endblock content %}

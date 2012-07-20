@@ -1,3 +1,73 @@
+{% extends "base.html" %}
+{% load entry_tags %}
+{% load thumbnail %}
+{% load markup %}    
+{% load humanize %}
+{% load filters %}
+{% load pagination_tags %}
+
+{% block content %}
+<ul class="flat-list">
+
+
+<li class="ui-widget ui-widget-content article-entry" id="article-{{article.id}}">
+	<h4 class="ui-widget-header ui-helper-reset header {% if article.notification and article.notification.status < 3 %}ui-state-active{% endif %}"> {{ article }} av {% render_userlink article.created_by %} - {{ article.date_created }} 
+	
+ 		<div class="tag-wrapper">
+	    	{% with subscriptions=request.user.profile.subscriptions.all %}
+		    {% for tag in article.tags.all %}
+		    {% render_tag tag tag_search_prefix subscriptions %}
+		    {% endfor %}
+			{% endwith %}
+		</div>  
+
+	</h4>
+
+	{% if article.created_by.profile.photo %}
+	<div class="entry-profile">    
+	    {% thumbnail article.created_by.profile.photo "75x75" crop="center" as im %}
+	    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+	    {% endthumbnail %}
+	</div>
+	{% endif %}
+
+	<div class="entry-content clearfix">
+	    <div id="content-{{ id }}" class="content">
+	        {{ article.body|user_filter }}
+	    </div>
+	</div>
+
+	<div class="ui-widget-toolbar footer">
+		<div class="buttonpanel">
+	       	<div class="buttonset">
+				<button class="ui-helper-hidden btn-comment-article" data-container="comments-{{article.id}}" data-form="comment-article-{{ article.id }}-form" id="btn-comment-{{ article.id }}">Svara</button>
+			</div>
+       </div>
+	</div>
+
+</li>
+
+{% if article.allow_comments %} 
+<li class="cont-comments ui-widget ui-widget-content " id="comments-{{article.id}}">
+{% url comment_article article.id as post_url %}
+{% include "_comments.html" with article_id=article.id app_name="articles" model_name="ArticleComment" post_url=post_url %}
+</li>
+{% endif %}
+
+</ul>
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+{% comment %}
 {% extends "articles.html" %}
 {% load entry_tags %}
 
@@ -13,3 +83,4 @@
 {% endif %}
 
 {% endblock content %}
+{% endcomment %}

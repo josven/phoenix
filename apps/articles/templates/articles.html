@@ -5,10 +5,11 @@
 
 {% block app_navigation %}
 <ul id="app_navigation" >
-    <li><h4 class="ui-widget-header entry-head" >Artikelmeny</h4></li>
+    <li><h4 class="ui-widget-header ui-helper-reset" >Artikelmeny</h4></li>
     <li><a href="{% url read_article %}">Alla artiklar</a></li>
     <li><a href="{% url create_article %}">Skriv ny</a></li>
-    <li><h4 class="ui-widget-header entry-head" >Huvudkategorier</h4></li>
+    <li><h4 class="ui-widget-header ui-helper-reset" >Huvudkategorier</h4></li>
+    
     {% for tag in categories %}
     <li><a href="{% url search_article tag %}">{{ tag|title }}</a></li>
     {% endfor %}

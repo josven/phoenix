@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
-
+from apps.core.templatetags.entry_tags import render_tag
+from django.template.loader import render_to_string
 from django.db.models import get_model
 
 from taggit.managers import TaggableManager
@@ -20,6 +21,8 @@ from apps.articles.models import Article
 
 from apps.core.signals import *
 
+import site_strings
+
 ''' NEW FORUM '''
 
 class Forum(Entry):
@@ -28,8 +31,8 @@ class Forum(Entry):
 
     """
         
-    title = models.CharField(max_length=128)
-    body = models.TextField(max_length=5120)
+    title = models.CharField(max_length=128, verbose_name = u'Rubrik')
+    body = models.TextField(max_length=5120, verbose_name = u'Meddelande', help_text = site_strings.COMMENT_FORM_HELP_TEXT)
     tags = TaggableManager()
     last_comment = models.ForeignKey('ForumComment', null=True, blank=True, default = None, on_delete=models.SET_NULL)
     posts_index = models.IntegerField(null=True, blank=True)
@@ -38,8 +41,14 @@ class Forum(Entry):
         permissions = (
             ("access_mod_forum", "Access to mod forum"),
         )
+        verbose_name = "Forumtråd"
+        verbose_name_plural = "Forumtrådar"
 
         
+    @property
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
     @property
     def ajax_editable_fields(self):
         return ["body"]
@@ -65,24 +74,28 @@ class Forum(Entry):
         return ["body"]
 
         
-    def aaData(self):
+    def aaData(self, request):
         """
         aaData formats for datatables
         """
 
         title = u"<a href=\"{0}\" >{1}</a>".format( self.get_absolute_url(), self.title )
-        tags = [u"<span class=\"ui-tag\"><a href=\"{0}\">{1}</a></span>".format( reverse( 'list_forum', args = [ tag.name ]), unicode(tag.name).title()  ) for tag in self.tags.all()]
+
+        subscriptions=request.user.profile.subscriptions.all()
+        tags = ""
+        for tag in self.tags.all():
+            vars = render_tag(tag, '/forum/tag/', subscriptions)
+            tags += render_to_string('tag_template.html', vars)
+
         created = u"{0} {1} av <a href=\"{2}\">{3}</a>".format(naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.get_profile().get_absolute_url(), self.created_by.username)
 
         data =  {
                 'title': title,
-                'tags' : u" ".join( tags ),
+                'tags' : tags,
                 'created': created,
                 'index' : self.id,
                 'posts_index': self.posts_index,
-
                 }
-
 
         if self.last_comment:
             last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.last_comment.get_absolute_url(), naturalday(self.last_comment.added), self.last_comment.added.strftime("%H:%M"), self.last_comment.created_by.username)
@@ -106,7 +119,7 @@ class Forum(Entry):
         return number
      
     def get_absolute_url(self):
-        return "/forum/read/%s/" % self.id
+        return u'{0}'.format( reverse('read_forum', args=[self.id]) )
         
     def __unicode__(self):
         return u'%s' % self.title
@@ -115,11 +128,32 @@ class ForumComment(MPTTModel):
     post = models.ForeignKey(Forum,blank=True, null=True, on_delete=models.SET_NULL)
     author = models.CharField(max_length=60)
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)
-    comment = models.TextField()
+    comment = models.TextField(help_text=site_strings.COMMENT_FORM_HELP_TEXT, verbose_name="Kommentar")
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
-    date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
+    date_last_changed = models.DateTimeField(auto_now=False, blank=True, null=True)
     tags = TaggableManager()
-    
+
+    class Meta:
+        permissions = (
+            ("access_mod_forum", "Access to mod forum"),
+        )
+        verbose_name = "Forumkommentar"
+        verbose_name_plural = "Forumkommentarer"
+
+    @property
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+        
+    def __unicode__(self):
+        return u'Kommentar i tråden {0}'.format(self.post)
+
+    def get_absolute_url(self):
+        return u'{0}?h=comment-{1}'.format( reverse('read_forum', args=[self.post.id]), self.id)
+        
+
+    def get_absolute_url_without_context(self):
+        return u'{0}'.format( reverse('read_forum_comment', args=[self.post.id, self.id]) )
+
     # a link to comment that is being replied, if one exists
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
 
@@ -175,9 +209,6 @@ class ForumComment(MPTTModel):
     def fields_history(self):
         return ["comment"]
         
-    def get_absolute_url(self):
-        return "/forum/read/{0}/#comment-{1}".format( self.post.id, self.id )
-        
     @property
     def get_reply_url(self):
         return reverse('comment_forum', args=[self.post.id])
@@ -193,9 +224,6 @@ class Thread(Entry):
     tags = TaggableManager()
     posts_index = models.IntegerField(null=True, blank=True)
     last_post = models.ForeignKey('ForumPost', null=True, blank=True, default = None)
-    
-    def get_absolute_url(self):
-        return "/forum/thread/read/%s/" % self.id
     
     def __unicode__(self):
         return u'%s' % self.title

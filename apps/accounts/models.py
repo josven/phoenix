@@ -40,7 +40,7 @@ class Users(User):
             photo = None
         return photo
     
-    def aaData(self):
+    def aaData(self, request):
         """
         aaData formats for datatables
         """

@@ -1,30 +1,44 @@
 {% extends 'desktop_base.html' %}
+{# {% load notification_tags %} #}
 
 {% block navigation %}
 <ul>
     <li><a href="{{  request.user.get_profile.get_absolute_url }}">{{ request.user }}</a></li>
-    <li><a href="{% url list_forum %}">Forum <span id="fo-indicator">{% if request.indicators.fo %}({{ request.indicators.fo }}){% endif %}</span></a></li>
+    <li><a href="{% url list_forum %}">Forum</a></li>
     <li><a href="{% url chat %}">Chat</a></li>
-    <li class="ui-corner-all"><a href="{% url guestbook request.user.id %}">Gästbok <span id="gb-indicator">{% if request.indicators.gb %}({{ request.indicators.gb }}){% endif %}</span></a></li>    
-    <li><a href="{% url read_article %}">Artiklar  <span id="ar-indicator">{% if request.indicators.ar %}({{ request.indicators.ar }}){% endif %}</span></a></li>
-    <li><a href="{% url camchat %}">Camchat</a></li>
-    <li><a href="{% url list_accounts %}">Användare</a></li>
-    {% comment %}
-    <li><a data-ajax="false" href="{% url set_base_template 'touch' %}">Touch</a></li>
-    <li><a data-ajax="false" href="{% url set_base_template 'desktop' %}">Desktop</a></li>
-    {% endcomment %}
+    <li class="ui-corner-all"><a href="{% url guestbook request.user.id %}">Gästbok</span></a></li>    
+    <li><a href="{% url read_article %}">Artiklar</a></li>
+    <li><a href="{% url camchat %}">TC</a></li>
+    <li><a href="{% url read_notifications %}">Aktivitet <span id="notification-counter">{% if request.notification_count %}({{request.notification_count}}){% endif %}</span></a></li>
 </ul>
 {% endblock navigation %}
 
 {% block messages %}
-{% if messages %}
+{# {% get_notes_for_annoncements request.user as annonced_notifications %}  #}
+{% if messages or annonced_notifications %}
 <ul class="messages jGrowlmessages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
     {% endfor %}
-</ul>
-{% endif %}
-{% endblock messages %}
+
+    {% comment %}
+    {% for note in annonced_notifications %}
+        {% if forloop.first and forloop.last %}
+        <li> Ny aktivitet!<br/>
+            {{ note.content_object.get_verbose_name }} !</br>
+            <a href="{{ note.content_object.get_absolute_url }}">Gå dit</a>
+        </li>
+        {% else %}
+        <li>{{annonced_notifications|length }} nya aktiviteter!<br/>
+            <a href="{% url read_notifications %}">Gå dit</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    {% endcomment %}
+
+    </ul>
+    {% endif %}
+    {% endblock messages %}
 
 {% block content %}
 <p>This is an empty base template</p>

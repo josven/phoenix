@@ -1,155 +1,206 @@
 var testvar;
 
-var preview_textarea = function(form, preview) {
-    "use strict";
+// THEMEROLLER
+$('#switcher').themeswitcher();
 
-    var data = form.serialize() + "&preview=" + preview;
 
-    $.ajax({
-        type: "POST",
-        url: '/utils/preview/',
-        data: data,
-        statusCode: {
-            200: function(data) {
-                console.log(data);
 
-                var preview_modal = $('<div>' + data + '</div>');
+/*
+* process_updates
+*
+*/
 
-                preview_modal.dialog({
-                    width: 800,
-                    modal: true,
-                    position: ['center', 100],
-                    title: 'Förhandsgranskning',
-                    });
+var process_updates = function (data) {
 
-            }
-        }
-    });
-};
-
-var formatImageDialogs = function() {
-    "use strict";
-    $('.entry-content img, .ui-text-panel img').attr('height', '80').unbind('click').click(function() {
-        $(this).clone().dialog({
-            resizable: false,
-            modal: true,
-            width: 'auto'
-        });
-    });
-};
-
-var formatJsReplyButton = function() {
-    "use strict";
-    $('.js-reply').button({
-        icons: {
-            primary: "ui-icon-comment"
-        },
-        text: false
-    });
-};
-
-// Data to catch
-var get_data = {
-    "n": true,
+    // Notifikationräknare
+    if ( data.hasOwnProperty('notification_count') ) {
+        $('#notification-counter').html("("+ data.notification_count +")");
     };
 
-// process all new updates
-var process_updates = function(data) {
-    "use strict";
-    // Display new notifications 
-    update_notifications(data);
+    // Notifikation annonserare
+    if ( data.hasOwnProperty('notification_message') ) {
+        $.jGrowl(data.notification_message);
+    };
 
-    // Display indicators
-    update_indicators(data);
+    console.log(data);
+
 };
 
-var update_notifications = function(data) {
-    "use strict";
-    // Annonce guestbook notifications
-    if (data.a.gb !== 0) {
 
-        if (data.a.gb === 1) {
-            $.jGrowl("Nytt gästboksinlägg");
+/*
+* Get search string from GET
+*
+*/
 
-        } else if (data.a.gb > 1) {
-            $.jGrowl(String(data.a.gb) + " nya gästboksinlägg");
-        }
-    }
-    // Annonce forum notifications
-    if (data.a.fo !== 0) {
+var highlightEntry = function () {
 
-        if (data.a.fo === 1) {
-            $.jGrowl("Nytt svar i forumet");
+    var searchObject = searchToObject();
 
-        } else if (data.a.fo > 1) {
-            $.jGrowl(String(data.a.fo) + " nya svar i forumet");
-        }
-    }
-    // Annonce article notifications
-    if (data.a.ar !== 0) {
+    if ( searchObject.hasOwnProperty('h') ) { 
+        var hEntry = $('#'+searchObject.h);
 
-        if (data.a.ar === 1) {
-            $.jGrowl("Ny artikelkommentar");
+        hEntry.addClass('ui-state-highlight');
 
-        } else if (data.a.ar > 1) {
-            $.jGrowl(String(data.a.ar) + " nya artikelkommentarer");
-        }
-    }
+        $('html, body').animate({
+            scrollTop: hEntry.offset().top - $(window).height() + hEntry.outerHeight()
+        }, 500);
+
+    };
 };
 
-var update_indicators = function(data) {
+/*
+* Get search string from GET
+*
+*/
+var searchToObject = function () {
+  var pairs = window.location.search.substring(1).split("&"),
+    obj = {},
+    pair,
+    i;
+
+  for ( i in pairs ) {
+    if ( pairs[i] === "" ) continue;
+
+    pair = pairs[i].split("=");
+    obj[ decodeURIComponent( pair[0] ) ] = decodeURIComponent( pair[1] );
+  }
+
+  return obj;
+}
+
+
+/*
+* Apply jQuery UI on pagination
+*
+*/
+var formatPagnation = function () {
     "use strict";
-    var window_indicator = 0,
-        title;
-        
-    // Set guestbook indicator
-    if (data.i.gb !== 0) {
-        $('#gb-indicator').html("(" + data.i.gb + ")");
-        window_indicator += data.i.gb;
-    } else {
-        $('#gb-indicator').html("");
-    }
 
-    // Set forum indicator
-    if (data.i.fo !== 0) {
-        $('#fo-indicator').html("(" + data.i.fo + ")");
-        window_indicator += data.i.fo;
-    } else {
-        $('#fo-indicator').html("");
-    }
 
-    // Set article indicator
-    if (data.i.ar !== 0) {
-        $('#ar-indicator').html("(" + data.i.ar + ")");
-        window_indicator += data.i.ar;
-    } else {
-        $('#ar-indicator').html("");
-    }
+    $('.pagination').buttonset();
+    $('.pagination .disabled').button({
+        disabled: true
+    });
 
-    // Window title indicator
-    if (window_indicator !== 0) {
-        document.title = "(" + String( window_indicator )+ ") PHX";
-        $('title').innerHTML = title;
-    } else {
-        document.title = "PHX";
-    }
+    $('.pagination .current').button().addClass('ui-state-highlight');
+    $('.pagination .elips').button();
 };
 
-$(document).ready(function() {
+/*
+* Show hidden subthreads
+*
+*/
+var showHiddenSubThreads = function () {
     "use strict";
-    /*
-    * Break out site from frames
-    *
-    */
+
+    var hidden = $('ul.ui-helper-hidden.list-comments');
+    hidden.each( function(){
+        $(this).find('.comment-entry.ui-state-highlight').removeClass('ui-state-highlight');
+    });
+    hidden.removeClass('ui-helper-hidden');
+};
+
+
+/*
+* deactivate Entries
+*
+*/
+var deactivateEntries = function () {
+    "use strict";
+
+    $('div.comment-entry.ui-state-highlight').removeClass('ui-state-highlight');
+};
+
+
+/*
+* reset Entries
+*
+*/
+var resetEntries = function () {
+    "use strict";
+
+    showHiddenSubThreads();
+    deactivateEntries();
+};
+
+
+
+/*
+* Preview button for textareas
+*
+*/
+var formatJsPreviewButton = function () {
+    "use strict";
+
+    $('input:[data-preview]').click(function() {
+        var form = $(this).parentsUntil('form').parent(),
+            preview = $(this).data('preview');
+            console.log(preview);
+        preview_textarea(form, preview);
+    }).parent().buttonset();
+};
+
+
+/*
+* Maximize button for forms with textareas
+*
+*/
+var formatJsMaximizeButton = function () {
+    "use strict";
+
     
-    if (top !== self) {
-        top.location.replace(self.location.href);
-    }
 
-    /*
-    * Edit entry button
-    *
-    */
+    $('input:[data-maximize]').click(function() {
+        var form_id = $(this).data('form'),
+            field_id = $(this).data('field');
+        maximize_form(form_id, field_id);
+
+    }).parent().buttonset();
+};
+
+
+/*
+* Save entry button
+*
+*/
+var formatJsSaveButton = function () {
+    "use strict";
+    $('.js-entry-save').button({
+        icons: {
+            primary: "ui-icon-pencil"
+        }
+    }).click(function(event) {
+
+        event.preventDefault();
+        
+        var button = $(this),
+            url = button.attr('href'),
+            rel = button.attr('rel'),
+            field = $("#" + rel);
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: field.find('form').serialize(),
+            statusCode: {
+                200: function(data) {
+                    field.html(data);
+                        // change to edit button
+                        button.replaceWith('<a href="' + url + '" class="js-entry-edit" rel="' + rel + '">&nbsp;</a>');
+                        formatJsEditButton();
+                }
+            }
+        });
+    }).parent().buttonset();
+};
+
+/*
+* Edit entry button
+*
+*/
+var formatJsEditButton = function () {
+    "use strict";
+
     $('.js-entry-edit').button({
         icons: {
             primary: "ui-icon-pencil"
@@ -158,52 +209,31 @@ $(document).ready(function() {
         event.preventDefault();
 
         var button = $(this),
-        url = button.attr('href'),
-        field = $("#" + button.attr('rel')),
-        initalHeight = field.height() + 100;
+            url = button.attr('href'),
+            rel = button.attr('rel'),
+            field = $("#" + rel);
 
         // load form
         field.load(url, function() {
-            field.find('textarea').css('height', initalHeight).autoResize({
-                // Quite slow animation:
-                animateDuration: 300,
-                });
+            formatJsMaximizeButton();
+            formatJsPreviewButton();
         });
 
         // change to save button
-        button.replaceWith('  <a href="http://sv.wikipedia.org/wiki/Textile" class="js-help" target="_blank">&nbsp;</a><a href="' + url + '" class="js-entry-save" rel="profile-description">Spara</a>');
-        $('.js-entry-save').button({
-            icons: {
-                primary: "ui-icon-pencil"
-            }
-        }).click(function(event) {
+        button.replaceWith('<a href="' + url + '" class="js-entry-save" rel="' + rel + '">Spara</a>');
+        formatJsSaveButton();
 
-            event.preventDefault();
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: field.find('form').serialize(),
-                statusCode: {
-                    200: function(data) {
-                        location.reload(true);
-                    }
-                }
-            });
-        });
-
-        $('.js-help').button({
-            icons: {
-                primary: "ui-icon-help"
-            }
-        }).parent().buttonset();
         return false;
     });
+};
 
-    /*
-    * Delete entry button
-    *
-    */
+/*
+* Delete entry button
+*
+*/
+var formatJsDeleteButton = function () {
+    "use strict";
+
     $('.js-entry-delete').button({
         icons: {
             primary: "ui-icon-trash"
@@ -212,8 +242,8 @@ $(document).ready(function() {
         event.preventDefault();
 
         var button = $(this),
-        url = button.attr('href'),
-        next_url = button.attr('data-next-url');
+            url = button.attr('href'),
+            entry = $('#'+button.data('comment'));
 
         // load form
         var dialog = $('<div></div').load(url).dialog({
@@ -224,10 +254,11 @@ $(document).ready(function() {
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: $(this).find('form').serialize(),
+                        data: dialog.find('form').serialize(),
                         statusCode: {
                             200: function(data) {
-                                location.href = next_url;
+                                entry.fadeOut().remove();
+                                dialog.dialog("close");
                             },
                             428: function(data) {
                                 dialog.append('<p style="font-style:bold;">Du måste välja om du ska fortsätta</p>');
@@ -236,22 +267,27 @@ $(document).ready(function() {
                     });
                 },
                 "Avbryt": function() {
-                    $(this).dialog("close");
+                    dialog.dialog("close");
                 }
             }
         });
 
         return false;
     });
-    /*
-    * History entry button
-    *
-    */
+};
+
+/*
+* History entry button
+*
+*/
+var formatJsHistoryButton = function () {
+    "use strict";
+
     $('.js-entry-history').button({
         icons: {
             primary: "ui-icon-folder-open"
         }
-    }).click(function(event) {
+        }).click(function(event) {
         event.preventDefault();
 
         var button = $(this),
@@ -272,6 +308,226 @@ $(document).ready(function() {
 
         return false;
     });
+};
+
+
+
+// Render tags, linktags, with toggable subcribe button
+var render_tags = function () {
+    "use strict";
+
+    $.each($('.ui-tag-link'), function() {
+
+        var tag = $(this),
+        toggle = tag.find('.ui-tag-link-toggle'),
+        toggle_icon = toggle.attr('data-icon'),
+        toggle_form = tag.find('.ui-tag-link-form'),
+        toggle_url = toggle_form.attr('action');
+
+        toggle.button({
+            icons: {
+                primary: toggle_icon
+            },
+            text: false,
+            }).click(function(event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: toggle_url,
+                data: toggle_form.serialize(),
+                statusCode: {
+                    200: function(data) {
+                        $.jGrowl(data.message);
+                        if (data.tag_status === 1) {
+                            $('.ui-tag-link-toggle[rel="' + toggle.attr('rel') + '"]').button("option", "icons", {
+                                primary: 'ui-icon-star'
+                            });
+
+                        } else if (data.tag_status === 0) {
+                            $('.ui-tag-link-toggle[rel="' + toggle.attr('rel') + '"]').button("option", "icons", {
+                                primary: 'ui-icon-tag'
+                            });
+                        }
+
+                    }
+                }
+
+            });
+
+            return false;
+
+        }).next().button().parent().buttonset();
+    });
+};
+
+var preview_textarea = function(form, preview) {
+    "use strict";
+
+    var data = form.serialize() + "&preview=" + preview;
+
+    $.ajax({
+        type: "POST",
+        url: '/utils/preview/',
+        data: data,
+        statusCode: {
+            200: function(data) {
+
+                var preview_modal = $('<div>' + data + '</div>');
+
+                preview_modal.dialog({
+                    width: 800,
+                    modal: true,
+                    position: ['center', 100],
+                    title: 'Förhandsgranskning',
+                    });
+
+            }
+        }
+    });
+};
+
+var maximize_form = function(form_id, field_id) {
+    "use strict";
+
+    var oForm = $('#'+form_id),
+        oTextarea = oForm.find('textarea[name='+field_id+']'),
+        oField = oTextarea.parent(),
+        win = oField.clone(),
+        oText = oTextarea.val();
+
+    var dialog = win.dialog({
+        modal: true,
+        position: ['center', 'left'],
+        height: ( $(window).height()),
+        width: ( $(window).width()),
+        title: 'Storskärm',
+        buttons: { 
+                    "Kommentera": function() { 
+                        win.dialog("close");
+                        oForm.submit();
+                    },
+                    "Tillbaks": function() { 
+                        win.dialog("close"); 
+                    },
+                    "Förhandsgranskning": function() {
+                        oTextarea.val( win.find('textarea').val() );
+                        preview_textarea( oForm, field_id);
+                    },
+                },
+        draggable: false,
+        beforeClose: function(event, ui) {
+            oTextarea.val( win.find('textarea').val() );
+            win.dialog( "destroy" );
+        },
+    }).parent().css({"position":"fixed","top":"0px"}).addClass('ui-state-maximized');
+
+    dialog.find('textarea').css('height', ($(window).height()*0.8) ).val(oText);
+    //dialog.find('.buttonset').hide();
+
+};
+
+var formatImageDialogs = function() {
+    "use strict";
+    $('.ui-widget-content .content img, .ui-text-panel img').attr('height', '80').unbind('click').click(function() {
+        $(this).clone().dialog({
+            resizable: false,
+            modal: true,
+            width: 'auto'
+        });
+    });
+};
+
+var formatJsReplyButton = function() {
+    "use strict";
+    $('.js-reply, .js-reply-all').button({
+        icons: {
+            primary: "ui-icon-comment"
+        }
+    });
+};
+
+// Cross Site Request Forgery protection 
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
+/*****************************************************************************************************************************************************/
+/*
+/* Document Redy
+/*
+/*****************************************************************************************************************************************************/
+$(document).ready(function() {
+    "use strict";
+
+    var update_data = {"n":true};
+
+    /*
+    * Break out site from frames
+    *
+    */
+    
+    if (top !== self) {
+        top.location.replace(self.location.href);
+    }
+
+    // Entry effekter
+    $('.comment-entry').live('mouseenter', function(){
+        $(this).removeClass( "comment-entry-mouseout" );
+    });
+
+    $('.comment-entry').live('mouseleave ', function(){
+        $(this).addClass( "comment-entry-mouseout" );
+    });
+    
+    // Render tags
+    render_tags();
+
+    // Hack for not allowing iframes to float over content.
+    $("iframe").each(function(){
+        var ifr_source = $(this).attr('src'),
+            wmode = "wmode=transparent";
+        if(ifr_source.indexOf('?') != -1) {
+            var getQString = ifr_source.split('?'),
+                oldString = getQString[1],
+                newString = getQString[0];
+            $(this).attr('src',newString+'?'+wmode+'&'+oldString);
+        }
+        else $(this).attr('src',ifr_source+'?'+wmode);
+    });
+
     /*
     * Convaseation entry button for guestbooks
     *
@@ -315,55 +571,59 @@ $(document).ready(function() {
     */
 
     // Auto updater
-    var auto_update = setInterval(function() {
-        $.ajax({
-            data: get_data,
-            contentType: "application/json; charset=UTF-8",
-            dataType: "json",
-            url: "/notifications/updates.json",
-            success: function(data) {
-                process_updates(data);
-                console.log("Updatering genonförd");
-            },
-            error: function(data) {
-                console.log("Något fel har inträffat");
+  
+    if ( !$('body').hasClass('noupdate') ) {
+        var auto_update = setInterval(function() {
+
+            var pass = false;
+
+            if (Modernizr.localstorage) {
+                if ( window.localStorage.hasOwnProperty("update_data_timestamp") ) {
+                    var now = Number( new Date().getTime()),
+                        then = Number( window.localStorage.getItem("update_data_timestamp") ),
+                        delta = ( now - then );
+                        if ( delta > 30000) {
+                            pass = true;
+                        } else {
+                            var stored_data = window.localStorage.getItem("update_data"),
+                                stored_json_data = JSON.parse(stored_data);
+
+                            process_updates(stored_json_data);
+                        }
+                }
             }
-        });
+            else {
+                pass = true;
+            }
 
-    }, 30000);
-    // refresh every 30000 milliseconds
-    /*
-    * Polyfills
-    *
-    */
+            if (pass === true) {
+                $.ajax({
+                    data: update_data,
+                    contentType: "application/json; charset=UTF-8",
+                    dataType: "json",
+                    url: "/notifications/updates.json",
+                    success: function(data) {                        
+                        if (Modernizr.localstorage) {
+                            var timestamp = new Date().getTime();
+                            window.localStorage.setItem("update_data_timestamp", timestamp);
+                            window.localStorage.setItem("update_data", JSON.stringify(data));
+                        }
+                        
+                        process_updates(data);
+                    },
+                    error: function(data) {
+                        console.log("Något fel har inträffat");
+                    }
+                });
+            };
 
-    // Placeholder
-    $('input, textarea').placeholder();
+        }, 30000);
+        // refresh every 30000 milliseconds
+    };
 
     /*
     * Tags
     * 
-    */
-
-    // HACK until we have real widgets based on CheckboxSelectMultiple for tags 
-    /*
-    $('input[type=checkbox].ui-tag-reformat').parent('label').each( function() {
-        var label = $(this),
-            input = label.find('input'),
-            tag = input.val();
-
-        // Format label
-        label.html( tag.charAt(0).toUpperCase() + tag.substr(1).toLowerCase() );
-
-        // Insert input before label
-        label.before( input );
-
-        // Add class to parent
-        label.parent().addClass('ui-tag');
-
-        // Remove class on input
-        input.removeClass('ui-tag');
-    });
     */
 
     // Checkboxtags are toggleble tag buttons. Used when new entry are created.
@@ -374,7 +634,7 @@ $(document).ready(function() {
     });
     
     // Checkbox togglebutton
-    $('input[type=checkbox].ui-toggle-button').button();
+    $('.ui-toggle-button > input[type=checkbox]').button();
 
     //$('.ui-tag input[type=checkbox]').button( {icons: {primary:'ui-icon-tag'}});
     /*
@@ -383,51 +643,7 @@ $(document).ready(function() {
     */
     formatImageDialogs();
 
-    // Linktags, with toggable subcribe buttons.
-    $.each($('.ui-tag-link'), function() {
 
-        var tag = $(this),
-        toggle = tag.find('.ui-tag-link-toggle'),
-        toggle_icon = toggle.attr('data-icon'),
-        toggle_form = tag.find('.ui-tag-link-form'),
-        toggle_url = toggle_form.attr('action');
-
-        toggle.button({
-            icons: {
-                primary: toggle_icon
-            },
-            text: false,
-            }).click(function(event) {
-            event.preventDefault();
-
-            $.ajax({
-                type: "POST",
-                url: toggle_url,
-                data: toggle_form.serialize(),
-                statusCode: {
-                    200: function(data) {
-                        $.jGrowl(data.message);
-                        if (data.tag_status === 1) {
-                            $('.ui-tag-link-toggle[rel="' + toggle.attr('rel') + '"]').button("option", "icons", {
-                                primary: 'ui-icon-star'
-                            });
-
-                        } else if (data.tag_status === 0) {
-                            $('.ui-tag-link-toggle[rel="' + toggle.attr('rel') + '"]').button("option", "icons", {
-                                primary: 'ui-icon-tag'
-                            });
-                        }
-
-                    }
-                }
-
-            });
-
-            return false;
-
-        }).next().button().parent().buttonset();
-
-    });
 
     /*
     * jQuery UI accordions
@@ -481,18 +697,12 @@ $(document).ready(function() {
 
     });
 
-    // Auto resize text areas 
-    $('textarea').autoResize({
-        // Quite slow animation:
-        animateDuration: 300,
-        });
+    formatPagnation();
 
-    // Apply jQuery UI on pagination
-    $('.pagination').buttonset();
-    $('.pagination .disabled').button({
-        disabled: true
-    });
-    $('.pagination .current').button().addClass('ui-state-active');
-    $('.pagination .elips').button();
 
+});
+
+$(window).bind("load", function() {
+    // Hajlata entry
+    highlightEntry();
 });

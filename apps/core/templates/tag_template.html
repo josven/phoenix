@@ -1,5 +1,6 @@
+{# trying another approach with subscribable tags #}
 <span class="ui-tag-link ui-tag">
-    <a class="ui-tag-link-toggle" rel="{{ tag }}" data-icon="{% if tag.name in usertags %}ui-icon-star{% else %}ui-icon-tag{% endif %}" href="#" >{{ tag|title }}</a>   
+    <a class="ui-tag-link-toggle" rel="{{ tag }}" data-icon="{% if tag.name in subscriptions %}ui-icon-star{% else %}ui-icon-tag{% endif %}" href="#" >{{ tag|title }}</a>
     
     <a class="ui-tag-link-button" href="{{ tag_search_prefix }}{{ tag }}/" >{{ tag|title }}</a>
     
@@ -8,3 +9,5 @@
         {{ subscribe_tag_form }}
     </form>
 </span>
+
+ {{ tag.tag_relname }}

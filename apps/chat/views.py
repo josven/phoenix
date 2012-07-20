@@ -1,4 +1,6 @@
-﻿from models import *
+# -*- coding: utf-8 -*-
+
+from models import *
 from forms import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,7 +11,7 @@ import site_settings
 
 from apps.core.utils import render
 
-@login_required(login_url='/auth/login/')
+@login_required()
 def camchat(request):
     """
     Temporary chamchat
@@ -22,18 +24,21 @@ def camchat(request):
     messages.add_message(request, messages.INFO, 'Lösenord är:fisk')    
     return render(request,'tinychat.html', vars)
 
-@login_required(login_url='/auth/login/')
+@never_cache
+@login_required()
 def chat(request):
     """
     Chat view, render chat page
     
     """
-    vars = {}
-    vars['form'] = PostForm()
+    vars = {
+        'form' : PostForm(),
+        'comments' : Post.active.order_by('-date_created').select_related('created_by','created_by__profile__photo').order_by('-id')[:site_settings.CHAT_LIST_ITEM_LIMIT]
+    }
     
     return render(request,'chat.html', vars)
 
-@login_required(login_url='/auth/login/')
+@login_required()
 def post_chat(request):
     """
     Chat post, only ajax
@@ -54,7 +59,7 @@ def post_chat(request):
     return HttpResponse(status=404)
 
 @never_cache   
-@login_required(login_url='/auth/login/')
+@login_required()
 def get_chat(request):
     """
     Chat get, only ajax

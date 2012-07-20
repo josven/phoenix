@@ -1,4 +1,4 @@
-﻿import sys, inspect
+import sys, inspect
 from datetime import date
 
 from django.db import models
@@ -69,12 +69,7 @@ def render(request, *args):
     
     vars['app_name'] = app_name
     vars['base_template'] = get_base_template(request)
-    
-    users = Visitor.objects.active()
-    seen = set()
-    seen_add = seen.add
-    vars['active_users'] = [ x for x in users if x.user not in seen and not seen_add(x.user)]
-    
+
     request.session['app_name'] = vars['app_name']
     
     return djangorender(request, template, vars)
@@ -176,7 +171,7 @@ def get_datatables_records(request, querySet, columnIndexNameMap, jsonTemplatePa
                 jstonString = render_to_string(jsonTemplatePath, locals()) #prepare the JSON with the response, consider using : from django.template.defaultfilters import escapejs
                 response = HttpResponse(jstonString, mimetype="application/javascript")
         else:
-                aaData = [ entry.aaData() for entry in querySet ]
+                aaData = [ entry.aaData(request) for entry in querySet ]
                     
                 '''
                 aaData = []

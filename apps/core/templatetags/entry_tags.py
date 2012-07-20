@@ -75,11 +75,6 @@ def render_entry(entry, request=None):
     # Tag search
     vars['tag_search_prefix'] = u"/{0}/tag/".format(entry.__class__.__module__.split('.')[1])
 
-    
-    # Get usertags
-    usertags = getattr(request, 'usertags', None)
-    vars['usertags'] = [tag.name for tag in usertags]
-
         
     # Find content
     content_names = ['body', 'comment','text']
@@ -139,11 +134,15 @@ def render_userlink(user):
     return vars   
     
 @register.inclusion_tag('tag_template.html')
-def render_tag(tag, usertags, tag_search_prefix):
+def render_tag(tag, tag_search_prefix, subscriptions):
     
+    
+    subscriptions = [ subtag.name for subtag in subscriptions ]
+
+
     vars = {
+        'subscriptions': subscriptions,
         'tag_search_prefix':tag_search_prefix,
-        'usertags':usertags,
         'tag':tag,
         'subscribe_tag_form':subscribe_tag_form(initial={'tag':tag})
         }

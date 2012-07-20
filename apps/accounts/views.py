@@ -17,7 +17,7 @@ from models import Users
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def list_accounts(request):
     
     vars = {}
@@ -26,7 +26,7 @@ def list_accounts(request):
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def list_accounts_json(request):
 
     if request.is_ajax():
@@ -51,7 +51,7 @@ def list_accounts_json(request):
     raise Http404 
     
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def update_account(request):
     """
     Update account settings
@@ -63,7 +63,8 @@ def update_account(request):
                 
     vars = {
             'username_change_form': UsernameChangeForm(instance = request.user, prefix='UsernameChangeForm'),
-            'password_change_form': PasswordChangeForm(request.user, prefix='PasswordChangeForm')
+            'password_change_form': PasswordChangeForm(request.user, prefix='PasswordChangeForm'),
+            'email_change_form': EmailChangeForm(instance = request.user, prefix='EmailChangeForm'),
             }
     if request.method == 'GET':
         profile = request.user.get_profile()
@@ -116,7 +117,14 @@ def update_account(request):
             if password_change_form.is_valid():
                 password_change_form.save()
                 messages.add_message(request, messages.INFO, "Lösenord ändrat.")
-            vars['password_change_form'] = password_change_form
+            vars['password_change_form'] = password_change_form            
+
+        if 'email_change_form' in request.POST:
+            email_change_form = EmailChangeForm(request.user, request.POST, prefix='EmailChangeForm')
+            if email_change_form.is_valid():
+                email_change_form.save()
+                messages.add_message(request, messages.INFO, "Epostadress ändrad.")
+            vars['email_change_form'] = email_change_form
             
     return render(request,'update_account.html', vars)
     

@@ -1,6 +1,47 @@
 {% extends "articles.html" %}
 
 {% block content %}
+<div class="ui-widget">
+    <h2 class="ui-widget-header ui-helper-reset">Skapa ny Artikel</h2>
+
+    <form class="ui-widget-content" action="{% url create_article %}" method="post" id="articles-form-create">
+        
+        <label>Du kan välja upp till 5 kategorier, minst en en huvudkategori</label>
+
+        {% csrf_token %}
+        <p>
+            <label for="id_title">Huvudkategorier:</label>
+                {% for field in tagform %}
+                {{ field.errors }}
+                {{ field }}
+                {% endfor %}
+        </p>
+
+        {% for field in form %}
+        <p id="field-wrapper-{{ field.name }}">    
+            <label>{{ field.label }}:</label>
+            {{ field.errors }}
+            {{ field }} <span class="helptext">{{ field.help_text|safe }}</span>
+        </p>
+        {% endfor %}
+        <br />
+        <div class="ui-widget-toolbar">
+            <div class="buttonset">
+                <input type="submit" value="Skapa" />
+                <input type="button" data-preview="body" value="Förhandsgranska" />
+                <input type="button" data-maximize="true" data-form="articles-form-create" data-field="body" value="Storskärm" />
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+{% comment %}
+
+{% block content %}
     <h1>Skapa ny Artikel</h2>
     <form id="form-create-article" action="" method="post">
         {% csrf_token %}
@@ -34,4 +75,7 @@
             <input type="button" data-preview="body" value="Förhandsgranska" />
         </div>
     </form>
+
+{% endcomment %}
+
 {% endblock content %}

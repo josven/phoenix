@@ -5,9 +5,12 @@ from django.utils import simplejson
 
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect  
+from django.utils.encoding import force_unicode
 
 from apps.notifications.models import *
-from django.http import HttpResponseRedirect  
 from apps.core.utils import render
 
 NOTIFICATION_TYPES = (
@@ -18,44 +21,67 @@ NOTIFICATION_TYPES = (
 )
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def delete_notification(request):
-    
-    vars = {}
-    
     if request.method == 'POST':
-            
-        notification_id = request.POST.get('notification_id', None)     
-        instance_id = request.POST.get('instance_id', None)                 
-        type = request.POST.get('type', None)
         
-        if notification_id:      
-            notification = Notification.objects.get(receiver=request.user,id=notification_id)       
-            if notification:
-                notification.delete()      
+        notification_ids = map(int, request.POST.getlist('notification'))
+        model = request.POST.get('model')
+        notifications = request.user.receiver_entries.filter(id__in = notification_ids)
+        
+        for note in notifications:
+            note.delete()
 
-        elif instance_id and type:
-            notification = Notification.objects.get(receiver=request.user, instance_id=instance_id, type=type)        
-            if notification:
-                notification.delete()
-                
-                if request.is_ajax():
-                    return HttpResponse(status=200)  
-        
+        return HttpResponse(status=200)
+
     return HttpResponseRedirect(request.META["HTTP_REFERER"]) 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def updates(request, format):
     
-    if request.is_ajax():
+    data = {}
+
+    if True: #not request.is_ajax():
         if request.user.is_authenticated():
-            data = get_notifications(request)
-            data.pop('notifications')
-            data.pop('test')
-            
-            json_data = simplejson.dumps( data )
- 
+
+            print request.GET.get('n', None)
+
+            # Ta upp notificationer som ska annonseras
+            if request.GET.get('n', None):
+                
+                notifications = request.user.receiver_entries.filter( status__in = [0,1] )
+                notification_count = len( notifications )
+
+                announced_notifications = [ note for note in notifications if note.status in [0]]
+                announced_notifications_length = len( announced_notifications )
+
+                new_notifications = [ note for note in notifications if note.status in [1]]
+                new_notifications_length = len( new_notifications )
+
+                if announced_notifications:
+                    
+                    announced_notifications_length = len( announced_notifications )
+                    
+                    if announced_notifications_length == 1:
+                        
+                        note = announced_notifications[0]
+
+                        message = u'Ny aktivitet!<br/> {0} </br> <a href="{1}">Gå dit</a>'.format( force_unicode(note.content_object.get_verbose_name), force_unicode( note.content_object.get_absolute_url() ) )
+                    
+                    if announced_notifications_length > 1:
+                        
+                        message = u'{0} nya aktiviteter!<br/> <a href="{1}">Gå dit</a>'.format( announced_notifications_length , reverse('read_notifications') )
+
+                    data['notification_message'] = message
+                    data['notification_count'] = notification_count
+
+                for a_note in announced_notifications:
+                    a_note.status = 1
+                    a_note.save()
+
+        json_data = simplejson.dumps( data )
+
         return HttpResponse(json_data, content_type='application/json; charset=UTF-8')
    
     else:
@@ -66,7 +92,9 @@ def updates(request, format):
 def get_notifications(request):
     
     d = {}
+    '''
     user = request.user
+    
     notifications = Notification.objects.filter(receiver=user)
     
     
@@ -126,40 +154,19 @@ def get_notifications(request):
         'a' : { 'gb' : count_new_guestbook, 'fo' : count_new_forum , 'ar' : count_new_article },
         'i' : { 'gb' : count_indicator_guestbook, 'fo' : count_indicator_forum, 'ar' : count_indicator_article } 
         }
-     
+    '''
     return d
 
     
 @never_cache
-@login_required(login_url='/auth/login/')    
+@login_required()
 def notifications(request):
-    vars ={}
-    
-    notifications = Notification.objects.filter(receiver=request.user)
+    vars = {
+            'notifications' : request.user.receiver_entries.all(),
+        }
 
-    vars['notifications'] = notifications
     
     return render(request, "notifications.html", vars )
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
     
     
 '''

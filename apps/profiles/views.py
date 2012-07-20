@@ -7,10 +7,10 @@ from django.views.decorators.cache import never_cache
 
 from apps.core.utils import render
 from models import Profile
-from forms import * #ProfileForm, ProfileDescriptionForm, ProfileSubscriptionsForm
+from forms import *
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def read_profile(request, user_id=None):
     """
     Read a profile. Uses the profile of the current user if not given an id.
@@ -33,7 +33,7 @@ def read_profile(request, user_id=None):
     return render(request, template, {"profile": profile,'user':user})
     
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def update_profile(request):
     """
     Updates a profile. Users may only update their own profile.
@@ -74,7 +74,7 @@ def update_profile(request):
     return render(request, 'update_profile.html', vars)
 
 @never_cache    
-@login_required(login_url='/auth/login/')
+@login_required()
 def profile_description_form(request,user_id=None):
     user = request.user
     profile, created = Profile.objects.select_related().get_or_create(user=user)

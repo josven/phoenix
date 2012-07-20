@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.utils import simplejson
 from django.db.models import get_model
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from apps.core.utils import render
 from forms import update_entry_form, delete_entry_form, subscribe_tag_form
 
 from reversion.models import Version
 
-
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def subscribe_tag(request):
+    print request.method
     if request.method == 'POST':
         if request.is_ajax():
             form = subscribe_tag_form(request.POST)
-            
             if form.is_valid():
-                
                 #Get user
                 user = request.user
                 profile = request.user.get_profile()
@@ -42,7 +43,7 @@ def subscribe_tag(request):
     return HttpResponse(status=404)
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def preview(request):
 
 	if request.method == 'POST':
@@ -62,7 +63,7 @@ def preview(request):
 	return HttpResponse(status=404)
     
 @never_cache
-@login_required(login_url='/auth/login/')   
+@login_required()   
 def update_entry(request, app_label, class_name, id):   
     vars = {}
 
@@ -89,6 +90,8 @@ def update_entry(request, app_label, class_name, id):
         # Get form
         fields = instance.ajax_editable_fields
         form = update_entry_form( fields, model, instance=instance)
+        vars['instance'] = instance
+        vars['fields'] = fields
         vars['form'] = form
     
     if request.method == 'POST':
@@ -97,7 +100,15 @@ def update_entry(request, app_label, class_name, id):
 
         if form.is_valid():
             form.save()
-            return HttpResponse(status=200)
+            
+            instance.date_last_changed = datetime.datetime.now()
+            instance.save()
+
+            vars['instance'] = instance
+            for field in fields:
+                vars[field] = getattr(instance,field)
+            print vars
+            return render(request, 'update_entry_form.html', vars ) 
         
         return HttpResponse(status=401)
         
@@ -105,7 +116,7 @@ def update_entry(request, app_label, class_name, id):
     return render(request, 'update_entry_form.html', vars ) 
     
 @never_cache
-@login_required(login_url='/auth/login/')   
+@login_required()   
 def delete_entry(request, app_label, class_name, id):   
     vars = {}
 
@@ -139,7 +150,7 @@ def delete_entry(request, app_label, class_name, id):
     return render(request, 'update_entry_form.html', vars )
 
 @never_cache
-@login_required(login_url='/auth/login/')   
+@login_required()   
 def history_entry(request, app_label, class_name, id):   
     vars = {}
 

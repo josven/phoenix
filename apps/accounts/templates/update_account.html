@@ -1,32 +1,53 @@
 {% extends "settings.html" %}
 
 {% block content %}
-<h2>Kontoinställningar</h2>
-<h3>Användarnamn</h3>
-{% if time_username_change_message %}
-<h4>{{ time_username_change_message }}</h4>
-{% else %}
-<h4>OBS! Du kan bara byta användarnamn per två månader.</h4>
+<div class="ui-widget">
+    <h2 class="ui-widget-header ui-helper-reset">Användarnamn</h2>
+	{% if time_username_change_message %}
+	<div class="ui-widget-content">
+		<p class="ui-state-error">{{ time_username_change_message }}</p>
+	</div>
+	{% else %}
+	
+    <form class="ui-widget-content" id="account-form-settings" action="" method="post">
+    	
+    	<p>OBS! Du kan bara byta användarnamn per två månader.</p>
 
-<form action="" method="post" class="form-settings">
-    {% csrf_token %}
+        {% csrf_token %}
+        {{ username_change_form.as_p }}
+        
+        <div class="ui-widget-toolbar">
+            <input type="submit" name="username_change_form" value="Ändra">
+        </div>
 
-    {{ username_change_form.as_p }}
+    </form> 
+    {% endif %}
+</div>
 
-    <input type="submit" name="username_change_form" value="Ändra">
-</form>
-
-
-{% endif %}
 <br/>
 
-<h3>Lösenord</h3>
-<form action="" method="post" class="form-settings">
-    {% csrf_token %}
+<div class="ui-widget">
+	<h2 class="ui-widget-header ui-helper-reset">Lösenord</h2>
+	<form action="" method="post" id="account-form-settings" class="ui-widget-content" >
+	    {% csrf_token %}
+	    {{ password_change_form.as_p }}
+	    <div class="ui-widget-toolbar">
+	    	<input type="submit" name="password_change_form" value="Ändra">
+	    </div>
+	</form>
+</div>
 
-    {{ password_change_form.as_p }}
+<br/>
 
-    <input type="submit" name="password_change_form" value="Ändra">
-</form>
-    
+<div class="ui-widget">
+	<h2 class="ui-widget-header ui-helper-reset">Epostadress</h2>
+	<form action="" method="post" id="account-form-settings" class="ui-widget-content" >
+	    {% csrf_token %}
+	    {{ email_change_form.as_p }}
+	    <div class="ui-widget-toolbar">
+	    	<input type="submit" name="email_change_form" value="Ändra">
+	    </div>
+	</form>
+</div>
+
 {% endblock content %}

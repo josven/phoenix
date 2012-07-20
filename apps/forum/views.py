@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
+import copy
 
 
 import json
 from django.http import HttpResponse
-
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
@@ -21,7 +22,7 @@ from apps.notifications.models import Notification
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def list_forum_json(request, tags=None):
 
     if request.is_ajax():
@@ -54,7 +55,7 @@ def list_forum_json(request, tags=None):
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def list_forum(request, tags=None):
 
     """
@@ -64,9 +65,8 @@ def list_forum(request, tags=None):
 
     vars = {
         "categories":defaultCategories.objects.all(),
-        "notes" : Notification.objects.filter(receiver=request.user, instance_type="ForumComment"),
         }
-    
+
     if request.user.has_perm('forum.access_mod_forum'):
         mod_tag = ModeratorForumCategories.objects.filter(tags__name__in=["MOD"])
         vars["categories"] = list( vars["categories"] ) + list( mod_tag )
@@ -80,28 +80,47 @@ def list_forum(request, tags=None):
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
-def read_forum(request, id):
+@login_required()
+def read_forum(request, id, comment_id = None):
 
     vars = {
-        'categories': defaultCategories.objects.all(),
-        'ArticleBodyForm': ForumCommentForm(),
+        'categories' : defaultCategories.objects.all(),
+        'commentform' : ForumCommentForm(),
+        'article_id' : id,
+        'article' : Forum.objects.get(id=id),
         }
-            
-    vars['forum'] = Forum.objects.get(id=id)
 
-    if "MOD" in [tag.name for tag in vars['forum'].tags.all()]:
+
+    if "MOD" in [tag.name for tag in vars['article'].tags.all()]:
         if not request.user.has_perm('forum.access_mod_forum'):
             raise Http404
 
-    vars['comments'] = ForumComment.objects.filter(post=vars['forum'])
+    try:
+        forum_note = request.user.receiver_entries.get(content_type__model = 'forum', object_id = id)
+    except:
+        forum_note = None
+    
+    if forum_note:
+        forum_note.delete()
+
+
+    ## Kommentar notifikationer
+    ##--------------------------
+    
+    if comment_id != None:
+        comments = ForumComment.objects.filter(id = comment_id)
+    else:
+        comments = ForumComment.objects.filter(post=vars['article'])
+
+    comments = list( comments )
+    
+    vars['comments'] = comments
     
     return render(request, 'read_forum.html', vars )
 
 
-
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def create_forum(request, tags=None):
 
     if tags:
@@ -112,25 +131,26 @@ def create_forum(request, tags=None):
 
         
     vars = {
-            'form' : ForumForm(),
+            'form' : ForumForm( user=request.user ),
             'tagform' : tagform,
             'categories' : defaultCategories.objects.all(),
         }
         
     if request.method == 'POST':    
-        form = ForumForm(request.POST)
+        form = ForumForm(request.POST, user=request.user)
         tagform = DefaultForumTagsForm(request.POST)
-        
-        if form.is_valid() & tagform.is_valid():            
+
+        if form.is_valid() & tagform.is_valid():        
             default_tags = tagform.cleaned_data['default_tags']
             
             user_tags = form.cleaned_data['tags']
-                       
+            user_sub_tags = form.cleaned_data['user_tags']
+
             # Filter list from empty strings
             cleaned_tags = filter(None, user_tags)
             
             # Combine and remove doubles
-            all_tags = list(set(default_tags + cleaned_tags))
+            all_tags = list(set(default_tags + cleaned_tags + user_sub_tags))
                 
             # Check if a default tag is present
             if len(default_tags) == 0:
@@ -141,24 +161,23 @@ def create_forum(request, tags=None):
             if len( all_tags ) > 5:
                 messages.add_message(request, messages.INFO, 'Du kan inte välja fler än fem kategorier!')
                 return render(request, 'create_forum.html', {'form': form,'tagform':tagform, 'categories':vars['categories']})
-
-            # Validate INTERNAL tags
-            all_tags = validate_internal_tags(request, all_tags) 
             
             post_values = request.POST.copy()
+
+            # Validate INTERNAL tags
             all_tags = validate_internal_tags(request, all_tags)
             post_values['tags'] = ', '.join(all_tags)
             
-            form = ForumForm(post_values)  
+            form = ForumForm(post_values, user=request.user)  
             link = form.save()
-            
+
             return HttpResponseRedirect(reverse('read_forum', args=[link.id]))
-    
+
     return render(request, 'create_forum.html', vars )
 
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def comment_forum(request,forum_id):
     """
     Comment article
@@ -191,6 +210,7 @@ def comment_forum(request,forum_id):
             # Save comment
             comment.save()
             
+
             # Get instance ids for all siblings
             # if there are any unreplied siblings we need to remove them
             instance_ids = []
@@ -201,19 +221,17 @@ def comment_forum(request,forum_id):
                 except:
                     pass
 
-            # If this is an answear to an unreplied post, include them in the
-            # in the instance array for notification remowal
-            instance_id = request.POST.get('unreplied', None)
+            # Put parent post in to the array
+            if comment.parent:
+                instance_ids += [comment.parent.id]
 
-            if instance_id:
-                instance_ids += [instance_id]
-                
-            # Remowe notifications
-            if instance_ids:
-                notes = Notification.objects.filter(receiver=request.user, instance_type="ForumComment", instance_id__in = instance_ids)
-                for note in notes:
+            # Get notifications and remove them all
+            notifications = request.user.receiver_entries.filter(content_type__model = 'forumcomment', object_id__in = instance_ids)
+
+            if notifications:
+                for note in notifications:
                     note.delete()
-            
+
             post.last_comment = comment
             
             if post.posts_index:
@@ -222,13 +240,46 @@ def comment_forum(request,forum_id):
                 post.posts_index = post.get_posts_index()
                 
             post.save()
+            
+            ## Kommentar notifikationer
+            ##--------------------------
+
+            comments = ForumComment.objects.filter(post=post)
+            comments = list( comments )
+            comments_ids = [comment.id for comment in comments]
+
+            # Tar upp notifikationer för kommentarer
+            notifications = request.user.receiver_entries.filter(content_type__model = 'forumcomment', object_id__in = comments_ids)
+
+            for notification in notifications:
+                for comment in comments:
+                    if comment.id == notification.object_id:
+
+                        # Hänger på notifikationen på kommentaren
+                        comment.notification = notification
+
+                        # Eftersom komentaren är nu läst så sätter vi status 3 på den (obesvarad)
+                        notification.status = 3
+                        notification.save()
+
+            if request.is_ajax():
+                vars = {
+                    'comments' : comments,
+                    'article_id': forum_id,
+                    'commentform': ForumCommentForm(),
+                    'app_name': "forum",
+                    'model_name': "ForumComment",
+                    'post_url': reverse('comment_forum', args=[forum_id]),
+                    }
+
+            return render(request, '_comments.html', vars )
     
     return HttpResponseRedirect(reverse('read_forum', args=[forum_id]))
 
 ''' ######################## old forum ############################ '''
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def read_old_forum(request):
     """
     Read the list of forum threads.
@@ -246,7 +297,7 @@ def read_old_forum(request):
     return render(request, 'old_forum.html', vars )
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def create_thread(request, tags=None):
     """
     Create a forum thread.
@@ -312,7 +363,7 @@ def create_thread(request, tags=None):
     return render(request, 'create_thread.html', {"threads": threads, 'form': form,'tagform':tagform, 'categories':categories})
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def read_thread(request, id):
     """
     Read a forum thread.
@@ -337,7 +388,7 @@ def read_thread(request, id):
     return render(request, 'thread.html', data)
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def create_forumpost(request, tags=None):
     """
     Create a forumpost. FormPost class will handle all threading logic.
@@ -386,7 +437,7 @@ def create_forumpost(request, tags=None):
     return render(request, 'thread.html', data)
 
 @never_cache
-@login_required(login_url='/auth/login/')
+@login_required()
 def get_threads_by_tags(request,tags):
     categories = defaultCategories.objects.all()
     tags_array = tags.split(",")

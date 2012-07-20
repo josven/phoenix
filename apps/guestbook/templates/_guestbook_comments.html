@@ -1,0 +1,76 @@
+{% load entry_tags %}
+{% load markup %}
+{% load humanize %}
+{% load thumbnail %}
+{% load filters %}
+{% load pagination_tags %}
+{% load notification_tags %}
+
+{% autopaginate entries %}
+{% get_notes_for_guestbook entries request.user as xentries %}
+
+{% for entry in xentries %}
+
+    <li data-id="{{ entry.id }}" class="ui-helper-reset">
+        <!-- Kommentar -->
+        <div data-comment-id="{{ entry.id }}" id="comment-{{ entry.id }}" class="{% if entry.notification and entry.notification.status < 3 %}ui-state-highlight{% endif %} ui-widget ui-widget-content ui-helper-clearfix comment-entry comment-entry-mouseout">
+            <h4 class="ui-widget-toolbar ui-helper-reset header clearfix">{% render_userlink entry.created_by %} {{ entry.date_created }} {% if entry.notification %}<em>({{entry.notification.get_status_display}})</em>{% endif %}</h4>
+
+            <div class="clearfix">
+                {% if entry.created_by.profile.photo %}
+                <div class="photo">    
+                    {% thumbnail entry.created_by.profile.photo "50x50" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ entry.created_by }}">
+                    {% endthumbnail %}
+                </div>
+                
+                <div class="photo-padding content">
+                {% else %}            
+                <div class="content">
+                {% endif %}
+                
+                    <div>
+                        <div id="comment-{{ entry.id }}-content">
+                            {{ entry.text|user_filter }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Visa toolbar, om man har något med detta inlägg att göra #}
+            {% if request.user == user or request.user == entry.created_by %}
+            <h4 class="ui-widget-toolbar ui-helper-reset footer clearfix" style="text-align:left;">
+                <div class="button-wrapper buttonset" style="float:left;">
+
+                    {# Visa svaraknappen, om det är ens enga gästbok. Men inte om man själv har skrivit det (i konversation vyn) #}
+                    {% if request.user == user and not request.user == entry.created_by %}
+                    <a href="{% if temple_type == "conversation" %}{% url guestbook_conversation_entry user.id entry.created_by.id entry.id %}{% else %}{% url guestbook_entry user.id entry.id %}{% endif %}" data-user-id="{{ entry.created_by.id }}" data-form="guestbook-form-post" data-comment="comment-{{ entry.id }}" class="js-reply">&nbsp;Svara</a>
+                    {% endif %}
+
+                    {# Visa konversationsknapp, om det är ens enga gästbok, eller om man själv har skrivit inlägget #}
+                    {% if request.user == user and not users or request.user == entry.created_by and not users %}
+                    <a href="{% url guestbook_conversation user.id entry.created_by.id %}" class="js-entry-conversation">&nbsp;Konversation</a>
+                    {% endif %}
+
+                    {# Visa tabortknappen, om det är ens enga gästbok, eller om man själv har skrivit inlägget #}
+                    {% if request.user == user or request.user == entry.created_by %}
+                    <a data-comment="comment-{{ entry.id }}" href="{% url guestbook_entry_delete user.id entry.id %}}" class="js-delete-guestbook-entry">&nbsp;Ta bort</a>
+                    {% endif %}
+                </div>
+            </h4>
+            {% endif %}
+
+        </div>
+    </li>
+
+{% empty %}
+    
+    <li class="entry ui-widget ui-widget-content">
+        <p>Tom gästbok =(</p>
+    </li>
+
+{% endfor %}
+
+<li>
+    {% my_paginate %}
+</li>
