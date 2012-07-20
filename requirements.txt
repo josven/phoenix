@@ -5,10 +5,11 @@ PIL
 -e git+git://github.com/etianen/django-reversion.git#egg=django-reversion
 -e git+git://github.com/ericflo/django-pagination.git#egg=django-pagination
 -e git+git://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
-Django 1.4
+Django
 South
 sorl-thumbnail
 python-memcached
 django-taggit
 textile
 psycopg2
+django_compressor
