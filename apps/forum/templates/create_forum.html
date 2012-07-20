@@ -1,32 +1,39 @@
 {% extends "forum.html" %}
 
 {% block content %}
-    <h1>Skapa ny tråd</h2>
-    <form id="form-create-thread" action="{% url create_forum %}" method="post">
+<div class="ui-widget">
+    <h2 class="ui-widget-header ui-helper-reset">Skapa ny tråd</h2>
+
+    <form class="ui-widget-content" action="{% url create_forum %}" method="post" id="forum-form-create">
+        
+        <label>Du kan välja upp till 5 kategorier, minst en en huvudkategori</label>
+
         {% csrf_token %}
-        
-        <h3>Du kan välja upp till 5 kategorier, minst en en huvudtagg</h3>
-        <div class="tag-list-wrapper">
-        {% for field in tagform %}
-        {{ field }}
+        <p>
+            <label for="id_title">Huvudkategorier:</label>
+                {% for field in tagform %}
+                {{ field.errors }}
+                {{ field }}
+                {% endfor %}
+        </p>
+
+        {% for field in form %}
+        <p id="field-wrapper-{{ field.name }}">    
+            <label>{{ field.label }}:</label>
+            {{ field.errors }}
+            {{ field }} <span class="helptext">{{ field.help_text|safe }}</span>
+        </p>
         {% endfor %}
-        </div>
-        
-        <p>
-        {{ form.tags }}
-        </p>
-        
-        <p>
-        {{ form.title }}
-        </p>
-        
-        <p>
-        {{ form.body }}
-        </p>
-        
-        <div class="buttonset">
-            <input type="submit" value="Skapa" />
-            <input type="button" data-preview="body" value="Förhandsgranska" />
+        <br />
+        <div class="ui-widget-toolbar">
+            <div class="buttonset">
+                <input type="submit" value="Skapa" />
+                <input type="button" data-preview="body" value="Förhandsgranska" />
+                <input type="button" data-maximize="true" data-form="forum-form-create" data-field="body" value="Storskärm" />
+
+            </div>
         </div>
     </form>
+
+</div>
 {% endblock content %}

@@ -1,60 +1,39 @@
 # -*- coding: utf-8 -*-
-from django.core import serializers
+
 from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.utils.encoding import force_unicode
+
 from apps.notifications.models import *
-from apps.notifications.views import get_notifications
- 
-NOTIFICATION_TYPES = (
-    (1, 'Gästboksinlägg'),
-    (2, 'Forumsvar'),
-    (3, 'Artikelkommentar'),
-)
 
 class AnnonuceNotifications(object):
-    def process_request(self, request):
+    def process_view(self, request, view_func, view_args, view_kwargs):
         if not request.is_ajax():
             if request.user.is_authenticated():
-                data = get_notifications(request)
                 
-                #Get annoncements
-                annoncements = data.get('a', None)
-                if annoncements:
-                    
-                    # Get guestbook annoncements
-                    guestbook_annoncements = annoncements.get('gb', None)
-                    if guestbook_annoncements:
-                        
-                        if guestbook_annoncements == 1:
-                            messages.add_message(request, messages.INFO, "Nytt gästboksinlägg")
-                        
-                        if guestbook_annoncements > 1:
-                            messages.add_message(request, messages.INFO, "{0} nya gästboksinlägg".format( guestbook_annoncements ) )
-                        
-                    # Get forum annoncements
-                    forum_annoncements = annoncements.get('fo', None)
-                    if forum_annoncements:
-                        
-                        if forum_annoncements == 1:
-                            messages.add_message(request, messages.INFO, "Nytt svar i forumet")
-                        
-                        if forum_annoncements > 1:
-                            messages.add_message(request, messages.INFO, "{0} nya svar i forumet".format( forum_annoncements ) )
+                notifications = request.user.receiver_entries.filter( status__in = [0,1] )
+                notification_count = len( notifications )
+
+                announced_notifications = [ note for note in notifications if note.status in [0]]
+                announced_notifications_length = len( announced_notifications )
+
+                new_notifications = [ note for note in notifications if note.status in [1]]
+                new_notifications_length = len( new_notifications )
+
+                if announced_notifications_length == 1:
+                    note = announced_notifications[0]
+                    message = u'Ny aktivitet!<br/> {0} </br> <a href="{1}">Gå dit</a>'.format( force_unicode(note.content_object.get_verbose_name), force_unicode( note.content_object.get_absolute_url() ) )
                    
-                                                             
-                    # Get article annoncements
-                    article_annoncements = annoncements.get('ar', None)
-                    if article_annoncements:
-                        
-                        if article_annoncements == 1:
-                            messages.add_message(request, messages.INFO, "Ny kommentar på en artikel")
-                        
-                        if article_annoncements > 1:
-                            messages.add_message(request, messages.INFO, "{0} nya artikelkommentarer".format( article_annoncements ) )
-                   
-                                                             
-                # Put indicators on 
-                request.__class__.indicators = data.get('i',None)
-                request.__class__.notifications = data.get('notifications',None)
-                
-                #Put on usertags
-                request.__class__.usertags = request.user.get_profile().subscriptions.all()
+                if announced_notifications_length > 1:
+                    message = u'{0} nya aktiviteter!<br/> <a href="{1}">Gå dit</a>'.format( announced_notifications_length , reverse('read_notifications') )
+
+                if announced_notifications_length != 0:
+                    messages.add_message( request, messages.INFO, message )
+
+                for a_note in announced_notifications:
+                    a_note.status = 1
+                    a_note.save()
+
+                request.__class__.notification_count = notification_count
+
+        return None

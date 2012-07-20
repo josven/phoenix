@@ -1,4 +1,4 @@
-﻿from django.conf.urls.defaults import patterns, url
+from django.conf.urls.defaults import patterns, url
 from django.conf import urls
 
 urlpatterns = patterns('',
@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     
         
     url(r'^read/(?P<forum_id>\d*)/comment/$', 'apps.forum.views.comment_forum', name='comment_forum'),
+    url(r'^read/(?P<id>\d*)/comment/(?P<comment_id>\d*)/$', 'apps.forum.views.read_forum', name='read_forum_comment'),
 
 
     

@@ -6,15 +6,18 @@ from django.contrib.auth.models import User
 
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 
-from taggit.managers import TaggableManager
+from apps.core.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
 
-import datetime
+import site_strings
 
+from apps.core.templatetags.entry_tags import render_tag
 from apps.core.models import Entry
-
 from apps.core.signals import *
+
+import site_strings
 
 class Article(Entry):
     """
@@ -22,10 +25,26 @@ class Article(Entry):
 
     """
     title = models.CharField(max_length=128, verbose_name="Rubrik")
-    body = models.TextField(max_length=5120, verbose_name="Text")
+    body = models.TextField(max_length=5120, verbose_name="Text", help_text = site_strings.COMMENT_FORM_HELP_TEXT)
     tags = TaggableManager(verbose_name="Kategorier")
     allow_comments = models.NullBooleanField(default=False,verbose_name="Tillåt kommentarer")
-        
+
+    class Meta:
+        verbose_name = "Artikel"
+        verbose_name_plural = "Artiklar"
+
+    def __unicode__(self):
+        return u''.format( self.title )
+
+    @property
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
+    def tags_list(self):
+        if not hasattr(self, "_cached_tags"):
+            self._cached_tags = self.tags.all()
+        return self._cached_tags
+
     @property
     def ajax_editable_fields(self):
         return ["body", "allow_comments"]
@@ -55,7 +74,10 @@ class Article(Entry):
 
     def get_absolute_url(self):
         return "/articles/read/%s/" % self.id
-        
+
+    def get_absolute_url(self):
+        return u"{0}".format( reverse('read_article', args=[self.id]) )
+    
     def __unicode__(self):
         return u'%s' % self.title
 
@@ -63,15 +85,19 @@ class Article(Entry):
     def verbose_name(self):
         return u'artikel'
         
-    def aaData(self):
+    def aaData(self, request):
         """
         aaData formats for datatables
         """
+        subscriptions=request.user.profile.subscriptions.all()
+        tags = ""
+        for tag in self.tags.all():
+            vars = render_tag(tag, '/forum/tag/', subscriptions)
+            tags += render_to_string('tag_template.html', vars)
 
         title = u"<a href=\"{0}\" >{1}</a>".format( self.get_absolute_url(), self.title )
-        tags = [u"<span class=\"ui-tag\"><a href=\"{0}\">{1}</a></span>".format( reverse( 'search_article', args = [ tag.name ]), unicode(tag.name).title()  ) for tag in self.tags.all()]
         created = u"{0} {1} av <a href=\"{2}\">{3}</a>".format(naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.get_profile().get_absolute_url(), self.created_by.username)
-        
+
         if self.allow_comments:
             allow_comments = self.get_posts_index()
         else:
@@ -80,11 +106,11 @@ class Article(Entry):
         data =  {
                 'title': title,
                 'created': created,
-                'tags' : u" ".join( tags ),
+                'tags' : tags,
                 'allow_comments': allow_comments,
                 'id': self.id,
                 }
-           
+
         return data
     
     def get_posts_index(self):   
@@ -95,18 +121,29 @@ class ArticleComment(MPTTModel):
     post = models.ForeignKey(Article)
     author = models.CharField(max_length=60)
     created_by = models.ForeignKey(User, related_name="created_%(class)s_entries", blank=True, null=True)
-    comment = models.TextField()
+    comment = models.TextField(max_length=5120, help_text=site_strings.COMMENT_FORM_HELP_TEXT, verbose_name="Kommentar")
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
-    date_last_changed = models.DateTimeField(auto_now=True, blank=True, null=True)
+    date_last_changed = models.DateTimeField(auto_now=False, blank=True, null=True)
     tags = TaggableManager()
     
     # a link to comment that is being replied, if one exists
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     
+    class Meta:
+        verbose_name = "Artikelkommentar"
+        verbose_name_plural = "Artikelkommentarer"
+
     class MPTTMeta:
         # comments on one level will be ordered by date of creation
         order_insertion_by=['added']
         
+    def __unicode__(self):
+        return u'Svar på "{0}"'.format( self.post.title )
+
+    @property
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
     @property
     def ajax_editable_fields(self):
         return ["comment"]
@@ -137,10 +174,6 @@ class ArticleComment(MPTTModel):
         return deleteble
         
     @property
-    def delete_next_url(self):
-        return reverse('read_article', args=[self.post.id])
-        
-    @property
     def is_editable(self):
         """
         Limit is_editable to one day
@@ -148,7 +181,7 @@ class ArticleComment(MPTTModel):
         return datetime.datetime.now() - self.added < datetime.timedelta(days=1)
            
     @property
-    def allow_history(self):
+    def allow_history(self):  
         return True    
         
     @property
@@ -156,7 +189,7 @@ class ArticleComment(MPTTModel):
         return ["comment"]
 
     def get_absolute_url(self):
-        return "/articles/read/{0}/#comment-{1}".format( self.post.id, self.id )
+        return "{0}?h=comment-{1}".format( reverse('read_article', args=[self.post.id]), self.id )
         
     @property
     def get_reply_url(self):

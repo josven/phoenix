@@ -1,35 +1,50 @@
-$(document).ready(function() {
+// Formatera jQuery UI för denna app
+var formatjQueryUI = function() {
+    $('.simpletabs').tabs({
+        spinner: "...", 
+        fx: { opacity: 'toggle' }
+    });
 
-    // DISABLE REGISTER BUTTON
-    //$( "#register_button" ).button( "option", "disabled", true );
-    // Modals for register and login. Can be reused for any modalforms
-    $('*[data-modal-form=true]').click(function(event) {
+    $("input:submit, a.ui-button, button").button();
+};
+
+$(document).ready(function() {
+    // Formatera jQuery UI grejer
+    formatjQueryUI();
+
+    // Formatera jQuery UI grejer efter ajaxComplete
+    $('body').ajaxComplete(function() {
+        formatjQueryUI();
+    });
+
+    //Ajaxifiera formulären
+    $("body").on("submit", "form", function(event) {
         event.preventDefault();
 
-        link = this;
+        var form = $(this),
+            url = form.attr('action'),
+            data = form.serialize(),
+            ajaxloader = form.find('input[type=submit]');
 
-        var modal = $('<div id="modal"><form action="' + link.href + '" method="post"></form></div>');
-        $('body').append(modal);
-        $('#modal form').load(link.href + " form ul.formfields");
+        form.find('input').attr('disabled', 'disabled');
+        ajaxloader.after( $('&nbsp;<img src="/static/img/ajax-loader.gif" class="gif-submit-loader" alt="Wakawakawakawakawaka..." />') );
 
-        modal.dialog({
-            modal: true,
-            minWidth: 350,
-            position: ["center", 100],
-            title: link.title,
-            buttons: [{
-                text: "Ok",
-                click: function() {
-                    $(this).find('form').submit();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            dataType: "html",
+            success: function(data, textStatus, jqXHR) {
+                if ( jqXHR.status === 278 ) {
+                    window.location.href = jqXHR.getResponseHeader("Location");
                 }
-            }, {
-                text: "Avbryt",
-                click: function() {
-                    $(this).dialog("close");
+                else {
+                    form.replaceWith(data);
                 }
-            }]
-            });
+            }
+        });
 
         return false;
     });
+
 });

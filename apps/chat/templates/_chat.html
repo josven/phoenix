@@ -1,7 +1,41 @@
 {% load entry_tags %}
+{% load markup %}
+{% load humanize %}
+{% load thumbnail %}
+{% load entry_tags %}
+{% load filters %}
 
 {% for entry in posts %}
-<li data-id="{{ entry.id }}" class="entry ui-widget ui-widget-content">
-    {% render_entry entry request %}
+<li data-id="{{ entry.id }}" class="ui-helper-reset">
+    <!-- Kommentar -->
+    <div data-comment-id="{{ entry.id }}" id="comment-{{ entry.id }}" class="{% if request.user.username|add:":" in entry.text %}ui-state-highlight{% endif %} ui-widget ui-widget-content ui-helper-clearfix comment-entry comment-entry-mouseout">
+        <h4 class="ui-widget-toolbar ui-helper-reset header clearfix">{% render_userlink entry.created_by %} {{ entry.date_created }}</h4>
+
+        <div class="clearfix">
+            {% if entry.created_by.profile.photo %}
+            <div class="photo">    
+                {% thumbnail entry.created_by.profile.photo "50x50" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ entry.created_by }}">
+                {% endthumbnail %}
+            </div>
+            
+            <div class="photo-padding content">
+            {% else %}            
+            <div class="content">
+            {% endif %}
+            
+                <div>
+                    <div id="comment-{{ entry.id }}-content">
+                        {{ entry.text|user_filter }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="ui-widget-toolbar ui-helper-reset footer clearfix" style="text-align:left;">
+            <div class="button-wrapper buttonset" style="float:left;">
+                <a href="#" data-form="chatt-form-post" data-comment="comment-{{ entry.id }}" data-reply-to="{{ entry.created_by }}" data-has-children="comment-{{ entry.id }}" class="js-reply">&nbsp;Svara</a>
+            </div>
+        </h4>
+    </div>
 </li>
 {% endfor %}

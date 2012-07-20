@@ -7,6 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    (r'^', include('apps.registration.urls')),
     (r'^', include('apps.frontpage.urls')),
     (r'^', include('apps.core.urls')),
     #url(r'^$', 'apps.registration.views.auth_login', name='start'),
@@ -14,7 +15,7 @@ urlpatterns = patterns('',
     (r'^', include('apps.guestbook.urls')),
     #(r'^register/beta/$', 'apps.registration.views.register_beta'),
     #(r'^test$', direct_to_template, {'template': 'desktop_base.html'}),
-    (r'^auth/', include('apps.registration.urls')),
+
     (r'^forum/', include('apps.forum.urls')),
     (r'^user/', include('apps.profiles.urls')),
     (r'^chat/', include('apps.chat.urls')),

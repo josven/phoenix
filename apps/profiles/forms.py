@@ -11,7 +11,7 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        exclude = ('user','subscriptions',)
+        exclude = ('user','subscriptions','date_username_last_changed',)
         description = forms.CharField(help_text="Formateringshjälp: http://sv.wikipedia.org/wiki/Textile")
 
 class ProfileDescriptionForm(ModelForm):

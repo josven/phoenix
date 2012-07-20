@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 from django.db import models
 from django.db.models import get_model
@@ -5,14 +7,6 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from utils import find_request
 from distutils.version import LooseVersion
-
-class Profile(models.Model):
-    """
-    A user profile
-
-    """
-
-    pass
 
 
 class ActiveManager(models.Manager):

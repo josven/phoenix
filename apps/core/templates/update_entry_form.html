@@ -1,4 +1,16 @@
-<form id="user-form-settings" action="{{ action }}" method="post" enctype="multipart/form-data">
+{% load filters %}
+{% if form %}
+<form class="form-edit-entry clearfix" id="update-entry-form-{{ instance.id }}" action="{{ action }}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
-{{ form.as_p }}
+    <ul>
+        {{ form.as_ul }}
+    {% if instance %}
+	<li class="buttonset ui-buttonset">
+	    <input type="button" data-preview="comment" value="Förhandsgranska" />
+	    <input type="button" data-maximize="update-entry-form-{{ instance.id }}" value="Storskärm" />
+	</li>
+	{% endif %}
 </form>
+{% else %}
+{{ comment|user_filter }}
+{% endif %}

@@ -57,3 +57,12 @@ div.dataTables_wrapper:after {
 }
 html[xmlns] .dataTables_wrapper { display: block; }
 * html .dataTables_wrapper { height: 1%; }
+
+
+#notification_table_wrapper .remove-notes { 
+	text-align: right;
+	margin: 5px; 
+	font-size: 60%;
+}
+
+#notification_table_wrapper .ui-toggle-button { font-size: 60%;}

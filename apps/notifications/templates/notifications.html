@@ -1,43 +1,49 @@
 {% extends "profile.html" %}
 {% load humanize %}
+{% load notification_tags %}
 
 {% block content %}
 
-{% for notification in notifications %}
-{% if forloop.first %}
-<h2>Notifieringar</h2>
-<table id="notification_table">
-	<thead>
-		<tr>
-            <th>Typ</th>
-            <th>Beskrivning</th>
-            <th>Status</th>
-            <th>Tid</th>
-            <th>Från</th>
-			<th>Länk</th>
-			<th>Ta bort</th>
-			<th>ID (Sortering)</th>
-		</tr>
-	</thead>
-	<tbody>
-{% endif %}
-		<tr class="ui-widget-content">
-			<td>{{ notification }}</td>
-			<td>{{ notification.message }}</td>
-			<td>{{ notification.get_status }}</td>
-			<td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
-			<td><a href="{{ notification.sender.get_profile.get_absolute_url }}">{{ notification.sender }}</a></td>
-			<td><a href="{{ notification.instance_url }}">Gå till {{ notification|lower }}</a></td>
-			<td><form class="ajax-delete-note" action="{% url delete_notification %}" method="post" >{% csrf_token %}<input type="hidden" value="{{ notification.id }}" id="id-{{ notification.id }}" name="notification_id" ><input class="button-mark" value="Ta bort" type="submit" id="input-delete-{{ notification.id }}" /></form></td>
-			<td>{{ notification.id }}</td>
-		</tr>
-{% if forloop.last %}
-	</tbody>
-</table>
-{% endif %}
+{% set_notifications_to_unread notifications as xnotifications %}
 
-{% empty %}
-<h2>Inga notifieringar</h2>
-{% endfor %}
-
+<form class="ajax-delete-note" id="form_remove_notes" action="{% url delete_notifications %}" method="post" >
+    {% csrf_token %}
+    <input type="hidden" name="model" value="forumcomment" />
+    <fieldset>
+        <table id="notification_table" class="tread_table">
+            <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Titel</th>
+                    <th>Status</th>
+                    <th>Tid</th>
+                    <th>Från</th>
+                    <th>Ta bort</th>
+                    <th>ID (Sortering)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notification in xnotifications %}
+                <tr class="ui-widget-content" id="row-notification-{{ notification.id }}">
+                    <td>{{ notification.content_object.get_verbose_name }}</td>
+                    <td>
+                       <a href="{{ notification.content_object.get_absolute_url }}">
+                            {{ notification.content_object }}
+                        </a>
+                        
+                    </td>
+                    <td>{{ notification.get_status_display }}</td>
+                    <td>{{ notification.date_created|naturalday  }} {{ notification.date_created|time:"TIME_FORMAT"  }}</td>
+                    <td><a href="{% url read_profile notification.content_object.created_by.id %}">{{ notification.content_object.created_by }}</a></td>
+                    <td class="ui-toggle-button">
+                        <input type="checkbox" name="notification" value="{{notification.id}}" id="notification-{{notification.id}}" />
+                        <label for="notification-{{notification.id}}">Markera</label>
+                    </td>
+                    <td>{{ notification.id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+</form>
 {% endblock content %}

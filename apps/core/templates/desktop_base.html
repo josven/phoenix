@@ -1,6 +1,4 @@
-{% load tracking_tags %}
 {% load filters %}
-{% visitors_on_site as visitors %}
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -17,34 +15,47 @@
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css?ac" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css?dc" />
     {% if app_name %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ app_name }}.css?dc" />{% endif %}
+    <link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css" />
 	{% endblock css %}
     
     {% block script %}
+      
+    
+
     <link rel="stylesheet" href="{{ STATIC_URL }}css/screen.less" type="text/less" media="screen" />
     <script src="{{ STATIC_URL }}js/libs/less-1.1.5.min.js" type="text/javascript" ></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/libs/modernizr.v2.5.3pre.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery.min.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/libs/themeswitchertool.js"> </script>
 
     <script defer type="text/javascript" src="{{ STATIC_URL }}js/plugins.js"></script>
 	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js?dc"></script>
 	<script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js?dc"></script>
+    <script type="text/javascript" src="http://jqueryui.com/js/jquery.js"></script>
+
+
     {% endblock script %}
 </head>
 
-<body class="{{ app_name }}">
+<body class="{{ app_name }} {% block body-classes %}{% endblock body-classes %} ui-widget-content">
 {% block body %}
     {% if request.user.is_authenticated %}
+    
+
     <div id="top-wrapper" class="ui-widget-content clearfix">
         
-        <h1 id="main_logo"><a href="{% url read_frontpage %}">PHX</a></h1>
+        <h1 id="main_logo">
+            <a href="{% url read_frontpage %}">PHX</a>
+        </h1>
         
         <nav id="primary_navigation">
             {% block navigation %}
             {% endblock navigation %}
+            <div id="switcher"></div>
         </nav>
-         
+     
         <div id="account">
             {% block account %}
             <a data-ajax="false" id="account_button" href="{% url logout %}">Logga ut <span id="username">{{ request.user }}</span></a>
@@ -70,10 +81,10 @@
                     {% block widgets %}
                     <ul id="widget-online-users" class="flat-list">
                         <li>
-                            <h4 class="ui-widget-header entry-head">Användare</h4>
+                            <h4 class="ui-widget-header ui-helper-reset">Aktiva användare</h4>
                         </li>
 
-                        {% for visitor in active_users %}
+                        {% for visitor in request.active_users %}
                         {% if visitor.user != None %}
                         <li>
                             <a class="link-user" href="{{ visitor.user.get_profile.get_absolute_url }}">{{ visitor.user }}</a>   
@@ -83,6 +94,13 @@
                         </li>
                         {% endif %}
                         {% endfor %}
+                        <li>
+                            <hr>
+                        </li>
+                        
+                        <li>
+                            <a href="{% url list_accounts %}">Alla användare</a>
+                        </li>
                     </ul>
                     {% endblock widgets %}
             </nav>

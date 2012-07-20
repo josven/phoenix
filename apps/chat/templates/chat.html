@@ -1,21 +1,33 @@
 {% extends "base.html" %}
+
+{% load markup %}
+{% load humanize %}
+{% load thumbnail %}
 {% load entry_tags %}
+{% load filters %}
+
 
 {% block content %}
-<form id="chat_form" action="{% url chat_post %}" method="post">
-    {% csrf_token %}
+<div class="ui-widget ui-widget-content ui-helper-clearfix form-wrapper">
+    <h2 class="ui-widget-header ui-helper-reset">Skriv i chatten</h2>
 
-    {{ form.text }}
-    <br />
-    <input type="submit" value="Skicka" /><input type="checkbox" id="autoupdate" /><label for="autoupdate">Automatik</label>
-</form>
+    <form id="chatt-form-post" class="form-add-entry" method="POST" action="{% url chat_post %}">
+        {% csrf_token %}
+        <ul>
+            {{ form.as_ul }}
+            <li class="buttonpanel">
+                <div class="buttonset">
+                    <input type="submit" value="Skicka">
+                    <input type="button" data-preview="text" value="Förhandsgranska" />
+                    <input type="button" data-field="text" data-maximize="true" data-form="chatt-form-post" value="Storskärm" />
+                    <input type="checkbox" checked="checked" id="autoupdate" /><label for="autoupdate">Uppdatera automatiskt</label>
+                </div>
+            </li>
+        </ul>
+    </form>
+</div>
 
-<br />
-
-<ul id="chatlist" class="flat-list entrylist">    
-    <li class="loading-message entry ui-widget ui-widget-content">
-        <h4 class="ui-widget-header entry-head" >Laddar chat...</h4>
-    </li>
+<ul id="chatlist" class="flat-list ui-widget ui-widget-content">
+    {% include "_chat.html" with posts=comments %}
 </ul>
-
 {% endblock content %}

@@ -20,8 +20,8 @@ class Guestbooks(Entry):
     text = models.CharField(max_length=5120)
 
     def get_absolute_url(self):
-        return "/user/{0}/guestbook/entry/{1}".format( self.user_id.id, self.id )
-        
+        return u"{0}".format( reverse('guestbook', args=[self.user_id.id]) )
+
     def conversation(self):
         A = self.created_by
         B = self.user_id
@@ -32,3 +32,14 @@ class Guestbooks(Entry):
         entrys = Guestbooks.active.filter(entrys_from_A_to_B | entrys_from_B_to_A)
         
         return entrys
+    
+    def __unicode__(self):
+        return u'Gästboksinlägg ifrån {0}'.format(self.created_by)
+
+    @property
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
+    class Meta:
+        verbose_name = "Gästboksinlägg"
+        verbose_name_plural = "Gästboksinlägg"

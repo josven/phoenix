@@ -1,0 +1,100 @@
+{% load mptt_tags %}
+{% load markup %}
+{% load humanize %}
+{% load thumbnail %}
+{% load entry_tags %}
+{% load filters %}
+{% load notification_tags %}
+
+<div data-article-id="{{ article_id }}" class="ui-widget ui-widget-content ui-widget-padded ui-helper-clearfix form-wrapper">
+    <form data-container="comments-{{article_id}}" id="comment-article-{{ article_id }}-form" class="form-add-entry" method="POST" action="{{ post_url }}">
+        {% csrf_token %}
+        <input type="hidden" name="parent_id" value="">
+        <ul>
+            {{ commentform.as_ul }}
+            <li class="buttonpanel">
+                <div class="buttonset">
+                    <input type="submit" value="Kommentera">
+                    <input type="button" data-preview="comment" value="Förhandsgranska" />
+                    <input type="button" data-field="comment" data-maximize="true" data-form="comment-article-{{ article_id }}-form" value="Storskärm" />
+                </div>
+                <div class="buttonset">
+                    <input type="checkbox" class="toggle-rel-threads" id="toggle-rel-threads-{{ article_id }}" /><label class="toggle-rel-threads" for="toggle-rel-threads-{{ article_id }}">Visa enbart relevanta trådar</label>
+                </div>
+            </li>
+        </ul>
+    </form>
+</div>
+
+<ul class="comment-list ui-helper-reset">
+{% recursetree comments %}
+	{% get_notes_for_item node request.user as node %}
+
+    <li class="ui-helper-reset">
+        <!-- Kommentar -->
+        <div data-comment-id="{{ node.id }}" id="comment-{{ node.id }}" class="{% if node.notification and node.notification.status < 3 %}ui-state-highlight{% endif %} ui-widget ui-widget-content ui-helper-clearfix comment-entry comment-entry-mouseout">
+
+            <h4 class="ui-widget-toolbar ui-helper-reset header clearfix">
+                {% render_userlink node.created_by %} {{ node.added }} {% if node.notification %}<em>({{node.notification.get_status_display}})</em>{% endif %}
+
+                <div class="button-wrapper buttonset">
+                    {% if node.date_last_changed %}
+                    <a href="{% url history_entry app_name model_name node.id %}" data-article-id="{{ article_id }}" class="js-entry-history">&nbsp;</a>
+                    {% endif %}
+
+                    {% if node.is_deleteble and node.created_by == request.user %}
+                    <a href="{% url delete_entry app_name model_name node.id %}" data-article-id="{{ article_id }}" data-comment="comment-{{ node.id }}" class="js-entry-delete">&nbsp;</a>
+                    {% endif %} 
+
+                    {% if node.is_editable and node.created_by == request.user %}
+                    <a href="{% url update_entry app_name model_name node.id %}" data-article-id="{{ article_id }}" class="js-entry-edit" rel="comment-{{ node.id }}-content">&nbsp;</a>
+                    {% endif %}
+                </div>
+            </h4>
+
+            <div class="clearfix">
+                {% if node.created_by.profile.photo %}
+                <div class="photo">    
+                    {% thumbnail node.created_by.profile.photo "50x50" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ node.created_by }}">
+                    {% endthumbnail %}
+                </div>
+                
+                <div class="photo-padding content">
+                {% else %}            
+                <div class="content">
+                {% endif %}
+                
+                    <div>
+                        <div id="comment-{{ node.id }}-content">
+                            {{ node.comment|user_filter }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="ui-widget-toolbar ui-helper-reset footer clearfix" style="text-align:left;">
+                <div class="button-wrapper buttonset" style="float:left;">
+                    {% if not node.is_root_node %}
+                    <a href="#" data-form="comment-article-{{ article_id }}-form" data-comment="comment-{{ node.id }}" class="js-reply-all">&nbsp;Svara i tråden</a>
+                    {% endif %}
+
+                    {% if children %}
+                    <a href="#" data-form="comment-article-{{ article_id }}-form" data-comment="comment-{{ node.id }}" data-has-children="comment-{{ node.id }}" class="js-reply-all">&nbsp;Svara</a>
+                    {% else %}
+                    <a href="#" data-form="comment-article-{{ article_id }}-form" data-comment-id="{{ node.id }}" data-comment="comment-{{ node.id }}" class="js-reply">&nbsp;Svara i ny subtråd</a>
+                    {% endif %}
+                </div>
+            </h4>
+
+        </div>
+        <!-- /Kommentar -->
+
+        {% if children %}
+        <ul class="list-comments ui-helper-reset">
+        {{ children }}
+        </ul>
+        {% endif %}
+    </li>
+{% endrecursetree %}
+</ul>

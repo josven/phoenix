@@ -69,16 +69,17 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
-    'tracking.middleware.BannedIPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    'tracking.middleware.VisitorTrackingMiddleware',
     'phoenix.apps.notifications.middleware.AnnonuceNotifications',
+    'phoenix.apps.core.middleware.AjaxRedirect',
+    'phoenix.apps.registration.middleware.ActiveUserMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -88,6 +89,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/src/django-debug-toolbar/debug_toolbar/templates',
 )
 
 INSTALLED_APPS = (
@@ -104,11 +106,11 @@ INSTALLED_APPS = (
     'taggit',
     'south',
     'mptt',
-    'tracking', # https://github.com/ramusus/django-tracking/commit/ab3c43107b89f54539b2f3e6a7b68a99f8d83971
     'sorl.thumbnail',
-    'oembed', #https://github.com/ixc/django-oembed
-    'reversion', #https://github.com/etianen/django-reversion
-    'pagination', #https://github.com/wuudward/django-pagination
+    'oembed',
+    'reversion',
+    'pagination',
+    'debug_toolbar',
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',
@@ -121,11 +123,27 @@ INSTALLED_APPS = (
     'phoenix.apps.notifications',
 )
 
+CACHE_COUNT_TIMEOUT = 60  # seconds, not too long.
+
 AUTH_PROFILE_MODULE = 'profiles.profile'
 
 AUTHENTICATION_BACKENDS = ('phoenix.apps.accounts.views.CaseInsensitiveModelBackend',)
 
 LOGIN_REDIRECT_URL = '/'
+
+# debug_toolbar.middleware.DebugToolbarMiddleware use this to determine your IP. 
+INTERNAL_IPS = ('192.168.1.70',)
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+
+
+#Email settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'phx.mailer@gmail.com'
+EMAIL_HOST_PASSWORD = 'fiskenflyger'
+EMAIL_PORT = 587
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

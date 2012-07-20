@@ -9,9 +9,15 @@
 #main_logo{
    .column(2);
 }
+
 #primary_navigation{
    .column(8);
 }
+
+#switcher {
+display: inline-block;
+}
+
 #account{
    .column(2);
 }
@@ -33,12 +39,287 @@ footer {
 }
 
 
-
+// Registration
+// - login, register, forgot password
+//
 body.registration #main {
-    .column(12);
+   .column(5);
+   .push(3);
+   .pull(3);
+
+   form ul li {
+
+      .column(6,6);
+      margin-top: 10px;
+
+      label {
+         .column(2,6);
+      }
+
+      .helptext {
+         .column(3,6);
+         .push(4,6);
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
 }
 
+// Camchat
+// 
+//
 
 body.camchat #main {
     .column(12);
+}
+
+// Frontpage
+// 
+//
+body.frontpage #main {
+   form ul li {
+
+      .column(10,10);
+      margin-top: 10px;
+
+      textarea {
+         width: 100%;
+         height: 50px;
+      }
+
+      .helptext {
+         display:none;
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
+
+   form ul li.buttonpanel {
+         .column(10,10);
+         margin-bottom: 10px;
+      }
+}
+
+// ui-state-maximized dialogs
+
+//// Profiles
+// 
+//
+
+body.profiles form#user-form-settings label {
+      .column(2,10);
+}
+
+//// Accounts  
+// 
+//
+
+body.accounts form#account-form-settings label {
+      .column(2,10);
+}
+
+//// forum  
+// 
+//
+
+body.forum #main {
+   form ul li {
+
+      .column(10,10);
+      margin-top: 10px;
+
+      textarea {
+         width: 100%;
+         height: 50px;
+      }
+
+      .helptext {
+         display:none;
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
+
+   form ul li.buttonpanel {
+         .column(10,10);
+         margin-bottom: 10px;
+      }
+}
+
+
+body.forum form#forum-form-create > label {
+      .column(9,10);
+      margin-top: 10px;
+      margin-bottom: 10px;
+}
+
+body.forum form#forum-form-create > p > label {
+      .column(2,10);
+}
+body.forum form#forum-form-create > div > label {
+      .column(2,10);
+}
+
+body.forum form#forum-form-create .tag-wrapper {
+         .column(5,10);
+         display: inline-block;
+         float: none;
+         margin-left:0;
+}
+
+body.forum form#forum-form-create #field-wrapper-body span.helptext {
+   display:none;
+}
+
+//// Chat  
+// 
+//
+
+body.chat #main {
+   form ul li {
+
+      .column(10,10);
+      margin-top: 10px;
+
+      textarea {
+         width: 100%;
+         height: 50px;
+      }
+
+      .helptext {
+         display:none;
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
+
+   form ul li.buttonpanel {
+         .column(10,10);
+         margin-bottom: 10px;
+      }
+}
+
+//// Guestbook  
+// 
+//
+
+body.guestbook #main {
+   form ul li {
+
+      .column(10,10);
+      margin-top: 10px;
+
+      textarea {
+         width: 100%;
+         height: 50px;
+      }
+
+      .helptext {
+         display:none;
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
+
+   form ul li.buttonpanel {
+         .column(10,10);
+         margin-bottom: 10px;
+      }
+
+   #guestbook-form-wrapper.ui-helper-hidden * {
+      display:none;
+   }
+}
+
+//// Articles  
+// 
+//
+
+body.articles #main {
+   form ul li {
+
+      .column(10,10);
+      margin-top: 10px;
+
+      textarea {
+         width: 100%;
+         height: 50px;
+      }
+
+      .helptext {
+         display:none;
+      }
+
+      .errorlist li {
+         .column(3,6);
+         .push(4,6); 
+      }
+   }
+
+   form ul li.buttonpanel {
+         .column(10,10);
+         margin-bottom: 10px;
+      }
+}
+
+
+body.articles form#articles-form-create > label {
+      .column(9,10);
+      margin-top: 10px;
+      margin-bottom: 10px;
+}
+
+body.articles form#articles-form-create > p > label {
+      .column(2,10);
+}
+body.articles form#articles-form-create > div > label {
+      .column(2,10);
+}
+
+body.articles form#articles-form-create .tag-wrapper {
+         .column(5,10);
+         display: inline-block;
+         float: none;
+         margin-left:0;
+}
+
+body.articles form#articles-form-create #field-wrapper-body span.helptext {
+   display:none;
+}
+
+.ui-state-maximized {
+   .column(11);
+   
+   margin:0;
+
+   label {
+      display:none !important;
+   }
+   
+   input {
+      display:none !important;
+   }
+
+   textarea {
+      .column(8,11);
+   }
+
+    .helptext {
+      .column(2,11);
+   }  
 }

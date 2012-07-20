@@ -3,7 +3,7 @@
 
 {% block app_navigation %}
 <ul id="app_navigation" >
-    <li><h4  class="ui-widget-header entry-head" >Inställningar</h4></li>
+    <li><h4  class="ui-widget-header ui-helper-reset header" >Inställningar</h4></li>
     <li><a href="{% url read_settings 'accounts' %}">Konto</a></li>
     <li><a href="{% url read_settings 'profiles' %}">Profil</a></li>
 </ul>
@@ -11,7 +11,7 @@
 
 {% block content %}  
     <div class="ui-widget ui-widget-content">
-        <h4 class="ui-widget-header entry-head">Inga inställningar hittades</h4>
+        <h4 class="ui-widget-header ui-helper-reset header">Inga inställningar hittades</h4>
         <p class="ui-text-panel">Finns inga inställningar för {{ appname }}</p>
     </div>
     

@@ -9,7 +9,7 @@
 <h4 class="ui-widget-header entry-head {% if note and note.status < 4 %}ui-state-active{% endif %}"> {% if title %} {{ title }} av {% endif %}{% render_userlink author %} - {{ date }}
     
     {% for tag in tags %}
-    {% render_tag tag usertags tag_search_prefix %}
+    {% render_tag tag tag_search_prefix %}
     {% endfor %}
     
     <div class="button-wrapper buttonset">

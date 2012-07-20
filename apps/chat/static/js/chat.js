@@ -13,11 +13,10 @@ var updateChat = function() {
                 $('#chatlist li.entry:gt(49)').fadeOut().remove();
                 formatJsReplyButton();
                 formatImageDialogs();
-                hilightUserName();
                 bindReplyButton();
 
-                $('#chat_form textarea, #chat_form input').prop('disabled', false);
-                $('#chat_form input').removeClass('ui-state-hover');
+                $('#chatt-form-post textarea, #chatt-form-post input').prop('disabled', false);
+                $('#chatt-form-post input').removeClass('ui-state-hover');
                 processing = false;
             }
         }
@@ -31,7 +30,7 @@ var bindReplyButton = function() {
         e.preventDefault();
 
         var to = $(this).data('replyTo'),
-        textarea = $('form#chat_form textarea'),
+        textarea = $('form#chatt-form-post textarea'),
         text = textarea.val();
 
         // if there any whitespace at the end.
@@ -44,12 +43,6 @@ var bindReplyButton = function() {
     });
 };
 
-// Hilight a messages with usename.
-var hilightUserName = function() {
-    var username = $('#username').html();
-    $('.entry-content:containsinsensitive("' + username + ':")').parent('li').addClass('ui-state-active');
-};
-
 jQuery(document).ready(function() {
     
     // tinychat
@@ -57,13 +50,13 @@ jQuery(document).ready(function() {
         'height': '85%',
         'margin-top': '3%'
     });
-    
+
     updateChat();
     bindReplyButton();
-    hilightUserName();
+    formatJsMaximizeButton();
 
     // Hi(A)ja(x)ck form
-    $('#chat_form').submit(function(event) {
+    $('#chatt-form-post').submit(function(event) {
         event.preventDefault();
 
         var form = $(this),
@@ -75,12 +68,12 @@ jQuery(document).ready(function() {
             cache: false,
             data: formData,
             beforeSend: function() {
-                $('#chat_form textarea, #chat_form input').prop('disabled', true);
+                $('#chatt-form-post textarea, #chatt-form-post input').prop('disabled', true);
                 clearInterval(auto_refresh);
             },
             statusCode: {
                 200: function(data) {
-                    $('#chat_form textarea').val('');
+                    $('#chatt-form-post textarea').val('');
                     updateChat();
                     auto_refresh = setInterval(function() {
                         if ($('#autoupdate').is(':checked')) {
@@ -92,7 +85,7 @@ jQuery(document).ready(function() {
             },
             error: function(data) {
                 console.log(data);
-                $('#chat_form textarea, #chat_form input').prop('disabled', false);
+                $('#chatt-form-post textarea, #chatt-form-post input').prop('disabled', false);
             }
         });
         return false;

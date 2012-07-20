@@ -9,3 +9,9 @@ class UsernameChangeForm(ModelForm):
     class Meta:
         model = User
         fields = ('username',)
+
+class EmailChangeForm(ModelForm):
+    
+    class Meta:
+        model = User
+        fields = ('email',)
