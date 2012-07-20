@@ -5,7 +5,7 @@ PIL
 -e git+git://github.com/etianen/django-reversion.git#egg=django-reversion
 -e git+git://github.com/ericflo/django-pagination.git#egg=django-pagination
 -e git+git://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
-Django
+Django 1.4
 South
 sorl-thumbnail
 python-memcached
