@@ -4,7 +4,10 @@ from datetime import date
 from django.db import models
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
+
 from tracking.models import Visitor
+
+from server_settings import *
 
 def calculate_age(born=None):
     if born:
@@ -56,7 +59,7 @@ def render(request, *args):
     mod = inspect.getmodule(frm[0])
 
     template = args[0]
-
+    
     try:
         vars = args[1]
     except:
@@ -69,6 +72,7 @@ def render(request, *args):
     
     vars['app_name'] = app_name
     vars['base_template'] = get_base_template(request)
+    vars['debug'] = DEBUG
 
     request.session['app_name'] = vars['app_name']
     

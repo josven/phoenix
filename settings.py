@@ -2,8 +2,8 @@
 # Django settings for phoenix project.
 from server_settings import *
 
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+COMPRESS_ENABLED = True
 
 MANAGERS = ADMINS
 
@@ -57,6 +57,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -111,6 +112,7 @@ INSTALLED_APPS = (
     'reversion',
     'pagination',
     'debug_toolbar',
+    'compressor',
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',
@@ -132,7 +134,9 @@ AUTHENTICATION_BACKENDS = ('phoenix.apps.accounts.views.CaseInsensitiveModelBack
 LOGIN_REDIRECT_URL = '/'
 
 # debug_toolbar.middleware.DebugToolbarMiddleware use this to determine your IP. 
-INTERNAL_IPS = ('192.168.1.70',)
+
+INTERNAL_IPS = ('192.168.1.70','127.0.0.1')
+
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
@@ -144,6 +148,11 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'phx.mailer@gmail.com'
 EMAIL_HOST_PASSWORD = 'fiskenflyger'
 EMAIL_PORT = 587
+
+
+COMPRESS_PRECOMPILERS = (
+   ('text/less', 'lessc {infile} {outfile}'),
+)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
