@@ -53,5 +53,5 @@ jQuery(document).ready(function() {
     }).appendTo('.remove-notes');
 
     //$('.remove-notes').buttonset();
-
+    $('#switcher').themeswitcher();
 });

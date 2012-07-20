@@ -13,7 +13,7 @@
 	<meta name="author" content="phx" />
     
     {% block css %}
-    <link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css" />
+    
     {% compress css %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css?ac" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css?dc" />
@@ -34,6 +34,7 @@
 	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js?dc"></script>
     {% endcompress js %}
     <script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js?dc"></script>
+    
     {% endblock script %}
 </head>
 

@@ -261,4 +261,5 @@ jQuery(document).ready(function() {
         table_threads.fnSort([[5, 'desc']]);
     });
 
+    $('#switcher').themeswitcher();
 });
