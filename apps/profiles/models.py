@@ -70,7 +70,7 @@ class User_Activity_log(models.Model):
     last_activity_date = models.DateTimeField(auto_now_add=True, null=True)
     last_url = models.URLField(null=True)
     user_ip = models.IPAddressField(null=True)
-    if_ajax = models.BooleanField(null=True)
+    if_ajax = models.NullBooleanField(null=True)
     request_method = models.CharField(max_length=10,null=True)
 
     class Meta:
