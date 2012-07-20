@@ -380,8 +380,8 @@ td { vertical-align: top; }
   background-image: none !important;
   border-top-color: transparent !important;
   border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
   border-left-width: 5px !important;
+  border-bottom-style: dotted; 
 }
 .comment-entry-mouseout .header, .comment-entry-mouseout .footer {
   background-color: transparent !important;
