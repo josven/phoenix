@@ -67,11 +67,11 @@ class Profile(models.Model):
 
 class User_Activity_log(models.Model):
     user = models.OneToOneField(User)
-    last_activity_date = models.DateTimeField(auto_now_add=True)
-    last_url = models.URLField()
-    user_ip = models.IPAddressField()
-    if_ajax = models.BooleanField()
-    request_method = models.CharField(max_length=10)
+    last_activity_date = models.DateTimeField(auto_now_add=True, null=True)
+    last_url = models.URLField(null=True)
+    user_ip = models.IPAddressField(null=True)
+    if_ajax = models.BooleanField(null=True)
+    request_method = models.CharField(max_length=10,null=True)
 
     class Meta:
         verbose_name = ('User_Activity_log')
