@@ -36,8 +36,9 @@ def tagged_item_reciver(sender, **kwargs):
 
     # Skapar notifieringar för beröda användare
     for receiver in receivers:
-        notification = Notification(content_object=obj, status=0, receiver=receiver.user)
-        notification.save()
+        if receiver.user:
+            notification = Notification(content_object=obj, status=0, receiver=receiver.user)
+            notification.save()
 
 # Forumkommentarer
 @receiver(post_save, sender=ForumComment)
