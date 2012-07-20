@@ -13,8 +13,6 @@ from apps.profiles.models import Profile
 
 from taggit.models import TaggedItem
 
-"""
-
 # Taggade saker
 @receiver(post_save, sender=TaggedItem)
 def tagged_item_reciver(sender, **kwargs):
@@ -112,4 +110,3 @@ def guestbook_reciver(sender, **kwargs):
     if instance.user_id:
         notification = Notification(content_object=instance, status=0, receiver=instance.user_id)
         notification.save()
-"""
