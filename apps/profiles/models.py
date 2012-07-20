@@ -65,6 +65,18 @@ class Profile(models.Model):
         else:
             return False
 
+class User_Activity_log(models.Model):
+    user = models.OneToOneField(User)
+    last_activity_date = models.DateTimeField(auto_now_add=True)
+    last_url = models.URLField()
+    user_ip = models.IPAddressField()
+    if_ajax = models.BooleanField()
+    request_method = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = ('User_Activity_log')
+        verbose_name_plural = ('User_Activity_logs')
+
     
 
         
