@@ -67,8 +67,9 @@ def forum_reciver(sender, **kwargs):
     
     for receiver in receivers:
         if receiver != instance.created_by:
-            notification = Notification(content_object=instance, status=0, receiver=receiver)
-            notification.save()
+            if receiver:
+                notification = Notification(content_object=instance, status=0, receiver=receiver)
+                notification.save()
 
 # Artikelkommentarer
 @receiver(post_save, sender=ArticleComment)
@@ -97,18 +98,20 @@ def acticlecomment_reciver(sender, **kwargs):
     
     for receiver in receivers:
         if receiver != instance.created_by:
-            notification = Notification(content_object=instance, status=0, receiver=receiver)
-            print "notification"
-            print notification
-            notification.save()
+            if receiver:
+                notification = Notification(content_object=instance, status=0, receiver=receiver)
+                print "notification"
+                print notification
+                notification.save()
 
 # Gästbok
 @receiver(post_save, sender=Guestbooks)
 def guestbook_reciver(sender, **kwargs):
     instance = kwargs['instance']
 
-    notification = Notification(content_object=instance, status=0, receiver=instance.user_id)
-    notification.save()
+    if instance.user_id:
+        notification = Notification(content_object=instance, status=0, receiver=instance.user_id)
+        notification.save()
 
 '''
 @receiver(post_save, sender=TaggedItem)
