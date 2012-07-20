@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
     'reversion.middleware.RevisionMiddleware',
     'phoenix.apps.notifications.middleware.AnnonuceNotifications',
     'phoenix.apps.core.middleware.AjaxRedirect',
-     #'phoenix.apps.registration.middleware.ActiveUserMiddleware',
+    'phoenix.apps.registration.middleware.ActiveUserMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
