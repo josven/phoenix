@@ -52,4 +52,6 @@ jQuery(document).ready(function() {
         });
     });
 
+    $('#switcher').themeswitcher();
+    
 });

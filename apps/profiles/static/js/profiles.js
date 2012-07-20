@@ -36,4 +36,6 @@ jQuery(document).ready(function() {
         }).parent().buttonset();
         return false;
     });
+
+    $('#switcher').themeswitcher();
 });

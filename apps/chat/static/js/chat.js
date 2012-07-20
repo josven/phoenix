@@ -100,5 +100,5 @@ jQuery(document).ready(function() {
     }, 10000);
     // refresh every 10000 milliseconds
     $("#autoupdate").button();
-
+    $('#switcher').themeswitcher();
 });
