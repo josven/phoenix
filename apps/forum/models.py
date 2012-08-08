@@ -102,8 +102,9 @@ class Forum(Entry):
             data['last_comment'] = last_comment
             data['last_comment_index'] = self.last_comment.id
         else:
-            data['last_comment'] = " "
-            data['last_comment_index'] = " "
+            last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.get_absolute_url(), naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.username)
+            data['last_comment'] = last_comment
+            data['last_comment_index'] = "0"
            
         return data
         

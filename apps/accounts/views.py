@@ -66,6 +66,9 @@ def update_account(request):
             'password_change_form': PasswordChangeForm(request.user, prefix='PasswordChangeForm'),
             'email_change_form': EmailChangeForm(instance = request.user, prefix='EmailChangeForm'),
             }
+            
+    user = request.user
+
     if request.method == 'GET':
         profile = request.user.get_profile()
         if profile.date_username_last_changed:
@@ -85,7 +88,6 @@ def update_account(request):
             if username_change_form.is_valid():
                 #username_change_form.save()
                 username = username_change_form.cleaned_data['username']
-                user = request.user
                 profile = user.get_profile()
                 
                 cond_username_avail = True
@@ -120,7 +122,7 @@ def update_account(request):
             vars['password_change_form'] = password_change_form            
 
         if 'email_change_form' in request.POST:
-            email_change_form = EmailChangeForm(request.user, request.POST, prefix='EmailChangeForm')
+            email_change_form = EmailChangeForm(request.POST, instance=user, prefix='EmailChangeForm')
             if email_change_form.is_valid():
                 email_change_form.save()
                 messages.add_message(request, messages.INFO, "Epostadress ändrad.")

@@ -51,7 +51,5 @@ jQuery(document).ready(function() {
             table_users.fnFilter($(this).val(), 4);
         });
     });
-
-    $('#switcher').themeswitcher();
     
 });

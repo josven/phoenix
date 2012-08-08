@@ -1,8 +1,6 @@
+// Some vars
 var testvar;
-
-// THEMEROLLER
-$('#switcher').themeswitcher();
-
+var update_data = {"n":true};
 
 
 /*
@@ -15,13 +13,68 @@ var process_updates = function (data) {
     // Notifikationräknare
     if ( data.hasOwnProperty('notification_count') ) {
         $('#notification-counter').html("("+ data.notification_count +")");
-        window.parent.document.title = "("+ data.notification_count +")";
-    };
+        window.parent.document.title = "("+ data.notification_count +") PHX";
+    }
 
     // Notifikation annonserare
     if ( data.hasOwnProperty('notification_message') ) {
         $.jGrowl(data.notification_message);
-    };
+    }
+};
+
+/*
+* auto_update
+*
+*/
+var auto_update = function() {
+    setInterval(function() {
+
+        var pass = false;
+
+        if (Modernizr.localstorage) {
+
+            if ( window.localStorage.hasOwnProperty("update_data_timestamp") ) {
+
+                var now = Number( new Date().getTime()),
+                    then = Number( window.localStorage.getItem("update_data_timestamp") ),
+                    delta = ( now - then );
+                    if ( delta > 30000) {
+                        pass = true;
+                    } else {
+                        var stored_data = window.localStorage.getItem("update_data"),
+                            stored_json_data = JSON.parse(stored_data);
+
+                        process_updates(stored_json_data);
+                    }
+            } else {
+                pass = true;
+            }
+        } else {
+            pass = true;
+        }
+
+        if (pass === true) {
+            $.ajax({
+                data: update_data,
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                url: "/notifications/updates.json",
+                success: function(data) {                        
+                    if (Modernizr.localstorage) {
+                        var timestamp = new Date().getTime();
+                        window.localStorage.setItem("update_data_timestamp", timestamp);
+                        window.localStorage.setItem("update_data", JSON.stringify(data));
+                    }
+                    
+                    process_updates(data);
+                },
+                error: function(data) {
+                    console.log("Något fel har inträffat");
+                }
+            });
+        }
+
+    }, 30000); // refresh every 30000 milliseconds
 };
 
 
@@ -43,7 +96,7 @@ var highlightEntry = function () {
             scrollTop: hEntry.offset().top - $(window).height() + hEntry.outerHeight()
         }, 500);
 
-    };
+    }
 };
 
 /*
@@ -57,20 +110,23 @@ var searchToObject = function () {
     i;
 
   for ( i in pairs ) {
-    if ( pairs[i] === "" ) continue;
+    if ( pairs[i] === "" ) {
+        continue;
+    }
 
     pair = pairs[i].split("=");
     obj[ decodeURIComponent( pair[0] ) ] = decodeURIComponent( pair[1] );
   }
 
   return obj;
-}
+};
 
 
 /*
 * Apply jQuery UI on pagination
 *
 */
+
 var formatPagnation = function () {
     "use strict";
 
@@ -133,7 +189,6 @@ var formatJsPreviewButton = function () {
     $('input:[data-preview]').click(function() {
         var form = $(this).parentsUntil('form').parent(),
             preview = $(this).data('preview');
-            console.log(preview);
         preview_textarea(form, preview);
     }).parent().buttonset();
 };
@@ -326,7 +381,7 @@ var render_tags = function () {
             icons: {
                 primary: toggle_icon
             },
-            text: false,
+            text: false
             }).click(function(event) {
             event.preventDefault();
             $.ajax({
@@ -376,7 +431,7 @@ var preview_textarea = function(form, preview) {
                     width: 800,
                     modal: true,
                     position: ['center', 100],
-                    title: 'Förhandsgranskning',
+                    title: 'Förhandsgranskning'
                     });
 
             }
@@ -410,13 +465,13 @@ var maximize_form = function(form_id, field_id) {
                     "Förhandsgranskning": function() {
                         oTextarea.val( win.find('textarea').val() );
                         preview_textarea( oForm, field_id);
-                    },
+                    }
                 },
         draggable: false,
         beforeClose: function(event, ui) {
             oTextarea.val( win.find('textarea').val() );
             win.dialog( "destroy" );
-        },
+        }
     }).parent().css({"position":"fixed","top":"0px"}).addClass('ui-state-maximized');
 
     dialog.find('textarea').css('height', ($(window).height()*0.8) ).val(oText);
@@ -448,7 +503,7 @@ var formatJsReplyButton = function() {
 $(document).ajaxSend(function(event, xhr, settings) {
     function getCookie(name) {
         var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
+        if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
             for (var i = 0; i < cookies.length; i++) {
                 var cookie = $.trim(cookies[i]);
@@ -482,15 +537,13 @@ $(document).ajaxSend(function(event, xhr, settings) {
     }
 });
 
-/*****************************************************************************************************************************************************/
-/*
-/* Document Redy
-/*
-/*****************************************************************************************************************************************************/
+/****************************************************************************************************************************************************
+*
+* Document Redy
+*
+*****************************************************************************************************************************************************/
 $(document).ready(function() {
     "use strict";
-
-    var update_data = {"n":true};
 
     /*
     * Break out site from frames
@@ -523,7 +576,9 @@ $(document).ready(function() {
                 newString = getQString[0];
             $(this).attr('src',newString+'?'+wmode+'&'+oldString);
         }
-        else $(this).attr('src',ifr_source+'?'+wmode);
+        else {
+            $(this).attr('src',ifr_source+'?'+wmode);
+        }
     });
 
     /*
@@ -564,62 +619,6 @@ $(document).ready(function() {
     });
 
     /*
-    * Updates
-    *
-    */
-
-    // Auto updater
-  
-    if ( !$('body').hasClass('noupdate') ) {
-        var auto_update = setInterval(function() {
-
-            var pass = false;
-
-            if (Modernizr.localstorage) {
-                if ( window.localStorage.hasOwnProperty("update_data_timestamp") ) {
-                    var now = Number( new Date().getTime()),
-                        then = Number( window.localStorage.getItem("update_data_timestamp") ),
-                        delta = ( now - then );
-                        if ( delta > 30000) {
-                            pass = true;
-                        } else {
-                            var stored_data = window.localStorage.getItem("update_data"),
-                                stored_json_data = JSON.parse(stored_data);
-
-                            process_updates(stored_json_data);
-                        }
-                }
-            }
-            else {
-                pass = true;
-            }
-
-            if (pass === true) {
-                $.ajax({
-                    data: update_data,
-                    contentType: "application/json; charset=UTF-8",
-                    dataType: "json",
-                    url: "/notifications/updates.json",
-                    success: function(data) {                        
-                        if (Modernizr.localstorage) {
-                            var timestamp = new Date().getTime();
-                            window.localStorage.setItem("update_data_timestamp", timestamp);
-                            window.localStorage.setItem("update_data", JSON.stringify(data));
-                        }
-                        
-                        process_updates(data);
-                    },
-                    error: function(data) {
-                        console.log("Något fel har inträffat");
-                    }
-                });
-            };
-
-        }, 30000);
-        // refresh every 30000 milliseconds
-    };
-
-    /*
     * Tags
     * 
     */
@@ -651,7 +650,7 @@ $(document).ready(function() {
     $('.accordion').accordion({
         collapsible: true,
         active: false,
-        autoHeight: false,
+        autoHeight: false
         });
 
     // Apply jQuery UI buttons
@@ -701,6 +700,16 @@ $(document).ready(function() {
 });
 
 $(window).bind("load", function() {
-    // Hajlata entry
+
+    // THEMEROLLER
+    $('#switcher').themeswitcher();
+
+    // Hajlata enties
     highlightEntry();
+
+    // Auto updater  
+    if ( !$('body').hasClass('noupdate') ) {
+        auto_update();
+    }
+
 });
