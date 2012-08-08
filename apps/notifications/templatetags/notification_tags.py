@@ -46,9 +46,10 @@ def get_notes_for_articlelist(context, queryset, user):
 @register.assignment_tag(takes_context=True)
 def get_notes_for_guestbook(context, queryset, user):
     
-    notifications = _get_notifications_for_qs(queryset, user)
-    queryset = _assign_notifications_on_qs(queryset, notifications)
-    new_notifications = _set_status_on_qs(notifications, 3)
+    if len(queryset) > 0:
+        notifications = _get_notifications_for_qs(queryset, user)
+        queryset = _assign_notifications_on_qs(queryset, notifications)
+        new_notifications = _set_status_on_qs(notifications, 3)
 
     return queryset
 

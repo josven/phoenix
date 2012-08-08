@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import naturalday
+from django.http import Http404
 
 from apps.core.utils import render, get_datatables_records
 
