@@ -34,6 +34,11 @@ class Profile(models.Model):
 
     photo = ImageField(upload_to=get_image_path, null=True, blank=True, verbose_name="Bildfil (max 2MB)")
 
+
+    @property
+    def get_verbose_name(self):
+        return None
+
     @property
     def get_age(self):
         

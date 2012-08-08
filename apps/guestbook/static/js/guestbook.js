@@ -135,5 +135,4 @@ jQuery(document).ready(function() {
 
         return false;
     });
-    $('#switcher').themeswitcher();
 });

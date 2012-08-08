@@ -260,6 +260,4 @@ jQuery(document).ready(function() {
     $('.js-sort-latest-replies').click(function() {
         table_threads.fnSort([[5, 'desc']]);
     });
-
-    $('#switcher').themeswitcher();
 });

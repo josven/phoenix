@@ -7,6 +7,5 @@ class UserCreationForm(DjangoUserCreationForm):
     email = forms.EmailField(label = "Email")
 
 class AuthenticationForm(DjangoAuthenticationForm):
-    """docstring for AuthenticationForm"""
     keep_session = forms.BooleanField(required=False, label='Håll mig inloggad')
         

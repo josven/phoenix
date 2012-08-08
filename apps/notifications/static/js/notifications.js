@@ -51,7 +51,4 @@ jQuery(document).ready(function() {
         var checkBoxes = $('#form_remove_notes input[type = checkbox]');
         checkBoxes.prop("checked", !checkBoxes.prop("checked")).button( "refresh" );
     }).appendTo('.remove-notes');
-
-    //$('.remove-notes').buttonset();
-    $('#switcher').themeswitcher();
 });
