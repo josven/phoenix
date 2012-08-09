@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
 
     var nTable = $('#notification_table').dataTable({
         "bAutoWidth": false,
-        //"aaSorting": [[6, 'desc']],
+        "aaSorting": [[6, 'desc']],
         "bJQueryUI": true,
         "oLanguage": {
             "sLengthMenu": "Visar _MENU_ notifieringar per sida",
@@ -24,8 +24,7 @@ jQuery(document).ready(function() {
         }, {
             "sWidth": "20%"
         }, {
-            "sWidth": "5%",
-            "iDataSort": 6
+            "sWidth": "5%"
         }, {
             "bVisible": false
         }],
