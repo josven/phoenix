@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^user/(?P<user_id>\d*)/(?P<tags>(.+)(,\s*.+)*)/json/$', 'apps.articles.views.list_articles_json', name='list_articles_json'),
     url(r'^articles/tag/(?P<tags>(.+)(,\s*.+)*)/json/$', 'apps.articles.views.list_articles_json', name='list_articles_json'),    
 
-    # Return allarticles
+    # Return all articles
     url(r'^articles/list/$', 'apps.articles.views.read_article', name='read_article'),    
     
     # Return a single article

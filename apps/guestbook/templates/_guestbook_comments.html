@@ -54,7 +54,7 @@
 
                     {# Visa tabortknappen, om det är ens enga gästbok, eller om man själv har skrivit inlägget #}
                     {% if request.user == user or request.user == entry.created_by %}
-                    <a data-comment="comment-{{ entry.id }}" href="{% url guestbook_entry_delete user.id entry.id %}}" class="js-delete-guestbook-entry">&nbsp;Ta bort</a>
+                    <a data-comment="comment-{{ entry.id }}" href="{% url guestbook_entry_delete user.id entry.id %}" class="js-delete-guestbook-entry">&nbsp;Ta bort</a>
                     {% endif %}
                 </div>
             </h4>

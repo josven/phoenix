@@ -290,6 +290,8 @@ td { vertical-align: top; }
 
 .article-entry .header .button-wrapper {
     font-size:60%;
+    float: right;
+    display: inline;
 }
 
 .article-entry .header .button-wrapper .delete-notification-form {
@@ -407,6 +409,10 @@ td { vertical-align: top; }
    ========================================================================== */
 .acticle_post span.ui-tag {
     font-size:100%;
+}
+
+.article-entry span.ui-tag {
+    margin:0;
 }
 
 .article-body {

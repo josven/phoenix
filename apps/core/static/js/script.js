@@ -186,7 +186,7 @@ var resetEntries = function () {
 var formatJsPreviewButton = function () {
     "use strict";
 
-    $('input:[data-preview]').click(function() {
+    $('input:[data-preview]').unbind('click').click(function() {
         var form = $(this).parentsUntil('form').parent(),
             preview = $(this).data('preview');
         preview_textarea(form, preview);
@@ -203,7 +203,7 @@ var formatJsMaximizeButton = function () {
 
     
 
-    $('input:[data-maximize]').click(function() {
+    $('input:[data-maximize]').unbind('click').click(function() {
         var form_id = $(this).data('form'),
             field_id = $(this).data('field');
         maximize_form(form_id, field_id);
@@ -237,6 +237,10 @@ var formatJsSaveButton = function () {
             data: field.find('form').serialize(),
             statusCode: {
                 200: function(data) {
+
+                    console.log(field);
+                    console.log(data);
+
                     field.html(data);
                         // change to edit button
                         button.replaceWith('<a href="' + url + '" class="js-entry-edit" rel="' + rel + '">&nbsp;</a>');
@@ -273,7 +277,7 @@ var formatJsEditButton = function () {
         });
 
         // change to save button
-        button.replaceWith('<a href="' + url + '" class="js-entry-save" rel="' + rel + '">Spara</a>');
+        button.replaceWith('<a href="' + url + '" class="js-entry-save" rel="' + rel + '">&nbsp;Spara</a>');
         formatJsSaveButton();
 
         return false;
@@ -296,6 +300,7 @@ var formatJsDeleteButton = function () {
 
         var button = $(this),
             url = button.attr('href'),
+            nexturl = button.data('nextUrl'),
             entry = $('#'+button.data('comment'));
 
         // load form
@@ -310,8 +315,12 @@ var formatJsDeleteButton = function () {
                         data: dialog.find('form').serialize(),
                         statusCode: {
                             200: function(data) {
-                                entry.fadeOut().remove();
-                                dialog.dialog("close");
+                                if ( entry.length === 0 ) {
+                                    window.location.href= nexturl;
+                                } else {
+                                    entry.fadeOut().remove();
+                                    dialog.dialog("close");  
+                                }
                             },
                             428: function(data) {
                                 dialog.append('<p style="font-style:bold;">Du måste välja om du ska fortsätta</p>');
@@ -664,14 +673,14 @@ $(document).ready(function() {
         icons: {
             primary: "ui-icon-gear"
         }
-    }).click(function() {
+    }).unbind('click').click(function() {
         }).parent().buttonset();
 
     /*
     * Preview button for textareas
     *
     */
-    $('input:[data-preview]').click(function() {
+    $('input:[data-preview]').unbind('click').click(function() {
         var form = $(this).parentsUntil('form').parent();
         var preview = $(this).data('preview');
         preview_textarea(form, preview);

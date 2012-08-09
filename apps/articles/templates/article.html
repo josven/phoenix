@@ -19,7 +19,21 @@
 		    {% render_tag tag tag_search_prefix subscriptions %}
 		    {% endfor %}
 			{% endwith %}
-		</div>  
+		</div>
+
+		<div class="button-wrapper buttonset">
+			{% if article.allow_history and article.date_last_changed %}
+				<a href="{% url history_entry app_name "article" article.id %}" data-article-id="{{ article_id }}" class="js-entry-history">&nbsp;</a>
+            {% endif %}
+
+			{% if article.is_editable and article.created_by == request.user %}
+        		<a href="{% url update_entry app_name "article" article.id %}" data-article-id="{{ article.id }}" class="js-entry-edit" rel="content-{{ article.id }}">&nbsp;</a> 
+        	{% endif %}
+
+			{% if article.is_deleteble and article.created_by == request.user %}
+				<a href="{% url delete_entry app_name "article" article.id %}" data-next-url="{% url read_article %}" data-article-id="{{ article.id }}" data-comment="" class="js-entry-delete">&nbsp;</a>
+			{% endif %} 
+		</div>
 
 	</h4>
 
@@ -32,7 +46,7 @@
 	{% endif %}
 
 	<div class="entry-content clearfix">
-	    <div id="content-{{ id }}" class="content">
+	    <div id="content-{{ article.id }}" class="content">
 	        {{ article.body|user_filter }}
 	    </div>
 	</div>

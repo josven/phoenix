@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.db.models import get_model
 from django.http import HttpResponse
@@ -9,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from apps.core.utils import render
 from forms import update_entry_form, delete_entry_form, subscribe_tag_form
-
+from django.shortcuts import redirect
 from reversion.models import Version
 
 @never_cache
@@ -45,22 +46,18 @@ def subscribe_tag(request):
 @never_cache
 @login_required()
 def preview(request):
+    if request.method == 'POST':
 
-	if request.method == 'POST':
+        if request.is_ajax():
+            preview_id = request.POST.get('preview', None)
+                
+            if preview_id:
+                preview = request.POST.get(preview_id.strip(), None)
+                
+                if preview:
+                    return render(request, 'preview.html', {'preview':preview} )
 
-		if request.is_ajax():
-				
-				preview_id = request.POST.get('preview', None)
-				
-				if preview_id:
-				
-					preview = request.POST.get(preview_id, None)
-					
-					if preview:
-						
-						return render(request, 'preview.html', {'preview':preview} )
-
-	return HttpResponse(status=404)
+    return HttpResponse(status=404)
     
 @never_cache
 @login_required()   
@@ -93,6 +90,7 @@ def update_entry(request, app_label, class_name, id):
         vars['instance'] = instance
         vars['fields'] = fields
         vars['form'] = form
+        vars['action'] = reverse('update_entry', args=[app_label, class_name, id])
     
     if request.method == 'POST':
         fields = instance.ajax_editable_fields
@@ -107,9 +105,9 @@ def update_entry(request, app_label, class_name, id):
             vars['instance'] = instance
             for field in fields:
                 vars[field] = getattr(instance,field)
-            print vars
-            return render(request, 'update_entry_form.html', vars ) 
-        
+            if request.is_ajax():
+                return render(request, 'update_entry_form.html', vars ) 
+            return redirect( request.META['HTTP_REFERER'] )
         return HttpResponse(status=401)
         
         
