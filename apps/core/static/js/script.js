@@ -12,8 +12,18 @@ var process_updates = function (data) {
 
     // Notifikationräknare
     if ( data.hasOwnProperty('notification_count') ) {
-        $('#notification-counter').html("("+ data.notification_count +")");
-        window.parent.document.title = "("+ data.notification_count +") PHX";
+        if ( data.notification_count > 0 ) {
+
+            $('#notification-counter').html("("+ data.notification_count +")");
+            window.parent.document.title = "("+ data.notification_count +") PHX";
+        
+        } else {
+        
+            $('#notification-counter').html("");
+            window.parent.document.title = "PHX";
+        
+        }
+
     }
 
     // Notifikation annonserare
@@ -38,12 +48,11 @@ var auto_update = function() {
                 var now = Number( new Date().getTime()),
                     then = Number( window.localStorage.getItem("update_data_timestamp") ),
                     delta = ( now - then );
-                    if ( delta > 30000) {
+                    if ( delta > 9000) {
                         pass = true;
                     } else {
                         var stored_data = window.localStorage.getItem("update_data"),
                             stored_json_data = JSON.parse(stored_data);
-
                         process_updates(stored_json_data);
                     }
             } else {
@@ -65,7 +74,6 @@ var auto_update = function() {
                         window.localStorage.setItem("update_data_timestamp", timestamp);
                         window.localStorage.setItem("update_data", JSON.stringify(data));
                     }
-                    
                     process_updates(data);
                 },
                 error: function(data) {
@@ -74,7 +82,7 @@ var auto_update = function() {
             });
         }
 
-    }, 30000); // refresh every 30000 milliseconds
+    }, 10000); // refresh every 10th second
 };
 
 
@@ -237,9 +245,6 @@ var formatJsSaveButton = function () {
             data: field.find('form').serialize(),
             statusCode: {
                 200: function(data) {
-
-                    console.log(field);
-                    console.log(data);
 
                     field.html(data);
                         // change to edit button
