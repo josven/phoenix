@@ -45,8 +45,6 @@ def updates(request, format):
     if True: #not request.is_ajax():
         if request.user.is_authenticated():
 
-            print request.GET.get('n', None)
-
             # Ta upp notificationer som ska annonseras
             if request.GET.get('n', None):
                 
@@ -74,8 +72,8 @@ def updates(request, format):
                         message = u'{0} nya aktiviteter!<br/> <a href="{1}">Gå dit</a>'.format( announced_notifications_length , reverse('read_notifications') )
 
                     data['notification_message'] = message
-                    data['notification_count'] = notification_count
-
+                
+                data['notification_count'] = notification_count
                 for a_note in announced_notifications:
                     a_note.status = 1
                     a_note.save()
