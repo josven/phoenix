@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from apps.notifications.models import *
-
+from django.contrib.auth.models import User
 #from apps.articles.models import Article
 from apps.guestbook.models import Guestbooks
 from apps.forum.models import ForumComment
@@ -22,6 +22,7 @@ def tagged_item_reciver(sender, **kwargs):
 
     Denna funkar bra
     '''
+    print "TAGG"
 
     # Tagginstansen
     instance = kwargs['instance']
@@ -29,14 +30,27 @@ def tagged_item_reciver(sender, **kwargs):
     # Objektet som notifieringen handlar om, objektet som har blivit taggat
     obj = instance.content_object
 
-    # Hämtar alla användare som har subscribat på någon av taggarna i objektet
-    receivers = Profile.objects.filter(subscriptions__name__in=[instance.tag.name])
+    # Inga profile objects
+    if not obj.__class__.__name__ == "Profile":
 
-    # Skapar notifieringar för beröda användare
-    for receiver in receivers:
-        if receiver.user:
-            notification = Notification(content_object=obj, status=0, receiver=receiver.user)
-            notification.save()
+        # Användaren som har skapat objektet
+        created_by = obj.created_by
+
+        # Hämtar alla användarprofiler som har subscribat på någon av taggarna i objektet
+        receivers_profiles = Profile.objects.select_related('user__receiver_entries','user__id','user','subscriptions__name').filter(subscriptions__name__in=[instance.tag.name])
+
+        # Exluderar den som skapade objektet
+        receivers_profiles = receivers_profiles.exclude(user__id = created_by.id)
+
+        # Skapar notifieringar för beröda användare
+        for receiver in receivers_profiles:
+            if receiver.user:
+
+                # Hämtar gamla notifikationerna för användaren
+                ctype_model = obj.__class__.__name__.lower()
+                if not receiver.user.receiver_entries.filter(content_type__model = ctype_model, object_id = obj.id):
+                    notification = Notification(content_object=obj, status=0, receiver=receiver.user)
+                    notification.save()
 
 # Forumkommentarer
 @receiver(post_save, sender=ForumComment)
