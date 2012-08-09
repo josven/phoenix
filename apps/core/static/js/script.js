@@ -300,6 +300,7 @@ var formatJsDeleteButton = function () {
 
         var button = $(this),
             url = button.attr('href'),
+            nexturl = button.data('nextUrl'),
             entry = $('#'+button.data('comment'));
 
         // load form
@@ -314,8 +315,12 @@ var formatJsDeleteButton = function () {
                         data: dialog.find('form').serialize(),
                         statusCode: {
                             200: function(data) {
-                                entry.fadeOut().remove();
-                                dialog.dialog("close");
+                                if ( entry.length === 0 ) {
+                                    window.location.href= nexturl;
+                                } else {
+                                    entry.fadeOut().remove();
+                                    dialog.dialog("close");  
+                                }
                             },
                             428: function(data) {
                                 dialog.append('<p style="font-style:bold;">Du måste välja om du ska fortsätta</p>');
