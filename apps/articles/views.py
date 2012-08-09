@@ -143,7 +143,15 @@ def read_article(request,user_id=None, id=None):
         vars['user'] = User.objects.get(pk=user_id)
     else:
         template = "article.html"
-           
+    
+    try:
+        article_note = request.user.receiver_entries.filter(content_type__model = 'article', object_id = id)
+    except:
+        article_note = []
+    
+    for note in article_note:
+        note.delete()
+
     return render(request,template, vars)
 
 @never_cache

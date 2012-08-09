@@ -96,12 +96,12 @@ def read_forum(request, id, comment_id = None):
             raise Http404
 
     try:
-        forum_note = request.user.receiver_entries.get(content_type__model = 'forum', object_id = id)
+        forum_note = request.user.receiver_entries.filter(content_type__model = 'forum', object_id = id)
     except:
-        forum_note = None
+        forum_note = []
     
-    if forum_note:
-        forum_note.delete()
+    for note in forum_note:
+        note.delete()
 
 
     ## Kommentar notifikationer
