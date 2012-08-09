@@ -6,11 +6,19 @@
         {{ form.as_ul }}
     {% if instance %}
 	<li class="buttonset ui-buttonset">
-	    <input type="button" data-preview="comment" value="Förhandsgranska" />
-	    <input type="button" data-maximize="update-entry-form-{{ instance.id }}" value="Storskärm" />
+	    <input 	type="button" 
+	    		data-preview="{% if form.fields.body %}body{% endif%} {% if form.fields.comment %}comment{% endif %}" 
+	    		value="Förhandsgranska" />
+	    <input 	type="button" 
+	    		data-field="{% if form.fields.body %}body{% endif%} {% if form.fields.comment %}comment{% endif %}" 
+	    		data-maximize="true" 
+	    		data-form="update-entry-form-{{ instance.id }}" 
+	    		value="Storskärm" 
+	    		type="button" />
 	</li>
 	{% endif %}
 </form>
 {% else %}
 {{ comment|user_filter }}
+{{ body|user_filter }}
 {% endif %}
