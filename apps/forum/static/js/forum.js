@@ -236,7 +236,7 @@ jQuery(document).ready(function() {
             "iDataSort": 6,
             "bSearchable": false
         }, {
-            "mDataProp": "last_comment_index",
+            "mDataProp": "date_last_changed",
             "bVisible": false,
             "bSearchable": false
         }],
@@ -258,6 +258,6 @@ jQuery(document).ready(function() {
     });
 
     $('.js-sort-latest-replies').click(function() {
-        table_threads.fnSort([[5, 'desc']]);
+        table_threads.fnSort([[6, 'desc']]);
     });
 });

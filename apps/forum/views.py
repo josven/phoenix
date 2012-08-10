@@ -45,7 +45,7 @@ def list_forum_json(request, tags=None):
                                 3: 'id',
                                 4: 'posts_index',
                                 5: 'last_comment__id',
-                                6: 'last_comment__id',
+                                6: 'date_last_changed',
                             }
 
         #call to generic function from utils
@@ -231,15 +231,6 @@ def comment_forum(request,forum_id):
             if notifications:
                 for note in notifications:
                     note.delete()
-
-            post.last_comment = comment
-            
-            if post.posts_index:
-                post.posts_index  += 1
-            else:
-                post.posts_index = post.get_posts_index()
-                
-            post.save()
             
             ## Kommentar notifikationer
             ##--------------------------
