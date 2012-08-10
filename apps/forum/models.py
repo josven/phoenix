@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import time
 
 from urllib import quote
 
@@ -100,12 +101,12 @@ class Forum(Entry):
         if self.last_comment:
             last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.last_comment.get_absolute_url(), naturalday(self.last_comment.added), self.last_comment.added.strftime("%H:%M"), self.last_comment.created_by.username)
             data['last_comment'] = last_comment
-            data['last_comment_index'] = self.last_comment.id
         else:
-            last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.get_absolute_url(), naturalday(self.date_created), self.date_created.strftime("%H:%M"), self.created_by.username)
-            data['last_comment'] = last_comment
-            data['last_comment_index'] = "0"
-           
+            last_comment =u"<a href=\"{0}\">{1} {2} av {3}</a>".format(self.get_absolute_url(), naturalday(self.date_last_changed), self.date_last_changed.strftime("%H:%M"), self.created_by.username)
+            data['last_comment'] = last_comment  
+
+        data['date_last_changed'] = time.mktime(self.date_last_changed.timetuple())
+
         return data
         
         
@@ -133,6 +134,28 @@ class ForumComment(MPTTModel):
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
     date_last_changed = models.DateTimeField(auto_now=False, blank=True, null=True)
     tags = TaggableManager()
+
+    def save(self, *args, **kwargs):
+        super(ForumComment, self).save(*args, **kwargs)
+
+        # Update parent post
+        if self.post:
+            post = self.post
+
+            # Update post count
+            if post.posts_index:
+                post.posts_index  += 1
+            else:
+                post.posts_index = post.get_posts_index()
+
+            # Set last comment
+            post.last_comment = self
+
+            # Set last changed
+            post.date_last_changed = self.added
+
+            # Save the post
+            post.save()
 
     class Meta:
         permissions = (
