@@ -16,7 +16,6 @@ from reversion.models import Version
 @never_cache
 @login_required()
 def subscribe_tag(request):
-    print request.method
     if request.method == 'POST':
         if request.is_ajax():
             form = subscribe_tag_form(request.POST)
@@ -38,7 +37,6 @@ def subscribe_tag(request):
                             'tag_status':1,
                             'message': u'Du bevakar nu <strong>\"{0}\"</stong>'.format(new_tag)
                             }             
-                
                 return HttpResponse(simplejson.dumps(data), content_type="application/json")
     
     return HttpResponse(status=404)

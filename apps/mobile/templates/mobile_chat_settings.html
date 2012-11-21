@@ -1,0 +1,30 @@
+{% extends "mobile_base.html" %}
+{% load thumbnail %}
+{% load markup %}
+{% load humanize %}
+{% load filters %}
+
+{% block header %}
+<div data-role="header" data-position="fixed">
+	<h1>{{ page_title }}</h1>
+</div><!-- /header {{ page_title }} -->
+{% endblock header %}
+
+{% block secondary-content %}
+{% endblock secondary-content %}
+
+{% block primary-content %}
+<div class="primary-content">
+	<form id="chat-form" action="{% url mobile_chat_settings %}" method="POST" data-ajax="false">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Spara" />
+	</form>
+</div><!-- /primary-content {{ page_title }} -->
+{% endblock primary-content %}
+
+
+{% block footer %}
+<div data-role="footer" data-position="fixed">
+</div><!-- /footer {{ page_title }} -->
+{% endblock footer %}

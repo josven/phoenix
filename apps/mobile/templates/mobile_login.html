@@ -1,0 +1,11 @@
+{% extends "mobile_base.html" %}
+
+{% block primary-content %}
+<div class="primary-content">	
+	<form action="" method="post" data-ajax="false">
+		{% csrf_token %}
+		{{ AuthenticationForm }}
+		<input type="submit" value="Logga in" />
+	</form>
+</div><!-- /primary-content {{ page_title }} -->
+{% endblock primary-content %}

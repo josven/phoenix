@@ -1,0 +1,11 @@
+{% extends "mobile_base.html" %}
+
+{% block content %}
+<div data-role="content">	
+	<form action="" method="post" data-ajax="false">
+		{% csrf_token %}
+		{{ PasswordResetForm }}
+		<input type="submit" value="Återställ" />
+	</form>
+</div><!-- /content -->
+{% endblock content %}

@@ -60,7 +60,7 @@ def user_filter(string, args=None):
     oembed_kwargs['max_width'] = 320
     oembed_kwargs['max_height'] = 240
     string = oembed_replace(string, **oembed_kwargs)
-    
+
     # Apply Urlize
     string = urlize(string, nofollow=True, autoescape=True)
     

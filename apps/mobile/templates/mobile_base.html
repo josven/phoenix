@@ -1,0 +1,745 @@
+{% load templatetag_handlebars %}
+<!DOCTYPE html> 
+<html> 
+	<head>
+	<title>{{ page_title }}</title> 
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<style type="text/css">
+		div[data-role="page"] { z-index : 1; }
+
+		.primary-content {
+			width: 100%;
+			float: left;
+		}
+
+		.secondary-content {
+			width: 0%;
+			float: left;
+		}
+
+		.secondary-content-hidden {
+			overflow: hidden;
+		}
+
+		.secondary-content .menu {
+			margin-right: 15px;
+		}
+
+		/*
+		*	Chat styles
+		*
+		*/
+
+		.chat-list .entry-content {
+			overflow: visible;
+			white-space: normal;
+			word-break: break-all;
+		}
+
+		.chat-list .entry-content .ui-li-desc{
+			overflow: visible;
+			white-space: normal;
+			word-break: break-all;
+		}
+
+		/*
+		*	Forum styles
+		*
+		*/
+
+		.forum-list > li > h1 {
+			overflow: visible;
+			white-space: normal;
+			word-break: break-all;
+		}
+
+
+		.forum-list > li > p > a[data-subscribe=True] {
+			color: #2C801C;
+		}
+				
+		/*
+		*	Responsive styles
+		*	320
+		*/
+		.min-width-320px {
+
+		}
+
+		/*
+		*	Responsive styles
+		*	480
+		*/
+		.min-width-480px {
+
+		}
+
+		/*
+		*	Responsive styles
+		*	768
+		*/
+		.min-width-768px {
+
+		}
+
+		/*
+		*	Responsive styles
+		*	1024
+		*/
+		.min-width-1024px {
+
+		}
+
+	</style>
+
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	
+	{% handlebars_js %}
+	{% tplhandlebars "tpl-chat-entry" %}
+    	<li class="chat-entry" data-object-id="{{ id }}" data-theme="{{ data_theme }}">
+    		<img src="{{ profile_photo }}" />
+	   		<h1 class="chat-entry-created_by">{{ created_by }}</h1>
+			<div class="entry-content" data-enhance="false">{{{ text }}}</div>
+			<p class="ui-li-aside"><em>{{ date_created }}</em></p>
+		</li>
+	{% endtplhandlebars %}
+
+	{% tplhandlebars "tpl-forum-thread" %}
+		<li data-object-id="{{ id }}">
+			<h1>{{ title }}</h1>
+			<p>Av: <strong>{{ created_by }}</strong> den {{ date_created }}</p>
+			<p>Senast svar: {{ date_last_changed }}</p>
+			<p data-enhance="false">{{{ tags }}}</p>
+			<span class="ui-li-count">
+				{{ posts_index }}
+			</span>
+		</li>
+	{% endtplhandlebars %}
+
+</head> 
+
+<body> 
+
+{% block page %}
+<div id="page-{{ page_title }}" data-role="page">
+	{% block header %}
+	<div id="main-header" data-role="header" data-position="fixed">
+		<a href="#" data-slidemenu="sidemenu" class="showMenu">Menu</a>
+		<h1>{{ page_title }}</h1>
+	</div><!-- /header {{ page_title }} -->
+	{% endblock header %}
+
+	{% block content %}
+	<div data-role="content">
+		{% block secondary-content %}
+		<div class="secondary-content secondary-content-hidden">
+			<ul data-role="listview" class="menu">
+				{% if request.user.is_authenticated %}
+				<li><a data-transition="slide" href="{% url mobile_logout %}" rel="external">Logga ut</a></li>
+				<li><a data-transition="slide" href="{% url mobile_chat %}" rel="external">Chat</a></li>
+				<li><a data-transition="slide" href="{% url mobile_forum_list %}" rel="external">Forum</a></li>
+				{% else %}
+				<li><a data-transition="slide" href="{% url mobile_login %}">Logga in</a></li>
+				<li><a data-transition="slide" href="{% url mobile_register %}">Registrera</a></li>
+				{# <li><a data-transition="slide" href="{% url mobile_recover %}">Glömt lösenord</a></li> #}
+				<li><a data-transition="slide" href="{% url mobile_about %}">Om oss</a></li>
+				{% endif %}
+			</ul>
+		</div><!-- /secondary-content {{ page_title }} -->
+		{% endblock secondary-content %}
+
+		{% block primary-content %}
+		<div class="primary-content">
+			<form action="form.php" method="post"> 
+				<label for="username">Användarnamn:</label>
+				<input type="text" name="name" id="username" data-mini="true" />
+				
+				<label for="password">Lösenord:</label>
+				<input type="password" name="name" id="password" data-mini="true" />
+			</form>
+		</div><!-- /primary-content {{ page_title }} -->
+		{% endblock primary-content %}
+	</div><!-- /content {{ page_title }} -->
+	{% endblock content %}
+
+	{% block footer %}
+	<div id="main-footer" data-role="footer" data-position="fixed">
+		<h4>Page Footer</h4>
+	</div><!-- /footer {{ page_title }} -->
+	{% endblock footer %}
+
+</div><!-- /page {{ page_title }} -->
+{% endblock page %}
+
+<script type="text/javascript">
+var testvar;
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(function(){
+
+	/*
+	Large display	1200px and up	70px	30px
+	Default	980px and up	60px	20px
+	Portrait tablets	768px and above	42px	20px
+	Phones to tablets	767px and below	Fluid columns, no fixed widths
+	Phones	480px and below	Fluid columns, no fixed widths
+	
+
+	phx = {
+		slideMenu : {
+			options : {
+				menuContainer : null,
+				menuButton : null,
+				body : null,
+				menuStatus: null
+			},
+
+			init : function( button ){
+
+				// Set all options
+				var slideMenu = this;
+				slideMenu.options.menuButton = button;
+				slideMenu.options.menuStatus = false;
+				slideMenu.options.menuContainer = $('#' + slideMenu.options.menuButton.data('slidemenu') );
+				slideMenu.options.body = $('body');
+				
+				// Render the menu
+				slideMenu.renderMenu();
+
+				// TO-DO: Fix z ordering
+				slideMenu.fixZIndex();
+
+				// Events
+				$("a[data-slidemenu]").live('click', function(){
+					if ( slideMenu.options.menuStatus != true ) {
+						slideMenu.showMenu();
+					} else {
+						slideMenu.hideMenu();
+					}
+				});
+
+				slideMenu.options.menuContainer.find("ul a").live('click', function(){
+					//slideMenu.options.menuContainer.find("ul a").removeClass('active');
+					$(this).addClass('active');
+					slideMenu.hideMenu();
+				});
+
+				$(document).bind("pagechange", function(event, ui) {
+					slideMenu.fixZIndex();
+					slideMenu.fixActiveButton();
+				});
+			},
+			fixActiveButton : function () {
+
+				var slideMenu = this,
+					current_url = $.mobile.path.parseUrl(window.location.href).pathname,
+					links = slideMenu.options.menuContainer.find("ul a");
+
+				$.each(links, function(){
+					var path = $.mobile.path.parseUrl(this.href).pathname;
+					if ( path === current_url) {
+						$(this).addClass('active');
+						$(this).parentsUntil('ul').last().addClass('ui-btn-active');	
+					} else {
+						$(this).removeClass('active');
+						$(this).parentsUntil('ul').last().removeClass('ui-btn-active');					}
+				});
+			},
+			renderMenu : function() {
+				var slideMenu = this;
+
+				// Move menu insde page
+				$(".ui-page-active").prepend( slideMenu.options.menuContainer);
+				// Format the menu
+				slideMenu.options.menuContainer.find('ul').listview();
+				// Move menu outside page
+				slideMenu.options.body.prepend( slideMenu.options.menuContainer );
+				// fix the active button state
+				slideMenu.fixActiveButton();
+			},
+			updateMenu : function() {
+				var slideMenu = this;
+
+				// Move menu insde page
+				$(".ui-page-active").prepend( slideMenu.options.menuContainer);
+				// Format the menu
+				slideMenu.options.menuContainer.find('ul').listview("refresh");
+				// Move menu outside page
+				slideMenu.options.body.prepend( slideMenu.options.menuContainer );
+			},
+			showMenu : function() {
+				var slideMenu = this;
+
+				$(".ui-page-active").animate({
+		        	marginLeft: String( $(".ui-page-active").width() / 2) + "px",
+			    }, 300, function(){
+			    	slideMenu.options.menuStatus = true
+			    });
+
+			    slideMenu.options.menuContainer.animate({
+		        	width: String( $(".ui-page-active").width() / 2) + "px",
+			    }, 300);
+
+				$("a[data-slidemenu]").addClass('ui-btn-active');
+			},
+			hideMenu : function() {
+				var slideMenu = this;
+
+		        $(".ui-page-active").animate({
+		            marginLeft: "0px",
+	            }, 300, function(){
+	            	slideMenu.options.menuStatus = false
+	            });
+
+	            slideMenu.options.menuContainer.animate({
+		        	width: "0px",
+			    }, 300);
+
+	            $("a[data-slidemenu]").removeClass('ui-btn-active');
+			},
+			fixZIndex : function () {
+				var slideMenu = this,
+					page = $(".ui-page-active"),
+					zindex = parseInt( page.css('z-index') );
+
+				if ( isNaN(zindex) ) {
+					page.css({'z-index':'1'});
+					slideMenu.options.menuContainer.css({'z-index':'0'});
+				} else {
+					if (zindex == 0) {
+						page.css({'z-index':'1'});
+						slideMenu.options.menuContainer.css({'z-index':'0'});
+					} else if ( zindex > 0 ){
+						slideMenu.options.menuContainer.css({'z-index': String( zindex - 1 ) });
+					}
+				}
+			}
+
+		}
+	};
+
+	//phx.slideMenu.init( $('.showMenu') );
+	*/
+
+
+	$(".showMenu").live("click", function(event) {
+		event.preventDefault();
+		var button = $(this);
+
+		if ( !button.hasClass('ui-btn-active') ){
+			// dra ut
+			$.mobile.silentScroll(0);
+			$(".secondary-content").animate({ width: "60%"}, 300).removeClass("secondary-content-hidden");
+			$(".primary-content").animate({ width: "40%"}, 300);
+			button.addClass('ui-btn-active');
+		} else {
+			// dra in
+			$(".primary-content").animate({ width: "100%"}, 300);
+			$(".secondary-content").animate({ width: "0%"}, 300).addClass("secondary-content-hidden");
+			button.removeClass('ui-btn-active');
+		}
+
+		return false;
+	});	
+});
+
+/*
+*
+* Common page JQM javascript
+*
+*/
+
+$(document).bind('pagechange', function () {
+
+	// Fix the active link problem in the nav menu
+	var	current_url = $.mobile.path.parseUrl(window.location.href).pathname,
+		links = $(".secondary-content .menu li a");
+
+	$.each(links, function(){
+		var path = $.mobile.path.parseUrl(this.href).pathname;
+		if ( path === current_url) {
+			$(this).addClass('active');
+			$(this).parentsUntil('ul').last().addClass('ui-btn-active');	
+		} else {
+			$(this).removeClass('active');
+			$(this).parentsUntil('ul').last().removeClass('ui-btn-active');					}
+	});
+
+});
+
+/*
+*
+* Page specfic JQM javascript
+*
+*/
+
+$( '#page-forum-list' ).live( 'pagebeforecreate',function(event){
+
+	var uri = "/api/v1/forum/thread/",
+		params = {
+			"format" : "json"
+		};
+
+	function getThreads(){
+		
+		$.mobile.loading( 'show', { theme: "a", text: "Laddar trådar...", textonly: false, textVisible : true });
+
+		var list = $('.forum-list');
+
+		$.ajax({ 
+			url: uri,
+			data: params,
+			success: function(data){
+				if( data.objects.length > 0) {
+					list.html("");
+					threadsRendered = '';
+
+					$.each( data.objects, function( i, e ){
+						var properties = {
+									    id: e.id,
+									    title: e.title,
+									    created_by: e.created_by,
+									    date_created: e.date_created,
+									    tags: e.tags,
+									    posts_index: e.posts_index,
+									    date_last_changed: e.date_last_changed
+
+									},
+							template = Handlebars.compile($('#tpl-forum-thread').html());
+						threadsRendered += template(properties);
+					});
+
+					list.prepend( $(threadsRendered) );
+					list.listview('refresh');
+
+					/*
+					*	Paginator
+					*
+					*/
+
+					$('.paginator').remove();
+					if ( data.meta.previous || data.meta.next ) {
+						var paginator = '<div class="paginator" data-role="navbar"><ul>';
+
+						var total = data.meta.total_count,
+							current_start = data.meta.offset,
+							current_end = data.meta.offset + data.meta.limit,
+							next_start = current_end + 1,
+							next_end = next_start + data.meta.limit,
+							previous_end = current_start - 1,
+							previous_start = previous_end - data.meta.limit;
+
+						if( data.meta.previous ) {
+							var span = "" //"("+String( data.meta.offset - data.meta.limit + 1) + " - " + String( data.meta.offset )+")";
+							paginator += '<li><a data-icon="arrow-l" class="link-thread-filter" href="'+ data.meta.previous +'">'+span+'</a></li>';
+						}
+
+						if( data.meta.next ) {
+							var span = "" //"("+String( data.meta.offset + data.meta.limit + 1) + " - " + String( data.meta.offset + 2*data.meta.limit + 1 )+")";
+							paginator += '<li><a data-icon="arrow-r" class="link-thread-filter" href="'+ data.meta.next +'">'+span+'</a></li>';
+						}
+
+						paginator += '</ul></div><!-- /navbar -->';
+						paginator = $(paginator);
+						$('#main-header').after( paginator.clone() );
+						$('#main-footer').before( paginator.clone() );
+						$('.paginator').navbar();
+					}
+					
+					$.mobile.silentScroll(0);
+					$.mobile.loading( 'hide' );
+
+				} else {
+					$.mobile.loading( 'show', { theme: "a", text: "Inga trådar...", textonly: false, textVisible : true });
+
+					setTimeout(function() {
+						$.mobile.loading( 'hide' );
+					}, 2000);
+
+					
+					
+
+					
+				}
+
+		}, dataType: "json", timeout: 30000 });
+	};
+
+
+	getThreads();
+
+	$('#form-search-threads').submit( function(event){
+		event.preventDefault();
+		var form = $(this),
+			searchtext = form.find('input').val();
+
+		params = form.serialize() + "&" +$('#form-thread-filters').serialize();
+		$('#btn-search .ui-btn-text').text(searchtext);
+		form.find('input:visible').val("").blur();
+ 		document.activeElement.blur();
+		getThreads();
+		$('#popup-search').popup('close');
+
+		return false;
+	});
+
+	$('#form-thread-filters').submit( function(event){
+		event.preventDefault();
+		form = $(this);
+		params = form.serialize();
+		$('#btn-search .ui-btn-text').text(" ");
+		getThreads();
+		return false;
+	});
+
+	$('.link-thread-filter').live('click', function(event){
+		event.preventDefault();
+		params = $.mobile.path.parseUrl( this.href ).search.replace('?','');
+		getThreads();
+		return false;
+	});
+
+	$('.link-thread-tag').live('click', function(event){
+		event.preventDefault();
+		var link = $(this),
+			tag = link.data('tag'),
+			subscribed = link.attr('data-subscribe') === 'True' ? true : false,
+			buttonSubscribed = $('#popup-tag #popup-tag-subscribe'),
+			buttonGo = $('#popup-tag #popup-tag-go'),
+			popup = $('#popup-tag'),
+			option = $("#tag option[value="+tag+"]"),
+			select = $('#tag'),
+			links = $('[data-tag='+tag+']');
+
+		if ( subscribed ) {
+			buttonSubscribed.attr('checked','checked').checkboxradio("refresh");
+
+		} else {
+			buttonSubscribed.removeAttr('checked').checkboxradio("refresh");
+		}
+
+		buttonSubscribed.unbind('click').bind('click', function(){
+			popup.popup( "close" );
+
+			$.ajax({
+				type: 'POST',
+				url: '/utils/subscribe-tag/',
+				data: {'tag': tag},
+				success: function ( data ) {
+					if ( data.tag_status === 0) {
+						subscribed = false;
+						links.attr('data-subscribe','False');
+						$("#tag #optgroup-subscribed-tags option[value="+tag+"]").remove();
+
+					} else {
+						subscribed = true;
+						links.attr('data-subscribe','True');
+						option = $('<option value="'+tag+'">'+tag.replace("_"," ")+'</option>');
+						$("#tag #optgroup-subscribed-tags").append( option );
+					}
+				}
+			});
+		});
+
+		buttonGo.unbind('click').bind('click', function(){
+			popup.popup( "close" );
+
+			if( option.length === 0 ) {
+				option = $('<option selected ="selected" value="'+tag+'">'+tag.replace("_"," ")+'</option>');
+				select.append( option ).selectmenu('refresh', true);
+			} else {
+				option.attr('selected', 'selected');
+				select.selectmenu('refresh', true);
+			}
+
+			$('#form-thread-filters').submit();
+		});
+
+		popup.popup("open", {
+			positionTo: $(this),
+			overlayTheme: "a"
+		});
+
+		return false;
+	});
+});
+
+$( '#page-chat' ).live( 'pagebeforecreate',function(event){
+
+	/*
+ 	*	Timer for the chat
+ 	*
+ 	*/
+ 	var chatSetTimeout;
+
+	var lastEntryId = $('[data-object-id]').first().data('objectId'),
+		uri = "/api/v1/chat/entry/",
+		params = {
+			"format" : "json",
+			"id__gte" : 0
+		};
+
+	// Hi-jax the form
+	$('#chat-form').submit( function(event){
+		event.preventDefault();
+		var form = $(this);
+
+		$.mobile.loading( 'show', { theme: "a", text: "Skickar meddelande...", textonly: false, textVisible : true });
+
+		//  Stop the chat polling while post
+		clearTimeout(chatSetTimeout);
+
+ 		$.post( form.attr('action'), form.serialize(), function() {
+ 			form.find('input:visible').val("").blur();
+ 			document.activeElement.blur();
+
+ 			// Start the chat polling
+ 			pollChat();
+
+ 			// scroll up
+ 			$.mobile.silentScroll(0);
+
+ 			// Hide message
+ 			$.mobile.loading( 'hide' );
+
+ 		});
+
+		return false;
+	});
+
+	// Simple reply function
+ 	$('.chat-list .chat-entry').live('click', function(){
+ 		var entry = $(this),
+ 			username = entry.find('h1.chat-entry-created_by').text(),
+ 			textfield = $('#chat-form #id_text');
+
+ 		textfield.val("@" + username + ": ").focus();
+ 	});
+
+ 	// Open embedded images in new windows
+ 	$('.chat-list .entry-content img').live('click', function(){
+ 		window.open( this.src );
+ 	});
+
+ 	/*
+ 	*	Updates the chat list with
+ 	*	new data
+ 	*/
+ 	function updateChatList ( data ) {
+ 		if( data.objects.length > 0) {
+			
+			var entriesRendered = '';
+
+			$.each( data.objects, function( i, e ){
+				var properties = {
+						    id: e.id,
+						    profile_photo: e.profile_photo,
+						    created_by: e.created_by,
+						    text: e.text,
+						    date_created: e.date_created,
+						    data_theme: e.data_theme
+
+						},
+					template = Handlebars.compile($('#tpl-chat-entry').html());
+				entriesRendered += template(properties);
+			});
+
+			entriesRendered = $( entriesRendered );
+			entriesRendered.hide();
+
+			$('.chat-list').prepend(entriesRendered).listview('refresh');
+
+			if( params.id__gte > 0) {
+				entriesRendered.slideDown("slow");
+			} else {
+				entriesRendered.fadeIn();
+			}
+
+			$('.chat-list li.chat-entry:gt(' + data.meta.limit + ')').fadeOut().remove();
+			params.id__gte = Number( data.objects[0].id ) + 1;
+
+			// Format embedded external_content
+			var external_content = $('.chat-list .entry-content img, .chat-list .entry-content iframe');
+
+			$.each( external_content, function(i,e){
+				var e = $(e);
+				e.load(function(){
+
+					var parent = e.parent(),
+						factor = parent.width() / e[0].clientWidth;
+
+					if ( e.width() > parent.width() ) {
+						e.attr( {'width': e.width() * factor, 'height': e.height() * factor} );
+					}
+				});
+			});
+		}
+	};
+
+ 	/*
+ 	*	Fetch the chat list with ajax
+ 	*
+ 	*/
+	function getChatList () {
+        $.ajax({
+            url: uri,
+            data: params,
+            type: "GET",
+            success: updateChatList,
+            dataType: "json",
+            timeout: 5000
+        });
+	};
+ 	
+ 	/*
+ 	*	Polling of the chat
+ 	*
+ 	*/
+    function pollChat () {
+        getChatList();
+        chatSetTimeout = setTimeout(pollChat,5000);
+    };
+
+    pollChat();
+
+}); // End #page-chat pagebeforecreate
+
+</script>
+</body>
+</html>
+

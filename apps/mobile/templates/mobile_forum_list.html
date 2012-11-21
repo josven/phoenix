@@ -1,0 +1,67 @@
+{% extends "mobile_base.html" %}
+{% load thumbnail %}
+{% load humanize %}
+
+{% block primary-content %}
+<div class="primary-content">
+	<ul data-role="listview" class="forum-list">
+	</ul>
+</div><!-- /primary-content {{ page_title }} -->
+
+<div data-role="popup" id="popup-tag" class="ui-content" data-theme="a">
+	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+	<fieldset data-theme="a" data-role="controlgroup" data-type="horizontal" data-mini="true">
+		<button id="popup-tag-go" data-theme="a">Gå till</button>
+		<input data-theme="a" type="checkbox" name="popup-tag-subscribe" id="popup-tag-subscribe" />
+		<label for="popup-tag-subscribe">Bevaka</label>
+	</fieldset>
+</div>
+{% endblock primary-content %}
+
+{% block footer %}
+<div data-role="popup" id="popup-search" class="ui-content" data-theme="a">
+	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+	<form action="" method="get" id="form-search-threads">
+		<input name="title__icontains" id="title__contains" placeholder="Sök bland trådar" data-type="search">
+	</form>
+</div>
+
+<div id="main-footer" data-role="footer" class="ui-bar" data-position="fixed" data-tap-toggle="false">
+	<form id="form-thread-filters">
+		<input type="hidden" name="format" value="json">
+		<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+
+			<label for="order_by" class="select">Sortera på</label>
+			<select data-icon="false" name="order_by" id="order_by" data-mini="true">
+			   <option value="-date_created">Senast skapad</option>
+			   <option value="-date_last_changed">Senast svarad</option>
+			</select> 
+
+			<label for="tag" class="select">Kategori</label>
+			<select data-icon="false" name="tag" id="tag" data-mini="true">
+				<option value="" selected >Alla</option>
+				<optgroup label="Huvudkategorier">
+				{% for tag in default_categories %}
+			   	<option value="{{ tag }}">{{ tag }}</option>
+			   	{% endfor %}
+			   </optgroup>
+	
+				{% for tag in user_categories %}
+				{% if forloop.first %}
+				<optgroup id="optgroup-subscribed-tags" label="Bevakade kategorier">
+				{% endif %}
+			   	<option value="{{ tag }}">{{ tag }}</option>
+			   	{% if forloop.last %}
+			   	</optgroup>
+			   	{% endif %}
+			   	{% endfor %}
+			  
+			</select>
+
+			<button>OK</button>
+			<a id="btn-search" href="#popup-search" data-position-to="window" data-rel="popup" data-role="button" data-icon="search"></a>
+
+		</fieldset>
+	</form>
+</div>
+{% endblock footer %}

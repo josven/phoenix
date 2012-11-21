@@ -5,9 +5,7 @@ from django.db import models
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render as djangorender
 
-from tracking.models import Visitor
-
-from server_settings import *
+from settings import *
 
 def calculate_age(born=None):
     if born:

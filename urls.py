@@ -1,20 +1,33 @@
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic.simple import direct_to_template
 from django.conf import settings
 
 from django.contrib import admin
 admin.autodiscover()
 
+
+# Resoures
+from apps.mobile.api import UserResource
+from apps.mobile.api import ChatEntryResource
+from apps.mobile.api import ForumThreadResource
+from tastypie.api import Api
+
+v1_api = Api(api_name='v1')
+#v1_api.register(UserResource())
+v1_api.register(ChatEntryResource())
+v1_api.register(ForumThreadResource())
+
 urlpatterns = patterns('',
+    (r'^api/', include(v1_api.urls)),
+)
+
+urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    (r'^mobile/', include('apps.mobile.urls')),
     (r'^', include('apps.registration.urls')),
     (r'^', include('apps.frontpage.urls')),
     (r'^', include('apps.core.urls')),
-    #url(r'^$', 'apps.registration.views.auth_login', name='start'),
     (r'^', include('apps.settings.urls')),
     (r'^', include('apps.guestbook.urls')),
-    #(r'^register/beta/$', 'apps.registration.views.register_beta'),
-    #(r'^test$', direct_to_template, {'template': 'desktop_base.html'}),
 
     (r'^forum/', include('apps.forum.urls')),
     (r'^user/', include('apps.profiles.urls')),
@@ -23,7 +36,6 @@ urlpatterns = patterns('',
     (r'^notifications/', include('apps.notifications.urls')),
     (r'^', include('apps.articles.urls')),
     (r'^accounts/', include('apps.accounts.urls')),
-
 )
 
 if settings.DEBUG:

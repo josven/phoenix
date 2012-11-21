@@ -1,0 +1,32 @@
+{% extends "mobile_base.html" %}
+{% load thumbnail %}
+{% load markup %}
+{% load humanize %}
+{% load filters %}
+
+{% block header %}
+<div data-role="header" data-position="fixed">
+	<a href="#" data-slidemenu="sidemenu" class="showMenu">Menu</a>
+	<h1>{{ page_title }}</h1>
+	<a data-icon="gear" data-iconpos="notext" href="{% url mobile_chat_settings %}" data-rel="dialog">Inställningar</a>
+</div><!-- /header {{ page_title }} -->
+{% endblock header %}
+
+{% block primary-content %}
+<div class="primary-content">
+	<ul data-role="listview" class="chat-list">
+	</ul>
+</div><!-- /primary-content {{ page_title }} -->
+{% endblock primary-content %}
+
+{% block footer %}
+<div data-role="footer" data-position="fixed" data-tap-toggle="false">
+	<form id="chat-form" action="{% url mobile_chat %}" method="POST" data-ajax="false">
+		{% csrf_token %}
+		{% for field in form %}
+			{{ field.errors }}
+			{{ field }}
+		{% endfor %}
+	</form>
+</div><!-- /footer {{ page_title }} -->
+{% endblock footer %}

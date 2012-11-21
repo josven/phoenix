@@ -2,6 +2,8 @@
 # Django settings for phoenix project.
 from server_settings import *
 
+DEBUG = True
+
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = True
 
@@ -69,7 +71,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,7 +83,7 @@ MIDDLEWARE_CLASSES = (
     'phoenix.apps.registration.middleware.ActiveUserMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'phoenix.urls'
@@ -113,6 +115,8 @@ INSTALLED_APPS = (
     'pagination',
     'debug_toolbar',
     'compressor',
+    'tastypie',
+    'templatetag_handlebars',
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',
@@ -123,6 +127,7 @@ INSTALLED_APPS = (
     'phoenix.apps.articles',
     'phoenix.apps.accounts',
     'phoenix.apps.notifications',
+    'phoenix.apps.mobile',
 )
 
 CACHE_COUNT_TIMEOUT = 60  # seconds, not too long.
