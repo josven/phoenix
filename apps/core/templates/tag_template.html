@@ -1,13 +1,14 @@
-{# trying another approach with subscribable tags #}
-<span class="ui-tag-link ui-tag">
-    <a class="ui-tag-link-toggle" rel="{{ tag }}" data-icon="{% if tag.name in subscriptions %}ui-icon-star{% else %}ui-icon-tag{% endif %}" href="#" >{{ tag|title }}</a>
-    
-    <a class="ui-tag-link-button" href="{{ tag_search_prefix }}{{ tag }}/" >{{ tag|title }}</a>
-    
-    <form  class="ui-helper-hidden ui-tag-link-form"  action="{% url subscribe_tag %}" method="post">
-        {% csrf_token %}
-        {{ subscribe_tag_form }}
-    </form>
-</span>
-
- {{ tag.tag_relname }}
+<div class="btn-group dropup pull-right">
+	<a  data-loading-text="Vänta..." class="btn btn-mini dropdown-toggle {% if tag.name in subscriptions %}btn-primary{% endif %} btn-tag-{{ tag }}" data-toggle="dropdown" href="#">
+		<i class="icon-tag"></i>
+		{{ tag|title }}
+	</a>
+	<ul class="dropdown-menu">
+		<li><a href="{{ tag_search_prefix }}{{ tag }}/">Gå till <strong>{{ tag|title }}</strong></a></li>
+		<li>
+			<a data-tag="{{ tag }}" class="link-subscribe" href="{% url subscribe_tag %}">
+				<span>{% if tag.name in subscriptions %}Avbevaka{% else %}Bevaka{% endif %}</span> <strong>{{ tag|title }}</strong>
+			</a>
+		</li>
+	</ul>
+</div>

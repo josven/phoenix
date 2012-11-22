@@ -3,9 +3,7 @@
 from server_settings import *
 
 DEBUG = True
-
 TEMPLATE_DEBUG = DEBUG
-COMPRESS_ENABLED = True
 
 MANAGERS = ADMINS
 
@@ -114,9 +112,9 @@ INSTALLED_APPS = (
     'reversion',
     'pagination',
     'debug_toolbar',
-    'compressor',
     'tastypie',
     'templatetag_handlebars',
+    'bootstrap_toolkit',
     'phoenix.apps.core',
     'phoenix.apps.registration',
     'phoenix.apps.forum',
@@ -146,18 +144,12 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
-
 #Email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'phx.mailer@gmail.com'
 EMAIL_HOST_PASSWORD = 'fiskenflyger'
 EMAIL_PORT = 587
-
-
-COMPRESS_PRECOMPILERS = (
-   ('text/less', 'lessc {infile} {outfile}'),
-)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

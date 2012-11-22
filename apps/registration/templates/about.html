@@ -1,0 +1,29 @@
+{% extends "startpage.html" %}
+{% load bootstrap_toolkit %}
+
+{% block main-navbar-nav %}
+<li><a href="{% url login %}">Logga in</a></li>
+<li><a href="{% url register %}">Registrera</a></li>
+<li><a href="{% url reset_password %}">Glömt lösenord</a></li>
+<li class="active"><a href="{% url about %}">Om oss</a></li>
+{% endblock main-navbar-nav %}
+
+{% block content %}
+<div class="container">
+	    <h1>Om oss</h1>
+	    <p>
+            Bacon ipsum dolor sit amet short ribs t-bone chuck, beef ribs jowl boudin pork loin ball tip meatball shank. Sausage capicola corned beef, filet mignon pork belly hamburger bresaola spare ribs frankfurter. Jerky leberkas shank short loin pork belly, spare ribs venison andouille pastrami hamburger jowl shoulder tail. Pig shank tongue salami. Strip steak shoulder pork chop pork belly, beef tongue ribeye bacon capicola short loin leberkas. Pastrami bresaola meatloaf boudin speck, pork pork chop biltong chuck turkey venison salami bacon ham ground round.
+        </p>
+        <p>
+            Pork loin turkey prosciutto speck ham hock pork chop, pig andouille spare ribs. Hamburger kielbasa capicola ham bresaola, pork turducken. Sausage pig speck, beef ribs ham hock shoulder pancetta filet mignon pork belly pork loin jowl. Bacon pancetta short ribs, tongue short loin ribeye sausage rump ham swine bresaola hamburger.
+        </p>
+        <p>
+            Ribeye pancetta beef, ham ground round prosciutto tail sausage. Spare ribs boudin prosciutto pork loin tri-tip, swine leberkas turducken ground round corned beef filet mignon short ribs ball tip pork chop hamburger. Hamburger turkey ground round pork belly t-bone andouille ham, spare ribs tri-tip pork loin. Andouille capicola salami, pig frankfurter pork belly drumstick. Tail beef ribs corned beef sausage pork belly cow venison sirloin, leberkas jowl tongue andouille ribeye. Leberkas capicola short ribs, short loin strip steak sirloin jerky cow ham hock bacon.
+        </p>
+        <p>
+            Biltong pork loin meatball andouille ribeye pork chicken, salami bacon pancetta. Leberkas ribeye sausage, ball tip tail pancetta short ribs biltong boudin bacon pork chop venison strip steak tongue beef. Cow rump pork belly shoulder. Drumstick capicola leberkas flank tail beef. Chuck strip steak pastrami salami cow short ribs drumstick rump ham hock, shoulder tail turkey sirloin. Sirloin short ribs bresaola, brisket rump flank meatloaf pork jerky frankfurter cow pork belly filet mignon venison.
+        <p>
+            Leberkas meatloaf prosciutto, pork loin ham hock tail capicola shankle filet mignon. Beef leberkas capicola cow, turducken fatback shoulder boudin corned beef hamburger pork chop. Hamburger pork ball tip, shank fatback ground round corned beef turkey pork loin. Bresaola pancetta tenderloin boudin shoulder, tail leberkas speck jowl drumstick capicola shankle tongue bacon flank.
+        </p>
+</div> <!-- /container -->
+{% endblock content %}

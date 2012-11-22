@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "bootstrap_base.html" %}
 {% load entry_tags %}
 {% load thumbnail %}
 {% load markup %}    
@@ -7,7 +7,79 @@
 {% load pagination_tags %}
 {% load notification_tags %}
 
+{% block main-navbar-nav %}
+<li><a href="{{  request.user.get_profile.get_absolute_url }}">{{ request.user }}</a></li>
+<li><a href="{% url list_forum %}">Forum</a></li>
+<li><a href="{% url chat %}">Chat</a></li>
+<li class="ui-corner-all"><a href="{% url guestbook request.user.id %}">Gästbok</a></li>    
+<li><a href="{% url read_article %}">Artiklar</a></li>
+<li><a href="{% url camchat %}">TC</a></li>
+<li><a href="{% url read_notifications %}">Aktivitet <span id="notification-counter">{% if request.notification_count %}({{request.notification_count}}){% endif %}</span></a></li>
+{% endblock main-navbar-nav %}
+
 {% block content %}
+<div class="container">
+	{% autopaginate articles %}
+	{% get_notes_for_articlelist articles request.user as articles %}
+	<ul class="media-list">
+	{% for article in articles %}
+		<li class="media">
+
+			<a class="pull-left" href="{{ article.created_by.profile.get_absolute_url }}">
+				<div class="media-object thumbnail">
+					{% if article.created_by.profile.photo %}
+					{% thumbnail article.created_by.profile.photo "64x64" crop="center" as im %}
+					<img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+					{% endthumbnail %}
+					{% else %}
+					<img src="http://placehold.it/64x64" alt="">
+					{% endif %}
+					<div class="caption">
+						{{ article.created_by }}
+					</div>
+	            </div>
+        	</a>
+
+			<div class="media-body">
+				<h1 class="media-heading">
+					<a href="{% url read_article article.id %}">{{ article }}</a>
+					<span class="muted pull-right"><small>{{ article.date_created }}</small></span>
+				</h1>
+
+				{{ article.body|user_filter }}
+			    
+			    <br />
+			    <br />
+
+			    {% if article.allow_comments %}
+			    
+
+
+				<button type="button" class="btn btn btn-info btn-mini btn-load-comments" data-toggle="collapse" data-url="{% url ajax_comments_article article.id %}" data-article-comments="{{ article.id }}" data-loading-text="Laddar kommentarer..." data-target="#article-{{ article.id }}-comments">Kommentarer</button>
+
+		    	{% with subscriptions=request.user.profile.subscriptions.all %}
+			    {% for tag in article.tags.all %}
+			    {% render_tag tag tag_search_prefix subscriptions %}
+			    {% endfor %}
+				{% endwith %}
+
+				<div id="article-{{ article.id }}-comments" class="collapse">
+					<ul class="media-list">
+					    <li class="media">
+					    	Kommentar!
+					    </li>
+					</ul>
+				</div>
+			    {% endif %}
+
+			    <hr>
+			</div>
+		</li>
+	{% endfor %}
+	</ul>
+</div> <!-- /container -->
+
+{% comment %}
 {% autopaginate articles %}
 {% get_notes_for_articlelist articles request.user as articles %}
 
@@ -65,4 +137,5 @@
 </ul>
 
 {% my_paginate %}
+{% endcomment %}
 {% endblock content %}

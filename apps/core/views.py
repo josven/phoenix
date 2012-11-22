@@ -7,7 +7,10 @@ from django.db.models import get_model
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
+from django.utils.crypto import constant_time_compare
+
 from apps.core.utils import render
 from forms import update_entry_form, delete_entry_form, subscribe_tag_form
 from django.shortcuts import redirect

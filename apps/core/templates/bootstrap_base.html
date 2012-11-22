@@ -1,0 +1,186 @@
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="sv"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="sv"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="sv"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="sv"> <!--<![endif]-->
+{% block head %}
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>{% if request.notification_count %}({{request.notification_count}}) {% endif %}PHX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="phx" />
+    <meta name="author" content="phx" />
+
+    {% block css %}
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    {% endblock css %}
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    {% block icons %}
+    {% comment %}
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    {% endcomment %}
+    {% endblock icons %}
+
+</head>
+{% endblock head %}
+
+<body class="{{ app_name }} {% block body-classes %}noupdate{% endblock body-classes %}">
+{% block main-navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="{% url startpage %}">PHX</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                {% block main-navbar-nav %}
+                {% endblock main-navbar-nav %}
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+{% endblock main-navbar %}
+
+    {% block content %}
+    {% endblock content %}
+
+    {% block js %}
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery-plugins.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        phx = {
+            events : {
+                init : function () {
+                    phx.events.subscribe();
+                    phx.events.comments();
+                },
+                comments : function () {
+                    var buttons = $('.btn-load-comments');
+
+                    $.each(buttons, function () {
+
+                        console.log( this );
+
+                        var button = $(this),
+                            article_id = button.attr('data-article-comments'),
+                            url = button.attr('data-url'),
+                            target = button.attr('data-target');
+                        
+                        button.click( function(event){
+                            button.button('loading');
+
+                            $(String(target)+" ul").load(url, function(){
+                                button.button('reset');
+                            });
+                        });
+
+                    });
+
+                },
+                subscribe : function () {
+                    var links = $('.link-subscribe');
+
+                    $.each(links, function() {
+                        var link = $(this),
+                            url = link.attr('href'),
+                            tag = link.attr('data-tag'),
+                            data = { tag : tag },
+                            buttons = $(".btn-tag-" + tag);
+
+                        link.click( function(event) {
+                            event.preventDefault();
+                            buttons.button('loading');
+                            link.dropdown('toggle');
+
+                            $.ajax({
+                                type : "POST",
+                                url : url,
+                                data : data,
+                                statusCode : {
+                                    200: function(data) {
+                                        if (data.tag_status === 1) {
+
+                                            buttons.addClass('btn-primary');
+                                            link.find('span').text('Avbevaka');
+
+                                        } else if (data.tag_status === 0) {
+
+                                            buttons.removeClass('btn-primary');
+                                            link.find('span').text('Bevaka');
+
+                                        }
+                                    }
+                                },
+                                complete : function() {
+                                    buttons.button('reset');
+                                }
+                            });
+
+                            return false;
+                        });
+                    });
+
+                }
+            },
+
+            csrf : {
+                csrfSafeMethod : function (method) {
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                },
+
+                csrftoken : function () {
+                    return $.cookie('csrftoken');
+                }
+            },
+
+            ajax : {
+                init : function () {
+                    $.ajaxSetup({
+                        crossDomain: false, // obviates need for sameOrigin test
+                        beforeSend: function(xhr, settings) {
+                            if (!phx.csrf.csrfSafeMethod(settings.type)) {
+                                xhr.setRequestHeader("X-CSRFToken", phx.csrf.csrftoken());
+                            }
+                        }
+                    });
+                },
+
+                post_link : function (link) {
+                    console.log ( "POST LINK ");
+                }
+            }
+        };
+
+        phx.ajax.init();
+        phx.events.init();
+
+    </script>
+    {% endblock js %}
+
+</body></html>
+
+        
+        
+
+

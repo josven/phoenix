@@ -1,9 +1,24 @@
-<form class="ui-helper-clearfix" id="id_loginform" action="{% url register %}?next={{ nextpage }}" method="post">
-    {% csrf_token %}
-    <ul>
-        {{ UserCreationForm.as_ul }}                
-        <li>
-            <input type="submit" value="Registrera" />
-        </li>
-    </ul>
-</form>
+{% extends "startpage.html" %}
+{% load bootstrap_toolkit %}
+
+{% block main-navbar-nav %}
+<li><a href="{% url login %}">Logga in</a></li>
+<li class="active"><a href="{% url register %}">Registrera</a></li>
+<li><a href="{% url reset_password %}">Glömt lösenord</a></li>
+<li><a href="{% url about %}">Om oss</a></li>
+{% endblock main-navbar-nav %}
+
+{% block content %}
+<div class="container">
+		<h1>Registrera nytt konto</h1>
+        <p>Skapa ditt konto. </p>
+		<form id="id_loginform" action="{% url register %}?next={{ nextpage }}" method="post">
+		    {% csrf_token %}
+		    {{ UserCreationForm|as_bootstrap }}
+		    <div class="actions">
+		        <button type="submit" class="btn primary">Registrera</button>
+		    </div>
+		</form>
+
+</div> <!-- /container -->
+{% endblock content %}

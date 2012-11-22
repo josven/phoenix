@@ -14,27 +14,19 @@ from django.views.decorators.cache import never_cache
 from forms import AuthenticationForm, UserCreationForm
 
 from apps.profiles.models import Profile
-
+from apps.frontpage.views import read_frontpage
 from apps.core.utils import render
 
 @never_cache
 def startpage(request):
     """
-    Startpage for PHX
+    Entry for PHX
     """
 
     if request.user.is_authenticated():
-        return HttpResponseRedirect( reverse('start') )
-
-    vars = {
-        'body_id':'page_startpage',
-        'AuthenticationForm': AuthenticationForm(),
-        'UserCreationForm': UserCreationForm(),
-        'nextpage': request.GET.get('next', reverse('start')),
-    }
-
-    return render(request, 'startpage.html',vars)
-
+        return read_frontpage(request)
+    else:
+        return auth_login(request)
 
 @never_cache
 def auth_reset_password(request):

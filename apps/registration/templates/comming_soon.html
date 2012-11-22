@@ -1,6 +1,15 @@
-{% extends "base.html" %}
-{% block header %}
-{% endblock header %}
+{% extends "startpage.html" %}
+{% load bootstrap_toolkit %}
+
+{% block main-navbar-nav %}
+<li><a href="{% url login %}">Logga in</a></li>
+<li><a href="{% url register %}">Registrera</a></li>
+<li><a href="{% url reset_password %}">Glömt lösenord</a></li>
+<li><a href="{% url about %}">Om oss</a></li>
+{% endblock main-navbar-nav %}
+
 {% block content %}
-<h2>Kommer snart</h2>
+<div class="container">
+	    <h1>Kommer snart</h1>
+</div> <!-- /container -->
 {% endblock content %}

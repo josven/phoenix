@@ -1,5 +1,4 @@
 {% load filters %}
-{% load compress %}
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -13,29 +12,30 @@
 	<meta name="author" content="phx" />
     
     {% block css %}
-    
-    {% compress css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css?ac" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css?dc" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/screen.less" type="text/less" media="screen" />
-    {% endcompress css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ app_name }}.css?dc" />
-	{% endblock css %}
-    {% block script %}
-      
-    
+    <link href="{{ STATIC_URL }}/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-    {% compress js %}
+    {% comment %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fall11-theme/jquery-ui-1.8.16.custom.css?de" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css?de" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ app_name }}.css?de" />
+    {% endcomment %}
+	{% endblock css %}
+
+    {% block script %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ STATIC_URL }}/bootstrap/js/bootstrap.min.js"></script>
+
+    {% comment %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/libs/modernizr.v2.5.3pre.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-1.7.2.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/libs/themeswitchertool.js"> </script>
     <script defer type="text/javascript" src="{{ STATIC_URL }}js/plugins.js"></script>
-	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js?dc"></script>
-    {% endcompress js %}
-    <script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js?dc"></script>
-    
+	<script defer type="text/javascript" src="{{ STATIC_URL }}js/script.js?de"></script>
+    <script defer type="text/javascript" src="{{ STATIC_URL }}js/{{ app_name }}.js?de"></script>
+    {% endcomment %}
     {% endblock script %}
+
 </head>
 
 <body class="{{ app_name }} {% block body-classes %}{% endblock body-classes %} ui-widget-content">

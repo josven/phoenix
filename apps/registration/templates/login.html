@@ -1,9 +1,24 @@
-<form class="ui-helper-clearfix" id="id_loginform" action="{% url login %}?next={{ nextpage }}" method="post">
-    {% csrf_token %}
-    <ul>
-        {{ AuthenticationForm.as_ul }}                
-        <li>
-            <input type="submit" value="Logga in" />
-        </li>
-    </ul>
-</form>
+{% extends "startpage.html" %}
+{% load bootstrap_toolkit %}
+
+{% block main-navbar-nav %}
+<li class="active"><a href="{% url login %}">Logga in</a></li>
+<li><a href="{% url register %}">Registrera</a></li>
+<li><a href="{% url reset_password %}">Glömt lösenord</a></li>
+<li><a href="{% url about %}">Om oss</a></li>
+{% endblock main-navbar-nav %}
+
+{% block content %}
+<div class="container">
+		<h1>Logga in på phx.se</h1>
+        <p>Logga in på phx.se med ditt användarnamn och lösenord. </p>
+		<form id="id_loginform" action="{% url login %}?next={{ nextpage }}" method="post">
+		    {% csrf_token %}
+		    {{ AuthenticationForm|as_bootstrap }}
+		    <div class="actions">
+		        <button type="submit" class="btn primary">Logga in</button>
+		    </div>
+		</form>
+
+</div> <!-- /container -->
+{% endblock content %}

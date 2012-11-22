@@ -54,7 +54,7 @@ def my_oembed(input, args):
 @register.filter(name='user_filter')
 @stringfilter
 def user_filter(string, args=None):
-    
+
     # Apply oEmbed
     oembed_kwargs = {}
     oembed_kwargs['max_width'] = 320
