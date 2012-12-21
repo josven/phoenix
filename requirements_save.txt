@@ -1,0 +1,15 @@
+PIL
+-e git+git://github.com/jbalogh/django-cache-machine.git#egg=django-cache-machine
+-e git+git://github.com/django-mptt/django-mptt.git#egg=django-mptt
+-e git+git://github.com/ixc/django-oembed.git#egg=django-oembed
+-e git+git://github.com/etianen/django-reversion.git#egg=django-reversion
+-e git+git://github.com/ericflo/django-pagination.git#egg=django-pagination
+-e git+git://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+Django
+South
+sorl-thumbnail
+python-memcached
+django-taggit
+textile
+psycopg2
+django_compressor

@@ -135,7 +135,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # debug_toolbar.middleware.DebugToolbarMiddleware use this to determine your IP. 
 
-INTERNAL_IPS = ('192.168.1.70','127.0.0.1')
+INTERNAL_IPS = ('192.168.1.70','127.0.0.1','83.179.23.10',)
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
