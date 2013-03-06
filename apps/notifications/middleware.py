@@ -22,10 +22,11 @@ class AnnonuceNotifications(object):
                 #new_notifications_length = len(new_notifications)
 
                 if announced_notifications_length == 1:
-                    note = announced_notifications[0]
-                    name = force_unicode(getattr(note.content_object, 'get_verbose_name', None))
-                    url = force_unicode(note.content_object.get_absolute_url())
-                    message = u'Ny aktivitet!<br/> {0} </br> <a href="{1}">Gå dit</a>'.format(name, url)
+                    if note.content_object:
+                        note = announced_notifications[0]
+                        name = force_unicode(getattr(note.content_object, 'get_verbose_name', None))
+                        url = force_unicode(note.content_object.get_absolute_url())
+                        message = u'Ny aktivitet!<br/> {0} </br> <a href="{1}">Gå dit</a>'.format(name, url)
 
                 if announced_notifications_length > 1:
                     message = u'{0} nya aktiviteter!<br/> <a href="{1}">Gå dit</a>'.format(announced_notifications_length, reverse('read_notifications'))

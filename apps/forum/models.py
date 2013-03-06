@@ -15,7 +15,9 @@ from django.template.loader import render_to_string
 from django.db.models import get_model
 
 from taggit.managers import TaggableManager
-from mptt.models import MPTTModel, TreeForeignKey
+from mptt.models import TreeForeignKey
+from mptt.models import MPTTModel
+from mptt.models import TreeManager
 
 from apps.core.models import ThreadedEntry, ThreadedEntryHistory, Entry, EntryHistory
 from apps.articles.models import Article
@@ -133,7 +135,9 @@ class ForumComment(MPTTModel):
     comment = models.TextField(help_text=site_strings.COMMENT_FORM_HELP_TEXT, verbose_name="Kommentar")
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
     date_last_changed = models.DateTimeField(auto_now=False, blank=True, null=True)
+    
     tags = TaggableManager()
+    objects = tree = TreeManager()
 
     def save(self, *args, **kwargs):
         super(ForumComment, self).save(*args, **kwargs)
