@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
+
 import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
-from apps.core.managers import TaggableManager
-from mptt.models import MPTTModel, TreeForeignKey
+
+from mptt.models import MPTTModel
+from mptt.models import TreeForeignKey
+from mptt.models import TreeManager
 
 import site_strings
-
+from apps.core.managers import TaggableManager
 from apps.core.templatetags.entry_tags import render_tag
 from apps.core.models import Entry
 from apps.core.signals import *
-
-import site_strings
 
 class Article(Entry):
     """
@@ -124,8 +124,10 @@ class ArticleComment(MPTTModel):
     comment = models.TextField(max_length=5120, help_text=site_strings.COMMENT_FORM_HELP_TEXT, verbose_name="Kommentar")
     added  = models.DateTimeField(default=datetime.datetime.now,blank=True)
     date_last_changed = models.DateTimeField(auto_now=False, blank=True, null=True)
-    tags = TaggableManager()
     
+    tags = TaggableManager()
+    objects = tree = TreeManager()
+
     # a link to comment that is being replied, if one exists
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     
