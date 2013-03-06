@@ -12,6 +12,7 @@ class AnnonuceNotifications(object):
         if not request.is_ajax():
             if request.user.is_authenticated():
 
+                message = u""
                 notifications = request.user.receiver_entries.filter(status__in=[0, 1])
                 notification_count = len(notifications)
 
